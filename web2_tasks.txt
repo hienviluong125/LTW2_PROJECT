@@ -1,0 +1,35 @@
+﻿1.DB design
+2.DB sequelize config
+3.view template
+4.login ------------> Hào 
+	local-passport -----------------> Hào
+	social login de sau ------------> ?
+5.register ---------> Hào
+6.admin management -------> ?
+7.editor 
+	duyệt bài viết ------> Hiền
+	gán tag, category ---------> Hiền
+8.writer
+	viết bài ------------------> CKEDITOR Hiền
+	xem danh sách bài viết của mình ----------> Hiền
+		Đã được duyệt & chờ xuất bản  ----------> Hiền
+    		Đã xuất bản  ----------> Hiền
+    		Bị từ chối  ----------> Hiền
+    		Chưa được duyệt  ----------> Hiền
+	sửa bài viết
+		chỉ được sửa ( bị từ chối và chưa đc duyệt )  ----------> Hiền
+9.sub
+	gia hạn tài khoản ---------------> Hao
+	xem bài viết vip và download pdf ( nếu còn hạn ) ---------------> Hao
+10.guest ( chưa đăng nhập )
+	xem ds bài viết (theo category, tags, có phân trang) --------------------------------> Hiền
+	xem chi tiết bài viết ---------------------------------> Hiền
+	
+	tìm bài viết(full-text-search nhiều tiêu chí tiêu đề, nội dung tóm tắt, nội dung chính) --------------------------------> Hiền
+	danh sách bình luận của chi tiết bài viết --------------------------------> Hiền
+	đăng bình luận --------------------------------> Hiền
+
+
+
+
+11.forgot password ( send mail otp ) -- using jsonwebtoken
