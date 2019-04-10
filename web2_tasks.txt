@@ -1,6 +1,6 @@
 ﻿1.DB design
 2.DB sequelize config
-3.view template
+3.view template - DONE
 4.login ------------> Hào 
 	local-passport -----------------> Hào
 	social login de sau ------------> ?
