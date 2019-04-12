@@ -2076,18 +2076,3 @@ h4 {
 		display: block !important;
 	}
 }
-
-/* HIEN EDIT */
-
-.text-white{
-	color:white;
-}
-.float-right-li{
-	float:right;
-}
-.register-form-wrapper > h2{
-	text-align: center;
-}
-.register-form > input{
-	border:1px solid red;
-}

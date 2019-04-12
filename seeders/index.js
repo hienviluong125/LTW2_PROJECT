@@ -1,7 +1,8 @@
 const db = require('./../models/index');
+const MainCategories = db.MainCategories;
+const SubCategories = db.SubCategories;
+const Posts = db.Posts;
 const faker = require('faker');
-const users = db['users'];
-const posts = db.posts;
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -9,39 +10,71 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-(function () {
+(async function () {
 
 
 
-
-    // posts.findAll({
-    //     raw: true,
-    //     include : [
-    //         {
-    //             model: users,
-    //             attributes: ['fullname']
-    //         }
-    //     ]
-    // })
+    // MainCategories.create({
+    //     name: 'MainCate01'
+    // });
 
 
-    
+    // MainCategories.create({
+    //     name: 'MainCate02'
+    // });
 
-    // users.findAll({
-    //     where : {
-    //         id : 3
-    //     },
+    // MainCategories.create({
+    //     name: 'MainCate03'
+    // });
+
+
+
+    // MainCategories.findAll({
     //     raw: true,
     //     include: [
     //         {
-    //             model: posts,
+    //             model: SubCategories
     //         }
     //     ]
-    // })
-    //     .then(res => {
-    //         console.log("result -> ", res);
-    //     })
+    // }).then(res => console.log("res -> ",res));
 
+
+    // for (let i = 0; i < 10; i++) {
+    //     Posts.create({
+    //         title: faker.lorem.sentence(),
+    //         content: faker.lorem.sentences(),
+    //         SubCategoryId: getRandomInt(1, 3),
+    //         MainCategoryId: getRandomInt(1,3)
+    //     })
+    // }
+
+
+
+
+
+
+
+
+    // Posts.findAll({
+    //     raw: true,
+    //     include: [
+    //         {
+    //             model: MainCategories
+    //         },
+    //         {
+    //             model: SubCategories
+    //         }
+    //     ]
+    // }).then(res => console.log("res -> ", res));
+
+    MainCategories.findAll({
+        raw: true,
+        include: [
+            {
+                model: Posts
+            }
+        ]
+    }).then(res => console.log("res -> ", res));
 
 
 
