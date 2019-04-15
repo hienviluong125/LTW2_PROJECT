@@ -6,6 +6,8 @@ const port = process.env.PORT || 4200;
 
 const indexRouter = require('./routes/indexRouter');
 const usersRouter = require('./routes/usersRouter');
+const writersRouter = require('./routes/writersRouter');
+
 
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
@@ -20,6 +22,7 @@ app.set('layout', 'layouts/main');
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/writers',writersRouter);
 
 
 //===========================================
