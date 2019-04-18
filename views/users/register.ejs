@@ -28,7 +28,11 @@
             <!-- Begin Right Content -->
             <div class="col-xl-9 col-lg-7 col-md-7 col-sm-12 col-12 my-auto no-padding">
                 <!-- Begin Form -->
+                
                 <div class="authentication-form-2 mx-auto">
+                        <% errors.forEach(function(error){ %>
+                            <%- include('../layouts/blocks/flash-message.ejs', {error: error.message}) %>
+                          <% }); %>
                     <div class="tab-content" id="animate-tab-content">
                         <!-- Begin Sign In -->
                         <div role="tabpanel" class="tab-pane " id="singin" aria-labelledby="singin-tab">
@@ -41,7 +45,7 @@
                                     <label>Username</label>
                                 </div>
                                 <div class="group material-input">
-                                    <input type="password" name="password" value="<%= typeof password != 'undefined' ? password : '' %>" required>
+                                    <input type="password" name="password" required>
                                     <span class="highlight"></span>
                                     <span class="bar"></span>
                                     <label>Password</label>
@@ -81,13 +85,13 @@
                                     <label>Email</label>
                                 </div>
                                 <div class="group material-input" >
-                                    <input type="password" name="password" value="<%= typeof password != 'undefined' ? password : '' %>" required>
+                                    <input type="password" name="password" required>
                                     <span class="highlight"></span>
                                     <span class="bar"></span>
                                     <label>Password</label>
                                 </div>
                                 <div class="group material-input" >
-                                    <input type="password" name="repassword" value="<%= typeof repassword != 'undefined' ? repassword : '' %>" required>
+                                    <input type="password" name="repassword" required>
                                     <span class="highlight"></span>
                                     <span class="bar"></span>
                                     <label>Confirm Password</label>

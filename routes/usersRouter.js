@@ -18,8 +18,7 @@ const registerAccount = async (req, res, next) => {
         res.render('users/register', {
             errors,
             email,
-            password, 
-            repassword
+            
         });
     }else{
         usersService.create(user)
