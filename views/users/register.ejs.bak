@@ -1,0 +1,24 @@
+<div class="content">
+    <div class="container">
+        <div class="columns">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <form class="register-form" action="" method="post">
+                        <h2 class="text-center">Register account</h2>
+                        <p for="" class="mt-10">Username</p>
+                        <input class="form-input" type="text" name="username" id="">
+                        <p for="" class="mt-10">Email</p>
+                        <input class="form-input" type="email" name="email" id="">
+                        <p for="" class="mt-10">Password</p>
+                        <input class="form-input" type="password" name="password" id="">
+                        <p for="" class="mt-10">Confirm password</p>
+                        <input class="form-input" type="password" name="confirmPasword" id="">
+                        <button type="submit" class="mt-20 custom-btn text-center red-btn white-text hover-red-btn">Register</button>
+                        <a href="http://" class="mt-10 custom-btn text-center bold-gray-text lightGray-btn hover-lightGray-btn">Already have an account ? </a>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
