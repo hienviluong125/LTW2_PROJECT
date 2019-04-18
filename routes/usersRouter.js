@@ -17,20 +17,20 @@ const registerAccount = async (req, res, next) => {
     if(errors.length > 0){
         res.render('users/register', {
             errors,
-            email,
-            
+            email, 
         });
     }else{
+        delete user.repassword;
+        user.username = user.email;
         usersService.create(user)
-        .then(user =>{
-            
-            console.log("user created");
-            //create session
-            
-            //redirect to main paged
-            res.end("created, redirecting to main page...");
-        })
-        .catch(err => next(err));
+            .then(user => {
+                console.log("user created: ", user.password);
+                //create session
+
+                //redirect to main paged
+                res.end("created, redirecting to main page...");
+            })
+            .catch(err => next(err)); 
     }
 }
 

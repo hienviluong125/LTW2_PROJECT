@@ -30,10 +30,12 @@
                 <!-- Begin Form -->
                 
                 <div class="authentication-form-2 mx-auto">
-                        <% errors.forEach(function(error){ %>
-                            <%- include('../layouts/blocks/flash-message.ejs', {error: error.message}) %>
-                          <% }); %>
-                    <div class="tab-content" id="animate-tab-content">
+                        <% if (typeof errors !== 'undefined') { %>
+                            <% errors.forEach(function(error){ %>
+                                <%- include('../layouts/blocks/flash-message.ejs', {error: error.message}) %>
+                            <% }); %>
+                        <% } %>
+                     <div class="tab-content" id="animate-tab-content">
                         <!-- Begin Sign In -->
                         <div role="tabpanel" class="tab-pane " id="singin" aria-labelledby="singin-tab">
                             <h3>Sign In To Elisyam</h3>
