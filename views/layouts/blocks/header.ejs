@@ -1,74 +1,102 @@
-<div class="header">
+<header class="header">
     <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="logo">
-                    <a href="/index.html"><span class="site-text-color">N</span>ovelty</a>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <form class="subscription" id="newsletter" method="post">
-                    <span class="subscription-text">Newsletter subscribe</span>
-                    <span class="input-cover">
-                        <input type="submit" value="" class="subscription-button">
-                        <input type="text" name="email" placeholder="Email ..." class="subscription-line">
-                    </span>
+        <nav class="navbar">
+            <div class="search-box">
+                <button class="dismiss"><i class="ion-close-round"></i></button>
+                <form id="searchForm" action="#" role="search">
+                    <input type="search" placeholder="Search something ..." class="form-control">
                 </form>
             </div>
-            <div class="col-md-4">
-                <ul class="header-socials">
-                    <li><a class="header-socials-facebook" href="/#"></a></li>
-                    <li><a class="header-socials-twitter" href="/#"></a></li>
-                    <li><a class="header-socials-pinterest" href="/#"></a></li>
-                    <li><a class="header-socials-vimeo" href="/#"></a></li>
-                </ul>
+            <div class="navbar-holder d-flex align-items-center align-middle justify-content-between horizontal-menu">
+                <!-- Begin Logo -->
+                <div class="navbar-header">
+                    <a href="db-modern.html" class="navbar-brand">
+                        <div class="brand-image brand-big">
+                            <img src="/assets/img/logo.png" alt="logo" style="width: 70px;" class="logo-big">
+                        </div>
+                        <div class="brand-image brand-small">
+                            <img src="/assets/img/logo.png" alt="logo" class="logo-small">
+                        </div>
+                    </a>
+                </div>
+                <nav class="navbar navbar-light navbar-expand-lg main-menu">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li><a href="maps-leaflet.html">Home</a></li>
+                            <li><a href="maps-leaflet.html">About</a></li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" href="#" id="components" role="button" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">Components</a>
+                                <ul class="dropdown-menu" aria-labelledby="components">
+                                    <li class="dropdown">
+                                        <a class="dropdown-toggle" href="#" id="elements" role="button"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                                class="la la-share-alt"></i>UI Elements</a>
+                                        <ul class="dropdown-menu" aria-labelledby="elements">
+                                            <li><a href="components-buttons.html">Buttons</a></li>
+                                            <li><a href="components-alerts.html">Alerts</a></li>
+                                            <li><a href="components-modal.html">Modal</a></li>
+                                            <li><a href="components-notifications.html">Noty</a></li>
+                                            <li><a href="components-timeline.html">Timeline</a></li>
+                                            <li><a href="components-progress.html">Progress</a></li>
+                                            <li><a href="components-tabs.html">Tabs</a></li>
+                                            <li><a href="charts-chartjs.html">Chart Js</a></li>
+                                            <li><a href="components-accordion.html">Accordion</a></li>
+                                            <li><a href="components-popover.html">Popover</a></li>
+                                            <li><a href="components-tooltip.html">Tooltip</a></li>
+                                            <li><a href="components-scrollable.html">Scrollable</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a class="dropdown-toggle" href="#" id="icons" role="button"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                                class="la la-font"></i>Icons</a>
+                                        <ul class="dropdown-menu" aria-labelledby="icons">
+                                            <li><a href="icons-lineawesome.html">Line Awesome</a></li>
+                                            <li><a href="icons-themify.html">Themify</a></li>
+                                            <li><a href="icons-ionicons.html">Ionicons</a></li>
+                                            <li><a href="icons-meteocons.html">Meteocons</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a class="dropdown-toggle" href="#" id="forms" role="button"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                                class="la la-list-alt"></i>Forms</a>
+                                        <ul class="dropdown-menu" aria-labelledby="forms">
+                                            <li><a href="forms-basic.html">Form Basic</a></li>
+                                            <li><a href="forms-validation.html">Form Validation</a></li>
+                                            <li><a href="forms-wizard.html">Form Wizard</a></li>
+                                            <li><a href="forms-select.html">Bootstrap Select</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a class="dropdown-toggle" id="tables" role="button" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false"><i
+                                                class="la la-th-large"></i><span>Tables</span></a>
+                                        <ul class="dropdown-menu" aria-labelledby="tables">
+                                            <li><a href="tables-basic.html">Basic</a></li>
+                                            <li><a href="tables-datatables.html">Datatables</a></li>
+                                            <li><a href="tables-tabledit.html">Tabledit</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a href="maps-leaflet.html">Contact</a></li>
+                        </ul>
+                        <ul class="navbar-nav ml-auto">
+                            <li><a href="maps-leaflet.html"> Sign up </a></li>
+                            <li><a href="maps-leaflet.html">Login</a></li>
+                        </ul>
+                    </div>
+                </nav>
             </div>
-        </div>
+        </nav>
     </div>
-
-    <div class="menu site-bg-color">
-        <div class="container">
-            <form class="header-search">
-                <input type="submit" value="" class="header-search-button">
-                <input type="text" name="search" placeholder="Search" class="header-search-line">
-            </form>
-            <div class="responsive-menu">Menu</div>
-            <ul class="responsive-menu-active">
-                <li class="current-page"><a href="/index.html">Home</a></li>
-                <li><a href="/index-category.html">Design</a>
-                    <ul class="children">
-                        <li><a href="/index-category.html">Design List view</a></li>
-                        <li><a href="/index-category-grid.html">Design Grid view</a></li>
-                        <li><a href="/index-category-grid-2.html">Design Grid view 2</a></li>
-                        <li><a href="/index-category-grid-3.html">Design Grid view 3</a></li>
-                    </ul>
-                </li>
-                <li><a href="/index-category.html">Politics</a></li>
-                <li><a href="/index-category.html">Travel</a></li>
-                <li><a href="/index-category.html">Technology</a></li>
-                <li><a href="/index-category.html">Sport</a></li>
-                <li><a href="/#">Pages</a>
-                    <ul class="children">
-                        <li><a href="/contact.html">Contact Us</a></li>
-                        <li><a href="/about.html">About Us</a></li>
-                        <li><a href="/features.html">Features</a></li>
-                        <li><a href="/error-404.html">Error-404</a></li>
-                        <li><a href="/#">Drop-Down 2</a>
-                            <ul class="children">
-                                <li><a href="/#">Menu</a></li>
-                                <li><a href="/#">Menu</a></li>
-                                <li><a href="/#">Drop-Down 3</a>
-                                    <ul class="children">
-                                        <li><a href="/#">Menu</a></li>
-                                        <li><a href="/#">Menu</a></li>
-                                        <li><a href="/#">Menu</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+</header>

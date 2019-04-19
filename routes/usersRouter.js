@@ -2,11 +2,15 @@ const router = require('express').Router();
 const usersService = require('./../services/usersService');
 
 const renderLoginPage = (req,res,next) => {
-    res.render('users/login');
+    res.render('users/login', { 
+        layout: 'layouts/without_blocks'
+    });
 }
 
 const renderRegisterPage = (req,res,next) => {
-    res.render('users/register');
+    res.render('users/register', {
+        layout: 'layouts/without_blocks'
+    });
 }
 
 const registerAccount = async (req, res, next) => {
@@ -18,6 +22,7 @@ const registerAccount = async (req, res, next) => {
         res.render('users/register', {
             errors,
             email, 
+            layout: 'layouts/without_blocks'
         });
     }else{
         delete user.repassword;
