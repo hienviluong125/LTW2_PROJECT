@@ -1,72 +1,127 @@
-<div class="container-fluid no-padding h-100">
-    <div class="row flex-row h-100 bg-white">
-        <!-- Begin Left Content -->
-        <div class="col-xl-8 col-lg-6 col-md-5 no-padding">
-            <div class="elisyam-bg background-05">
-                <div class="elisyam-overlay overlay-04"></div>
-                <div class="authentication-col-content mx-auto">
-                    <h1 class="gradient-text-01">
-                        Be Elisyam!
-                    </h1>
-                    <span class="description">
-                        Etiam consequat urna at magna bibendum, in tempor arcu fermentum vitae mi massa egestas. 
-                    </span>
-                </div>
-            </div>
-        </div>
-        <!-- End Left Content -->
-        <!-- Begin Right Content -->
-        <div class="col-xl-4 col-lg-6 col-md-7 my-auto no-padding">
-            <!-- Begin Form -->
-            <div class="authentication-form mx-auto">
-                <div class="logo-centered">
-                    <a href="db-default.html">
-                        <img src="/assets/img/logo.png" alt="logo">
-                    </a>
-                </div>
-                <h3>Create An Account</h3>
-                <form>
-                    <div class="group material-input">
-                        <input type="text" required>
-                        <span class="highlight"></span>
-                        <span class="bar"></span>
-                        <label>Email</label>
-                    </div>
-                    <div class="group material-input">
-                        <input type="password" required>
-                        <span class="highlight"></span>
-                        <span class="bar"></span>
-                        <label>Password</label>
-                    </div>
-                    <div class="group material-input">
-                        <input type="password" required>
-                        <span class="highlight"></span>
-                        <span class="bar"></span>
-                        <label>Confirm Password</label>
-                    </div>
-                </form>
-                <div class="row">
-                    <div class="col text-left">
-                        <div class="styled-checkbox">
-                            <input type="checkbox" name="checkbox" id="agree">
-                            <label for="agree">I Accept <a href="#">Terms and Conditions</a></label>
+
+    <!-- Begin Container -->
+    <div class="container-fluid no-padding h-100">
+        <div class="row flex-row h-100 bg-white">
+            <!-- Begin Left Content -->
+            <div class="col-xl-3 col-lg-5 col-md-5 col-sm-12 col-12 no-padding">
+                <div class="elisyam-bg background-03">
+                    <div class="elisyam-overlay overlay-08"></div>
+                    <div class="authentication-col-content-2 mx-auto text-center">
+                        <div class="logo-centered">
+                            <a href="db-default.html">
+                                <img src="/assets/img/logo.png" alt="logo">
+                            </a>
                         </div>
+                        <h1>Join Our Community</h1>
+                        <span class="description">
+                            Etiam consequat urna at magna bibendum, in tempor arcu fermentum vitae mi massa egestas. 
+                        </span>
+                        <ul class="login-nav nav nav-tabs mt-5 justify-content-center" role="tablist" id="animate-tab">
+                                <li><a class="active"  data-toggle="tab" href="#signup" role="tab" id="signup-tab" data-easein="zoomInRight">Sign Up</a></li>
+                            <li><a data-toggle="tab" href="#singin" role="tab" id="singin-tab" data-easein="zoomInUp">Sign In</a></li>
+                            
+                        </ul>
                     </div>
                 </div>
-                <div class="sign-btn text-center">
-                    <a href="db-default.html" class="btn btn-lg btn-gradient-01">
-                        Create an account
-                    </a>
-                </div>
-                <div class="register">
-                    Already have an account?
-                    <br>
-                    <a href="pages-login.html">Sign In</a>
-                </div>  
             </div>
-            <!-- End Form -->                      
+            <!-- End Left Content -->
+            <!-- Begin Right Content -->
+            <div class="col-xl-9 col-lg-7 col-md-7 col-sm-12 col-12 my-auto no-padding">
+                <!-- Begin Form -->
+                
+                <div class="authentication-form-2 mx-auto">
+                        <% if (typeof errors !== 'undefined') { %>
+                            <% errors.forEach(function(error){ %>
+                                <%- include('../layouts/blocks/flash-message.ejs', {error: error.message}) %>
+                            <% }); %>
+                        <% } %>
+                     <div class="tab-content" id="animate-tab-content">
+                        <!-- Begin Sign In -->
+                        <div role="tabpanel" class="tab-pane " id="singin" aria-labelledby="singin-tab">
+                            <h3>Sign In To Elisyam</h3>
+                            <form action="/users/login" method="POST">
+                                <div class="group material-input">
+                                    <input type="text" name='username' value="<%= typeof username != 'undefined' ? username : '' %>" required>
+                                    <span class="highlight"></span>
+                                    <span class="bar"></span>
+                                    <label>Username</label>
+                                </div>
+                                <div class="group material-input">
+                                    <input type="password" name="password" required>
+                                    <span class="highlight"></span>
+                                    <span class="bar"></span>
+                                    <label>Password</label>
+                                </div>
+
+                                <div class="sign-btn text-center">
+                                        <!-- <a href="db-default.html" class="btn btn-lg btn-gradient-01">
+                                            Sign In
+                                        </a> -->
+                                        <input type="submit" value="Sign In" class="btn btn-lg btn-gradient-01">
+                                    </div>
+                            </form>
+                            <div class="row">
+                                <!-- <div class="col text-left">
+                                    <div class="styled-checkbox">
+                                        <input type="checkbox" name="checkbox" id="remeber">
+                                        <label for="remeber">Remember me</label>
+                                    </div>
+                                </div> -->
+                                <div class="col ">
+                                    <a href="pages-forgot-password.html">Forgot Password ?</a>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <!-- End Sign In -->
+                        <!-- Begin Sign Up -->
+                        <div role="tabpanel" class="tab-pane show active" id="signup" aria-labelledby="signup-tab">
+                            <h3>Create An Account</h3>
+                            <form action="" method="POST">
+                                
+
+                                <div class="group material-input">
+                                    <input type="text"  name="email" value="<%= typeof email != 'undefined' ? email : '' %>" required>
+                                    <span class="highlight"></span>
+                                    <span class="bar"></span>
+                                    <label>Email</label>
+                                </div>
+                                <div class="group material-input" >
+                                    <input type="password" name="password" required>
+                                    <span class="highlight"></span>
+                                    <span class="bar"></span>
+                                    <label>Password</label>
+                                </div>
+                                <div class="group material-input" >
+                                    <input type="password" name="repassword" required>
+                                    <span class="highlight"></span>
+                                    <span class="bar"></span>
+                                    <label>Confirm Password</label>
+                                </div>
+                                <div class="sign-btn text-center">
+                                        <!-- <a href="db-default.html" class="btn btn-lg btn-gradient-01">
+                                            Sign Up
+                                        </a> -->
+                                        <input type="submit" class="btn btn-lg btn-gradient-01" value="Sign up">
+                                    </div>
+                            </form>
+                            <!-- <div class="row">
+                                <div class="col text-left">
+                                    <div class="styled-checkbox">
+                                        <input type="checkbox" name="checkbox" id="agree">
+                                        <label for="agree">I Accept <a href="#">Terms and Conditions</a></label>
+                                    </div>
+                                </div>
+                            </div> -->
+                            
+                        </div>
+                        <!-- End Sign Up -->
+                    </div>
+                </div>
+                <!-- End Form -->                        
+            </div>
+            <!-- End Right Content -->
         </div>
-        <!-- End Right Content -->
+        <!-- End Row -->
     </div>
-    <!-- End Row -->
-</div>
+    <!-- End Container -->  
