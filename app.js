@@ -4,6 +4,9 @@ const expressLayouts = require('express-ejs-layouts');
 const app = express();
 const port = process.env.PORT || 4200;
 const session = require('express-session');
+const passport = require('passport');
+//Passport config
+require('./config/passport-local')(passport);
 
 const indexRouter = require('./routes/indexRouter');
 const usersRouter = require('./routes/usersRouter');
@@ -19,6 +22,8 @@ app.use(session({
      saveUninitialized:true
     }
 ));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 

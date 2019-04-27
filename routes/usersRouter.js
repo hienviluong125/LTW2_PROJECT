@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const usersService = require('./../services/usersService');
-
+const passport = require('passport');
 const renderLoginPage = (req,res,next) => {
     res.render('users/login', { 
         layout: 'layouts/without_blocks'
@@ -39,9 +39,17 @@ const registerAccount = async (req, res, next) => {
     }
 }
 
+const loginHandle = async(req, res, next) => {
+    passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/users/login',
+
+    })(req, res, next);
+};
+
 
 router.get('/register',renderRegisterPage);
 router.get('/login',renderLoginPage);
 router.post('/register', registerAccount);
-
+router.post('/login', loginHandle);
 module.exports = router;
