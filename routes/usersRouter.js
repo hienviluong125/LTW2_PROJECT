@@ -2,14 +2,17 @@ const router = require('express').Router();
 const usersService = require('./../services/usersService');
 const passport = require('passport');
 const renderLoginPage = (req,res,next) => {
-    res.render('users/login', { 
-        layout: 'layouts/without_blocks'
+    res.render('users/register', { 
+        layout: 'layouts/without_blocks',
+        errors: req.flash('errors'),
+        active: 'login'
     });
 }
 
 const renderRegisterPage = (req,res,next) => {
     res.render('users/register', {
-        layout: 'layouts/without_blocks'
+        layout: 'layouts/without_blocks',
+        active: 'register'
     });
 }
 
@@ -22,7 +25,8 @@ const registerAccount = async (req, res, next) => {
         res.render('users/register', {
             errors,
             email, 
-            layout: 'layouts/without_blocks'
+            layout: 'layouts/without_blocks',
+            active: 'register'
         });
     }else{
         delete user.repassword;
@@ -43,7 +47,18 @@ const loginHandle = async(req, res, next) => {
     passport.authenticate('local', {
         successRedirect: '/',
         failureRedirect: '/users/login',
-
+        failureMessage: 'Email or password incorrect.'
+    },(error, user, info) => {
+            if (error) { return next(err); }
+            if (!user) { 
+                //set flash message here
+                req.flash('errors', {message: info.message});
+                return res.redirect('/users/login'); 
+            }
+            req.logIn(user, function (error) {
+                if (error) { return next(error); }
+                return res.end(req.user.password);
+            });
     })(req, res, next);
 };
 

@@ -35,12 +35,12 @@ module.exports = function(passport){
         })
     );
     passport.serializeUser((user, done) => {
-        done(null, user.id);
+        done(null, {id: user.id, email: user.email});
       });
       
-      passport.deserializeUser((id, done) => {
-        User.findByPk(+id).then(user => {
-            done(null, user);
+      passport.deserializeUser((user, done) => {
+        User.findByPk(+user.id).then(returnUser => {
+            done(null, returnUser);
         })
         .catch(err => {
             done(err, user);
