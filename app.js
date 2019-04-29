@@ -9,8 +9,6 @@ const passport = require('passport');
 require('./config/passport-local')(passport);
 const flash = require('connect-flash');
 
-const indexRouter = require('./routes/indexRouter');
-const usersRouter = require('./routes/usersRouter');
 
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
@@ -27,33 +25,38 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
+const indexRouter = require('./routes/indexRouter');
+const usersRouter = require('./routes/usersRouter');
+const postsRouter = require('./routes/postsRouter');
+const writersRouter = require('./routes/writersRouter');
+
+//================End Routes require =================
+
+
+
+
+
+
+
 
 
 //================== Routes =================
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/posts',postsRouter);
+app.use('/writers',writersRouter);
+
+//================ End Routes =================
 
 
-//===========================================
+//================ Error pages =================
 
-
-
-
-//================== no exist routes ==================
-
-app.use((req,res,next) => {
+app.use((req,res)=>{
     res.render('commons/error404');
 })
 
-//===========================================
-
-
-
-
-
-
-
+//============== End Error pages =============
 
 
 app.listen(port, () => console.log("connected port " + port));

@@ -1636,6 +1636,9 @@ fieldset[disabled] a.btn {
 .btn-square {
   border-radius: 0;
 }
+.btn-tag-style{
+  border-radius:4px;
+}
 
 .btn-circle {
   border-radius: 50%;
@@ -2689,6 +2692,15 @@ span.badge-pulse-orange {
   margin-bottom: 30px;
 }
 
+<<<<<<< HEAD
+.widget-mb-0{
+  margin-bottom: 0px;
+}
+
+
+
+=======
+>>>>>>> succ
 .widget-image {
   background: #fff;
   border-radius: 0;
@@ -7775,6 +7787,7 @@ nav.navbar .user-size.dropdown-menu a.logout:hover {
     margin-left: 0.5rem;
     vertical-align: top;
     content: "\f123";
+    /* content: ""; */
     font-family: "Ionicons";
     border: 0 none;
 }
@@ -8523,7 +8536,7 @@ nav.navbar .user-size.dropdown-menu a.logout:hover {
   position: relative;
   box-shadow: 0 1px 15px 1px rgba(52, 40, 104, 0.1);
   padding: 1.07rem;
-  margin: 1.4rem;
+  margin: 0rem 1.4rem 1.4rem 1.4rem;
 }
 
 .widget-04 .post-container img {
