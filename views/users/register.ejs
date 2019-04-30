@@ -88,7 +88,7 @@
                                 <%= 'active' %>
                                 <% } %>" id="signup" aria-labelledby="signup-tab">
                             <h3>Create An Account</h3>
-                            <form action="" method="POST">
+                            <form action="/users/register" method="POST">
                                 
 
                                 <div class="group material-input">
@@ -108,6 +108,16 @@
                                     <span class="highlight"></span>
                                     <span class="bar"></span>
                                     <label>Confirm Password</label>
+                                </div>
+                                <div class="form-group row mb-5">
+                                    <label class="col-lg-3 mt-3 form-control-label text-center">Register as:</label>
+                                    <div class="col-lg-9 select mb-3">
+                                        <select name="type" class="custom-select form-control">
+                                            <option value='sub'>Subscriber</option>
+                                            <option value='writer'>Writer</option>  
+                                        </select>
+                                    </div>
+                                    
                                 </div>
                                 <div class="sign-btn text-center">
                                         <!-- <a href="db-default.html" class="btn btn-lg btn-gradient-01">
