@@ -17,9 +17,15 @@
                             Etiam consequat urna at magna bibendum, in tempor arcu fermentum vitae mi massa egestas. 
                         </span>
                         <ul class="login-nav nav nav-tabs mt-5 justify-content-center" role="tablist" id="animate-tab">
-                                <li><a class="active"  data-toggle="tab" href="#signup" role="tab" id="signup-tab" data-easein="zoomInRight">Sign Up</a></li>
-                            <li><a data-toggle="tab" href="#singin" role="tab" id="singin-tab" data-easein="zoomInUp">Sign In</a></li>
-                            
+                                <li><a class="<% if(active == 'register'){ %>
+                                    <%= 'active' %>
+                                    <% } %>
+                                    " data-toggle="tab" href="#signup" role="tab" id="signup-tab" data-easein="zoomInRight">Sign Up</a></li>
+                            <li><a class="
+                                <% if(active == 'login'){ %>
+                                    <%= 'active' %>
+                                    <% } %>
+                                " data-toggle="tab" href="#singin" role="tab" id="singin-tab" data-easein="zoomInUp">Sign In</a></li>
                         </ul>
                     </div>
                 </div>
@@ -31,20 +37,23 @@
                 
                 <div class="authentication-form-2 mx-auto">
                         <% if (typeof errors !== 'undefined') { %>
+                            <% console.log(errors); %>
                             <% errors.forEach(function(error){ %>
                                 <%- include('../layouts/blocks/flash-message.ejs', {error: error.message}) %>
                             <% }); %>
                         <% } %>
                      <div class="tab-content" id="animate-tab-content">
                         <!-- Begin Sign In -->
-                        <div role="tabpanel" class="tab-pane " id="singin" aria-labelledby="singin-tab">
+                        <div role="tabpanel" class="tab-pane <% if(active == 'login'){ %>
+                                <%= 'active' %>
+                                <% } %>" id="singin" aria-labelledby="singin-tab">
                             <h3>Sign In To Elisyam</h3>
                             <form action="/users/login" method="POST">
                                 <div class="group material-input">
-                                    <input type="text" name='username' value="<%= typeof username != 'undefined' ? username : '' %>" required>
+                                    <input type="text" name='email' required>
                                     <span class="highlight"></span>
                                     <span class="bar"></span>
-                                    <label>Username</label>
+                                    <label>Email</label>
                                 </div>
                                 <div class="group material-input">
                                     <input type="password" name="password" required>
@@ -75,9 +84,11 @@
                         </div>
                         <!-- End Sign In -->
                         <!-- Begin Sign Up -->
-                        <div role="tabpanel" class="tab-pane show active" id="signup" aria-labelledby="signup-tab">
+                        <div role="tabpanel" class="tab-pane show <% if(active == 'register'){ %>
+                                <%= 'active' %>
+                                <% } %>" id="signup" aria-labelledby="signup-tab">
                             <h3>Create An Account</h3>
-                            <form action="" method="POST">
+                            <form action="/users/register" method="POST">
                                 
 
                                 <div class="group material-input">
@@ -97,6 +108,16 @@
                                     <span class="highlight"></span>
                                     <span class="bar"></span>
                                     <label>Confirm Password</label>
+                                </div>
+                                <div class="form-group row mb-5">
+                                    <label class="col-lg-3 mt-3 form-control-label text-center">Register as:</label>
+                                    <div class="col-lg-9 select mb-3">
+                                        <select name="type" class="custom-select form-control">
+                                            <option value='sub'>Subscriber</option>
+                                            <option value='writer'>Writer</option>  
+                                        </select>
+                                    </div>
+                                    
                                 </div>
                                 <div class="sign-btn text-center">
                                         <!-- <a href="db-default.html" class="btn btn-lg btn-gradient-01">

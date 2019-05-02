@@ -7,6 +7,7 @@ const session = require('express-session');
 const passport = require('passport');
 //Passport config
 require('./config/passport-local')(passport);
+const flash = require('connect-flash');
 
 
 app.use(express.static(__dirname + '/public'));
@@ -20,6 +21,7 @@ app.use(session({
      saveUninitialized:true
     }
 ));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
