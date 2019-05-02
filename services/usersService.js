@@ -49,31 +49,10 @@ async function findOneByEmail(email){
     });
 }
 
-async function comparePassword(user, hashedPassword){
-    let errors = [];
-    let account = await findOneByEmail(user.email);
-    if(!account){
-        errors.push({message:"Account does not exist"});
-
-    }else{
-        try{
-            bcrypt.compare(user.password, hashPassword, (err, res) =>{
-                if(res == false){
-                    errors.push({message:"Account does not exist"});
-                }
-            });
-        }catch(err){
-            throw err;
-        } 
-    }
-    return errors;
-}
-
 
 
 module.exports = {
     getAllUsers,
     validateRegisterData,
     create,
-    comparePassword
 }

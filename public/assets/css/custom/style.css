@@ -5,3 +5,47 @@
     padding-top:4px;
     
 }
+
+.post-list-thumbnail{
+    object-fit: cover;
+    width:150px;
+    height:130px;
+}
+
+.top-right-thumbnail{
+    object-fit: cover;
+    width:128px;
+    height:120px;
+}
+
+.main-thumbnail{
+    object-fit: cover;
+    width:600px;
+    height:300px;
+}
+
+.owl-thumbnail{
+    object-fit: cover;
+    width:180px;
+    height:180px;
+}
+
+.bottom-left-thumbmail{
+    object-fit: cover;
+    width:200px;
+    height:150px;
+}
+
+.text-default-color{
+    color:#2c304d
+}
+
+.bottom-right-thumbmail{
+    object-fit: cover;
+    width:80px;
+    height:65px;
+}
+
+.small-text{
+    font-size:12px;
+}

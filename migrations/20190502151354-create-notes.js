@@ -1,49 +1,42 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Posts', {
+    return queryInterface.createTable('Notes', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      MainCategoryId: {
+      EditorId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'MainCategories',
+          model: 'Users',
           key: 'id',
         }
-      },
-      SubCategoryId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'SubCategories',
-          key: 'id',
-        }
-      },
-      title: {
-        type: Sequelize.STRING
-      },
-      releaseDate: {
-        type: Sequelize.DATE
-      },
-      shortContent: {
-        type: Sequelize.STRING
-      },
-      content: {
-        type: Sequelize.TEXT
       },
       WriterId: {
-        type: Sequelize.INTEGER
-      },
-      thumbnail: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id',
+        }
       },
       status: {
         type: Sequelize.STRING
+      },
+      content: {
+        type: Sequelize.STRING
+      },
+      PostId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Posts',
+          key: 'id',
+        }
       },
       createdAt: {
         allowNull: false,
@@ -56,6 +49,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Posts');
+    return queryInterface.dropTable('Notes');
   }
 };

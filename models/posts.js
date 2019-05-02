@@ -9,8 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     content: DataTypes.TEXT,
     WriterId: DataTypes.INTEGER,
     thumbnail: DataTypes.STRING,
-    status: DataTypes.BOOLEAN,
-    editorNote: DataTypes.STRING
+    status: DataTypes.STRING,
   }, {});
   Posts.associate = function(models) {
     // associations can be defined here

@@ -9,6 +9,11 @@ const renderAboutPage = (req, res, next) => {
 }
 
 const redirectToIndexPage = (req, res, next) => {
+    //Index page
+    // Hiển thị 4 bài viết nổi bật nhất trong tuần qua
+    // Hiển thị 10 bài viết được xem nhiều nhất (mọi chuyên mục)
+    // Hiển thị 10 bài viết mới nhất (mọi chuyên mục)
+    // Hiển thị top 10 chuyên mục, mỗi chuyên mục 1 bài mới nhất
     res.redirect('/index');
 }
 
