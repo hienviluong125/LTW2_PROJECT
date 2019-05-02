@@ -14,20 +14,22 @@ module.exports = function(passport){
                 where: {email}
             })
             .then(user => {
-                if(!user){
+                if(user === null){
                     done(null, false, {message: "User is not registered."});
-                }
-                bcrypt.compare(password, user.password)
-                .then(result => {
-                    if(result == true){
-                        done(null, user);
-                    }else{
-                        done(null, false, {'message':'Password incorrect.'});
-                    }
-                })
-                .catch(err => {
-                    throw err;
-                })
+                    
+                }else {
+                    bcrypt.compare(password, user.password)
+                    .then(result => {
+                        if(result == true){
+                            done(null, user);
+                        }else{
+                            done(null, false, {'message':'Password incorrect.'});
+                        }
+                    })
+                    .catch(err => {
+                        throw err;
+                    })
+                }            
             })
             .catch(err => {
                 throw err;

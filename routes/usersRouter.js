@@ -14,7 +14,8 @@ const renderLoginPage = (req,res,next) => {
     res.render('users/register', { 
         layout: 'layouts/without_blocks',
         errors: req.flash('errors'),
-        active: 'login'
+        active: 'login',
+        success: req.flash('success'),
     });
 }
 
@@ -38,8 +39,10 @@ const registerAccount = async (req, res, next) => {
             active: 'register'
         });
     }else{
+        delete user.type;
         delete user.repassword;
         user.username = user.email;
+        user.role = type;
         usersService.create(user)
             .then(user => {
                 console.log("user created: ", user.password);
@@ -54,7 +57,7 @@ const registerAccount = async (req, res, next) => {
                         console.log('account type is created for userID: ', user.UserId);
                     })
                     .catch(err => next(err))
-                
+                req.flash('success', {message: "Great, now you can log in"});
                 res.redirect("/users/login");
             })
             .catch(err => next(err)); 
