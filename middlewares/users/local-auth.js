@@ -8,11 +8,11 @@ function ensureAuthenticated(req, res, next){
 }
 
 function status(req, res, next){
-    req.locals.isLoggedIn = (req.isAuthenticated()) ? true : false;
-    if(req.locals.isLoggedIn){
-        req.locals.user = req.user;
+    res.locals.isLoggedIn = (req.isAuthenticated()) ? true : false;
+    if(res.locals.isLoggedIn){
+        res.locals.user = req.user.dataValues;
+        //console.log("info:", res.locals.user);
     }
-    console.log("info:", req.locals.user);
     next();
 }
 

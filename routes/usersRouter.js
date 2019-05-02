@@ -7,7 +7,7 @@ const passport = require('passport');
 
 const logout = (req, res, next) => {
     req.logout();
-    req.redirect('/');
+    res.redirect('/');
 }
 
 const renderLoginPage = (req,res,next) => {
