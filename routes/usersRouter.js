@@ -83,10 +83,16 @@ const loginHandle = async(req, res, next) => {
     })(req, res, next);
 };
 
+const renderForgotPage = (req, res, next) => {
+    res.render('users/forgot', {
+        layout: false
+    });
+}
 
 router.get('/register',renderRegisterPage);
 router.get('/login',renderLoginPage);
 router.post('/register', registerAccount);
 router.post('/login', loginHandle);
 router.get('/logout', logout);
+router.get('/forgot', renderForgotPage);
 module.exports = router;
