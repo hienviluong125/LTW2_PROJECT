@@ -49,3 +49,39 @@
 .small-text{
     font-size:12px;
 }
+
+.tags-input-hint{
+    display:block;
+    font-style:italic;
+}
+.tags-container{
+    width:100%;
+    display: flex;
+  flex-flow: row wrap;
+}
+    
+.tags-container .tags{
+    display: flex;
+    background: #E8E8E8;
+    color: rgba(53, 53, 53, 0.65);
+    font-size: 12px;
+    font-weight:600;
+    border-radius: 4px;
+  
+    align-items: center;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    margin-right:5px;
+    margin-top:5px;
+    padding:7px;
+    
+}
+
+.tags-container .tag-input{
+    flex:1;
+    padding:7px;
+    font-size: 12px;
+    border:0px;
+    outline:none;
+}
