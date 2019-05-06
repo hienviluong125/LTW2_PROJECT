@@ -38,7 +38,6 @@ async function validateRegisterData(email, password, repassword, next){
 async function create(user){
     let hash = await bcrypt.hash(user.password, crypto.iteration)
     user.password = hash;
-    console.log(user.password);
     return User.create(user);
 }
 
