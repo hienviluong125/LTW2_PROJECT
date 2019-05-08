@@ -2,13 +2,17 @@ const User = require('./../models/index').Users;
 const bcrypt = require('bcrypt');
 const crypto = require('../config/crypto');
 const validator = require('validator');
-
+const jwt = require('jwt-simple');
 
 async function getAllUsers(){
     return User.findAll({raw: true});
 };
 
-async function validateRegisterData(email, password, repassword, next){
+function isEmail(email){
+    return validator.isEmail(email);
+}
+
+async function validateRegisterData(email, password, repassword){
     let errors = [];
     if(!email || !password || !repassword){
         errors.push({message:"Please fill in all fields."});
@@ -19,7 +23,7 @@ async function validateRegisterData(email, password, repassword, next){
     if(password.length < 6){
         errors.push({message:"Passwords must have at least 6 characters"});
     }
-    if(!validator.isEmail(email)){
+    if(!isEmail(email)){
         errors.push({message:"Email is not valid"});
     }
     await findOneByEmail(email)
@@ -30,13 +34,13 @@ async function validateRegisterData(email, password, repassword, next){
         }
     })
     .catch(err => {
-        next(err);
+        throw err;
     });
     return errors;
 }
 
 async function create(user){
-    let hash = await bcrypt.hash(user.password, crypto.iteration)
+    let hash = await bcrypt.hash(password, crypto.iteration)
     user.password = hash;
     return User.create(user);
 }
@@ -48,10 +52,46 @@ async function findOneByEmail(email){
     });
 }
 
+function generateUserSecret(user){
+    return user.password + '-' + user.createdAt.getTime();
+}
+
+function generateRecoveryPasswordToken(user){
+    let payload = {
+        id: user.id,
+        email: user.email,
+        exp: Math.round(Date.now() / 1000 + 5 * 3600)
+    };
+    let secret = generateUserSecret(user);
+    return jwt.encode(payload, secret, "HS256", {header: {exp: payload.exp}});
+}
+
+async function findOne(id){
+    return User.findByPk(id, {
+        raw: true
+    });
+}
+
+function decodeRecoveryPasswordToken(user, token){
+    try {
+        if (user !== null) {
+            console.log("secret: ", generateUserSecret(user));
+            return jwt.decode(token, generateUserSecret(user));
+        }
+    } catch (err) {
+        throw err;
+    }
+}
+
 
 
 module.exports = {
     getAllUsers,
     validateRegisterData,
     create,
+    isEmail,
+    findOneByEmail,
+    generateRecoveryPasswordToken,
+    findOne,
+    decodeRecoveryPasswordToken,
 }
