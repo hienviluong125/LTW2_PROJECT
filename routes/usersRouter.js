@@ -162,14 +162,16 @@ const recoveryPasswordHandler = (req, res, next) => {
         res.redirect(`/users/reset/${data.userId}/${data.token}`);
     }else {
         usersService.findOne(data.userId).then(user => {
-            usersService.changePassword(user, data.password)
-            .then(changedRows => {
-                req.flash('success', {message: "Password changed successfully, now you can log in again"});
-                res.redirect('/users/login');
-            })
-            .catch(err => {
-                next(err);
-            })
+            if(user.email == data.email){
+                usersService.changePassword(user, data.password)
+                    .then(changedRows => {
+                        req.flash('success', { message: "Password changed successfully, now you can log in again" });
+                        res.redirect('/users/login');
+                    })
+                    .catch(err => {
+                        next(err);
+                    })
+            }
         })
         .catch(err => {
             next(err);
