@@ -11,6 +11,10 @@ const logout = (req, res, next) => {
 }
 
 const renderLoginPage = (req,res,next) => {
+    if(typeof res.locals.isLoggedIn !== 'undefined' && res.locals.isLoggedIn){       
+        res.redirect('/index');
+        return;
+    }
     res.render('users/register', { 
         layout: 'layouts/without_blocks',
         errors: req.flash('errors'),
@@ -70,6 +74,7 @@ const registerAccount = async (req, res, next) => {
 }
 
 const loginHandle = async(req, res, next) => {
+    
     passport.authenticate('local', {
         successRedirect: '/',
         failureRedirect: '/users/login',
@@ -83,7 +88,7 @@ const loginHandle = async(req, res, next) => {
             }
             req.logIn(user, function (error) {
                 if (error) { return next(error); }
-                return res.end(req.user.password);
+                return res.redirect("/index");
             });
     })(req, res, next);
 };
@@ -143,7 +148,7 @@ const renderRecoveryPasswordPage = function(req, res, next){
                     flash: req.flash('invalid-new-password')
                 })
             } else {
-                res.end("Invalid params");
+                next(new Error("invalid token/params"));
             }    
         }catch(err){
             next(err);
@@ -179,6 +184,23 @@ const recoveryPasswordHandler = (req, res, next) => {
     }
 }
 
+const renderProfilePage = (req, res, next) => {
+    Promise.all([usersService.findOne(+req.params.id), writerService.findOne(+req.params.id)])
+    .then(values => {
+        let penName;
+        if(values[1] !== null){
+            penName = values[1].PenName
+        }
+        console.log(values);
+        res.render('users/profile.ejs', {
+            user: values[0],
+            penName
+        });
+    })
+    .catch(err => {
+        next(err);
+    })   
+}
 
 router.get('/register',renderRegisterPage);
 router.get('/login',renderLoginPage);
@@ -189,4 +211,5 @@ router.get('/forgot', renderForgotPage);
 router.post('/forgot', forgotHandler);
 router.get('/reset/:id/:token', renderRecoveryPasswordPage);
 router.post('/reset', recoveryPasswordHandler);
+router.get('/profile/:id', renderProfilePage);
 module.exports = router;

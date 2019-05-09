@@ -67,6 +67,9 @@ function generateRecoveryPasswordToken(user){
 }
 
 async function findOne(id){
+    if(Number.isNaN(id)){
+        throw new Error("Can not parse userId");
+    }
     return User.findByPk(id, {
         raw: true
     });

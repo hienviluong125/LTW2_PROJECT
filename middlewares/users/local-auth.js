@@ -7,16 +7,21 @@ function ensureAuthenticated(req, res, next){
     }
 }
 
-function status(req, res, next){
-    res.locals.isLoggedIn = (req.isAuthenticated()) ? true : false;
-    if(res.locals.isLoggedIn){
-        res.locals.user = req.user.dataValues;
-        //console.log("info:", res.locals.user);
+function registerStatus(req, res, next){
+	if(typeof res.locals.isLoggedIn === 'undefined' || res.locals.isLoggedIn === false){
+		res.locals.isLoggedIn = (req.isAuthenticated()) ? true : false;
+	}
+    if(res.locals.isLoggedIn && typeof res.locals.user === 'undefined'){
+        res.locals.user = {
+			id: req.user.dataValues.id,
+			email: req.user.dataValues.email,
+			role: req.user.dataValues.role,
+		};
     }
     next();
 }
 
 module.exports = {
     ensureAuthenticated,
-    status
+    registerStatus
 }

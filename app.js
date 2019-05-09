@@ -25,7 +25,7 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(require('./middlewares/users/local-auth').status);
+app.use(require('./middlewares/users/local-auth').registerStatus);
 
 const indexRouter = require('./routes/indexRouter');
 const usersRouter = require('./routes/usersRouter');
