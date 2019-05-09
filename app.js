@@ -6,12 +6,15 @@ const port = process.env.PORT || 4200;
 const session = require('express-session');
 const passport = require('passport');
 //Passport config
+// const multer = require('multer');
 require('./config/passport-local')(passport);
 const flash = require('connect-flash');
+const upload = require('./helpers/uploader');
 
 
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout', 'layouts/main');
@@ -26,6 +29,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(require('./middlewares/users/local-auth').status);
+
+
+
+
 
 const indexRouter = require('./routes/indexRouter');
 const usersRouter = require('./routes/usersRouter');

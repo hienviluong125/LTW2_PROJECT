@@ -44,12 +44,12 @@ module.exports = function (passport) {
         User.findByPk(+user.id).then(returnUser => {
             // done(null, returnUser);
             //hien edit
-            let { username, email, role } = returnUser;
-            done(null, { username, email, role });
+            let { username, email, role, id } = returnUser;
+            done(null, { username, email, role, id });
             //end hien edit
         })
-        .catch(err => {
-            done(err, user);
-        });
+            .catch(err => {
+                done(err, user);
+            });
     });
 };

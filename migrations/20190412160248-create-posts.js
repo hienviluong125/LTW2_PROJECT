@@ -42,6 +42,9 @@ module.exports = {
       thumbnail: {
         type: Sequelize.STRING
       },
+      slug :{
+        type:Sequelize.STRING
+      },
       status: {
         type: Sequelize.STRING
       },

@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     SubCategoryId: DataTypes.INTEGER,
     title: DataTypes.STRING,
     releaseDate: DataTypes.DATE,
+    slug: DataTypes.STRING,
     shortContent: DataTypes.STRING,
     content: DataTypes.TEXT,
     WriterId: DataTypes.INTEGER,
@@ -18,3 +19,4 @@ module.exports = (sequelize, DataTypes) => {
   };
   return Posts;
 };
+// pending - verified - published - rejected

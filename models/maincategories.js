@@ -1,7 +1,8 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const MainCategories = sequelize.define('MainCategories', {
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    slug: DataTypes.STRING,
   }, {});
   MainCategories.associate = function(models) {
     // associations can be defined here
