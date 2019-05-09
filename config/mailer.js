@@ -14,12 +14,13 @@ function sendMail(user, token){
         html: `<html>Click this <a href="${homepage}/users/reset/${user.id}/${token}">link</a>to recover your account.</html>`,
         text: "ay"
       };  
-      mailgun.messages().send(data, function (error, body) {
-        if(error){
-            console.log(error);
-        }
-        console.log("uh", data, body);
-      });
+      console.log("Link: ", data.html);
+      // mailgun.messages().send(data, function (error, body) {
+      //   if(error){
+      //       console.log(error);
+      //   }
+      //   console.log("uh", data, body);
+      // });
 }
 
 module.exports = {

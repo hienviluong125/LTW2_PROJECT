@@ -111,11 +111,7 @@ const forgotHandler = async (req, res, next) => {
                 submitted: true,
                 email: email
             });   
-            // try{
-            //     console.log("uh", usersService.decodeRecoveryPasswordToken(user, token));
-            // }catch(err){
-            //     next(err);
-            // }
+
         })
         .catch(error => {
             next(error);
@@ -132,19 +128,53 @@ const forgotHandler = async (req, res, next) => {
     }
 }
 
-const recoveryPasswordHandler = function(req, res, next){
+const renderRecoveryPasswordPage = function(req, res, next){
     usersService.findOne(+req.params.id)
     .then(user => {
-        if(user !== null){
-            res.end("ayy you made it ID: " + user); 
-        } else {
-            res.end("nope..");
-        }    
+        try{
+            let payload = usersService.decodeRecoveryPasswordToken(user, req.params.token);
+            if(user !== null && user.id == payload.id && user.email == payload.email){
+                res.render("users/recover", {
+                    submitted: false,
+                    layout: false,
+                    userId: user.id,
+                    email: user.email,
+                    token: req.params.token,
+                    flash: req.flash('invalid-new-password')
+                })
+            } else {
+                res.end("Invalid params");
+            }    
+        }catch(err){
+            next(err);
+        } 
     })
     .catch(err => {
         next(err);
-    })
-    
+    })    
+}
+
+const recoveryPasswordHandler = (req, res, next) => {
+    let data = req.body;
+    console.log(data);
+    if(data.password && data.password.length < 6){
+        req.flash('invalid-new-password', {className: 'warning', msg: "Password has atleast 6 characters"});
+        res.redirect(`/users/reset/${data.userId}/${data.token}`);
+    }else {
+        usersService.findOne(data.userId).then(user => {
+            usersService.changePassword(user, data.password)
+            .then(changedRows => {
+                req.flash('success', {message: "Password changed successfully, now you can log in again"});
+                res.redirect('/users/login');
+            })
+            .catch(err => {
+                next(err);
+            })
+        })
+        .catch(err => {
+            next(err);
+        })
+    }
 }
 
 
@@ -155,5 +185,6 @@ router.post('/login', loginHandle);
 router.get('/logout', logout);
 router.get('/forgot', renderForgotPage);
 router.post('/forgot', forgotHandler);
-router.get('/reset/:id/:token', recoveryPasswordHandler);
+router.get('/reset/:id/:token', renderRecoveryPasswordPage);
+router.post('/reset', recoveryPasswordHandler);
 module.exports = router;

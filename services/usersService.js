@@ -75,12 +75,25 @@ async function findOne(id){
 function decodeRecoveryPasswordToken(user, token){
     try {
         if (user !== null) {
-            console.log("secret: ", generateUserSecret(user));
             return jwt.decode(token, generateUserSecret(user));
         }
     } catch (err) {
         throw err;
     }
+}
+
+async function changePassword(user, newPassword){
+    try{
+        console.log("old pass: ", user.password);
+        console.log("user: ", user);
+        let hash = await bcrypt.hash(newPassword, crypto.iteration);
+        console.log("new hash:", hash);
+        return User.update({password: hash}, {
+            where: {id: user.id}
+        });
+    }catch(err){
+        throw err;
+    }   
 }
 
 
@@ -94,4 +107,5 @@ module.exports = {
     generateRecoveryPasswordToken,
     findOne,
     decodeRecoveryPasswordToken,
+    changePassword
 }
