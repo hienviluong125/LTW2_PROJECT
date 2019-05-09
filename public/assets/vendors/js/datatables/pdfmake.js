@@ -2354,7 +2354,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * var pdfKitDoc = printer.createPdfKitDocument(docDefinition);
 	 *
-	 * pdfKitDoc.pipe(fs.createWriteStream('sample.pdf'));
+	 * pdfKitDoc.pipe(fs.createWriterstream('sample.pdf'));
 	 * pdfKitDoc.end();
 	 *
 	 * @return {Object} a pdfKit document object which can be saved or encode to data-url
@@ -25399,7 +25399,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var err;
 	      err = new Error('PDFDocument#write is deprecated, and will be removed in a future version of PDFKit. Please pipe the document into a Node stream.');
 	      console.warn(err.stack);
-	      this.pipe(fs.createWriteStream(filename));
+	      this.pipe(fs.createWriterstream(filename));
 	      this.end();
 	      return this.once('end', fn);
 	    };
@@ -26564,7 +26564,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // If the user pushes more data while we're writing to dest then we'll end up
 	  // in ondata again. However, we only want to increase awaitDrain once because
-	  // dest will only emit one 'drain' event for the multiple writes.
+	  // dest will only emit one 'drain' event for the multiple Writers.
 	  // => Introduce a guard on increasing awaitDrain.
 	  var increasedAwaitDrain = false;
 	  src.on('data', ondata);
@@ -27647,7 +27647,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (this.allowHalfOpen || this._writableState.ended) return;
 
 	  // no more data can be written.
-	  // But allow more writes to happen in this tick.
+	  // But allow more Writers to happen in this tick.
 	  processNextTick(onEndNT, this);
 	}
 
@@ -27845,7 +27845,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // a flag to see when we're in the middle of a write.
 	  this.writing = false;
 
-	  // when true all writes will be buffered until .uncork() call
+	  // when true all Writers will be buffered until .uncork() call
 	  this.corked = 0;
 
 	  // a flag to be able to tell if the onwrite cb is called immediately,
@@ -28126,7 +28126,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
-	function onwriteStateUpdate(state) {
+	function onWriterstateUpdate(state) {
 	  state.writing = false;
 	  state.writecb = null;
 	  state.length -= state.writelen;
@@ -28138,7 +28138,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var sync = state.sync;
 	  var cb = state.writecb;
 
-	  onwriteStateUpdate(state);
+	  onWriterstateUpdate(state);
 
 	  if (er) onwriteError(stream, state, sync, er, cb);else {
 	    // Check if we're actually ready to finish, but don't emit yet
@@ -28995,14 +28995,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	//
 	// While the output is causally related to the input, it's not a
 	// necessarily symmetric or synchronous transformation.  For example,
-	// a zlib stream might take multiple plain-text writes(), and then
+	// a zlib stream might take multiple plain-text Writers(), and then
 	// emit a single compressed chunk some time in the future.
 	//
 	// Here's how this works:
 	//
 	// The Transform stream has all the aspects of the readable and writable
 	// stream classes.  When you write(chunk), that calls _write(chunk,cb)
-	// internally, and returns false if there's a lot of pending writes
+	// internally, and returns false if there's a lot of pending Writers
 	// buffered up.  When you call read(), that calls _read(n) until
 	// there's enough pending readable data buffered up.
 	//
@@ -30072,7 +30072,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    do {
-	      var res = this._binding.writeSync(flushFlag,
+	      var res = this._binding.Writersync(flushFlag,
 	                                        chunk, // in
 	                                        inOff, // in_off
 	                                        availInBefore, // in_len
@@ -30306,7 +30306,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
-	Zlib.prototype.writeSync = function(flush, input, in_off, in_len, out, out_off, out_len) {
+	Zlib.prototype.Writersync = function(flush, input, in_off, in_len, out, out_off, out_len) {
 	  this._writeCheck();
 	  return this._write(flush, input, in_off, in_len, out, out_off, out_len);
 	};
@@ -30905,7 +30905,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /* If the WIN_INIT bytes after the end of the current data have never been
 	   * written, then zero those bytes in order to avoid memory check reports of
-	   * the use of uninitialized (or uninitialised as Julian writes) bytes by
+	   * the use of uninitialized (or uninitialised as Julian Writers) bytes by
 	   * the longest match routines.  Update the high water mark for the next
 	   * time through here.  WIN_INIT is set to MAX_MATCH since the longest match
 	   * routines allow scanning to strstart + MAX_MATCH, ignoring lookahead.
@@ -53731,7 +53731,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.pos += buffer.length;
 	    };
 
-	    EncodeStream.prototype.writeString = function(string, encoding) {
+	    EncodeStream.prototype.Writerstring = function(string, encoding) {
 	      var buf, byte, i, _i, _ref;
 	      if (encoding == null) {
 	        encoding = 'ascii';
@@ -57418,7 +57418,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.length instanceof NumberT) {
 	        this.length.encode(stream, Buffer.byteLength(val, encoding));
 	      }
-	      stream.writeString(val, encoding);
+	      stream.Writerstring(val, encoding);
 	      if (this.length == null) {
 	        return stream.writeUInt8(0x00);
 	      }
@@ -65311,7 +65311,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return ret.join('');
 	    };
 
-	    Data.prototype.writeString = function(val) {
+	    Data.prototype.Writerstring = function(val) {
 	      var i, j, ref, results;
 	      results = [];
 	      for (i = j = 0, ref = val.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
@@ -65329,7 +65329,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.readInt16();
 	    };
 
-	    Data.prototype.writeShort = function(val) {
+	    Data.prototype.Writershort = function(val) {
 	      return this.writeInt16(val);
 	    };
 
@@ -66475,7 +66475,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					, force = type === force_saveable_type
 					, object_url
 					, dispatch_all = function() {
-						dispatch(filesaver, "writestart progress write writeend".split(" "));
+						dispatch(filesaver, "Writerstart progress write writeend".split(" "));
 					}
 					// on any filesys errors revert to saving with object URLs
 					, fs_error = function() {
@@ -66552,7 +66552,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		FS_proto.DONE = 2;
 
 		FS_proto.error =
-		FS_proto.onwritestart =
+		FS_proto.onWriterstart =
 		FS_proto.onprogress =
 		FS_proto.onwrite =
 		FS_proto.onabort =

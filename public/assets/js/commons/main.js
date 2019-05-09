@@ -1,8 +1,8 @@
 var API_URL = 'http://localhost:4200';
 $(document).ready(function () {
 
-    // initCarousel();
-    // initAddPostComponentEvent();
+    initCarousel();
+    initAddPostComponentEvent();
 
 
 

@@ -126,7 +126,7 @@ var _saveAs = (function(view) {
 				, force = type === force_saveable_type
 				, object_url
 				, dispatch_all = function() {
-					dispatch(filesaver, "writestart progress write writeend".split(" "));
+					dispatch(filesaver, "Writerstart progress write writeend".split(" "));
 				}
 				// on any filesys errors revert to saving with object URLs
 				, fs_error = function() {
@@ -203,7 +203,7 @@ var _saveAs = (function(view) {
 	FS_proto.DONE = 2;
 
 	FS_proto.error =
-	FS_proto.onwritestart =
+	FS_proto.onWriterstart =
 	FS_proto.onprogress =
 	FS_proto.onwrite =
 	FS_proto.onabort =

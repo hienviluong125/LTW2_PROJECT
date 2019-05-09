@@ -39,7 +39,23 @@ async function add({ username, title, shortContent, slug, MainCategoryId, SubCat
 
 }
 
+async function get({slug,WriterId}){
+    const post = db.Posts.findOne({
+        where: {
+            slug
+        },
+        include: [
+            db.MainCategories,
+            db.SubCategories,
+            db.Users
+        ]
+    });
+    // console.log(post);
+    return post;
+}
+
 
 module.exports = {
-    add
+    add,
+    get
 };

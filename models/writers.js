@@ -1,11 +1,12 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Writes = sequelize.define('Writes', {
+  const Writers = sequelize.define('Writers', {
     UserId: DataTypes.INTEGER,
     PenName: DataTypes.STRING
   }, {});
-  Writes.associate = function(models) {
+  Writers.associate = function(models) {
     // associations can be defined here
+    Writers.hasMany(models.Posts);
   };
-  return Writes;
+  return Writers;
 };

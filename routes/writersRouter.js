@@ -7,7 +7,7 @@ const faker = require('faker');
 
 const renderPostListPage = (req, res, next) => {
     let posts = [];
-    for(let i = 0;i<15;i++){
+    for (let i = 0; i < 15; i++) {
         posts.push({
             title: faker.name.jobTitle(),
             mainCateName: faker.name.jobType(),
@@ -17,10 +17,10 @@ const renderPostListPage = (req, res, next) => {
             status: 'Chờ duyệt',
             comments: faker.random.number()
         });
-        
+
     }
 
-    res.render('writers/posts',{posts});
+    res.render('writers/posts', { posts });
 }
 
 const renderAddPostPage = (req, res, next) => {
@@ -29,13 +29,18 @@ const renderAddPostPage = (req, res, next) => {
         .then(allCategories => {
             res.render('writers/posts/add', { allCategories });
         })
-
-
-    // res.render('writers/posts/add', mockData);
 }
 
 const renderEditPostPage = (req, res, next) => {
-    res.render('writers/posts/edit');
+    let slug = req.params.slug
+    let WriterId = 2;
+    postsService
+        .get({ slug, WriterId })
+        .then(post => {
+            return res.json({ post });
+            res.render('writers/posts/edit');
+        })
+
 }
 
 const addPost = (req, res, next) => {
@@ -60,7 +65,7 @@ const addPost = (req, res, next) => {
 
 router.get('/posts', renderPostListPage);
 router.get('/posts/add', renderAddPostPage);
-router.get('/posts/edit', renderEditPostPage);
+router.get('/posts/edit/:slug', renderEditPostPage);
 
 router.post('/posts/add', upload.array('images', 10), addPost);
 
