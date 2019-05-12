@@ -13,11 +13,17 @@ module.exports = (sequelize, DataTypes) => {
     status: DataTypes.STRING,
     views: DataTypes.INTEGER
   }, {});
-  Posts.associate = function(models) {
+  Posts.associate = function (models) {
     // associations can be defined here
     Posts.belongsTo(models.SubCategories);
     Posts.belongsTo(models.MainCategories);
-    Posts.belongsTo(models.Users,{foreignKey: 'WriterId'});
+    Posts.belongsTo(models.Users, { foreignKey: 'WriterId' });
+    Posts.belongsToMany(models.Tags, {
+      through: {
+        model: models.PostTags
+      },
+      foreignKey: 'PostId'
+    });
   };
   return Posts;
 };

@@ -41,7 +41,11 @@
 }
 
 .personal-post{
-    max-height:187px;
+    min-height:187px;
+}
+
+.custom-tag{
+    margin-top:-2px;
 }
 
 .bottom-right-thumbmail{
@@ -53,7 +57,7 @@
 
 .personal-post-thumbnail{
     object-fit: cover;
-    width:200px;
+    width:90%;
     height:150px;
 }
 .action-a-link{
@@ -123,7 +127,7 @@
     cursor: pointer;
 }
 
-#editor-container{
+.custom-quill-editor-container{
     height:auto;
   color:black;
   /* added these styles */

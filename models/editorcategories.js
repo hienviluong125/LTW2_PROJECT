@@ -1,7 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const EditorCategories = sequelize.define('EditorCategories', {
-    WriterId: DataTypes.INTEGER,
     SubCategoryId: DataTypes.INTEGER,
     UserId: DataTypes.INTEGER
   }, {});

@@ -16,15 +16,29 @@ async function creatTags({ tags }) {
 }
 
 async function addTagsToPost({ tagIds, postId }) {
-    return Promise.all(tagIds.map(t_id => {
-        return db.PostTags.create({
-            PostId: postId,
-            TagId: t_id
-        });
+    try{
+        return Promise.all(tagIds.map(async t_id => {
+            return await db.PostTags.create({
+                PostId: postId,
+                TagId: t_id
+            });
     }))
+    }catch(err){
+        console.log({err});
+    }
+    
+}
+
+async function removeTagsOfPost({ postId }) {
+    return db.PostTags.destroy({
+        where: {
+            PostId: postId
+        }
+    });
 }
 
 module.exports = {
     creatTags,
-    addTagsToPost
+    addTagsToPost,
+    removeTagsOfPost
 }

@@ -38,6 +38,7 @@ const indexRouter = require('./routes/indexRouter');
 const usersRouter = require('./routes/usersRouter');
 const postsRouter = require('./routes/postsRouter');
 const writersRouter = require('./routes/writersRouter');
+const editorsRouter = require('./routes/editorsRouter');
 
 //================End Routes require =================
 
@@ -55,6 +56,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/posts',postsRouter);
 app.use('/writers',writersRouter);
+app.use('/editors',editorsRouter);
 
 //================ End Routes =================
 

@@ -2,26 +2,23 @@ const router = require('express').Router();
 const upload = require('./../helpers/uploader');
 const postsService = require('./../services/postsService');
 const categoriesSerivce = require('./../services/categoriesService');
-const faker = require('faker');
-
 
 const renderPostListPage = (req, res, next) => {
-    let posts = [];
-    for (let i = 0; i < 15; i++) {
-        posts.push({
-            title: faker.name.jobTitle(),
-            mainCateName: faker.name.jobType(),
-            subCateName: faker.name.jobType(),
-            content: faker.lorem.sentences(),
-            views: faker.random.number(),
-            status: 'Chờ duyệt',
-            comments: faker.random.number()
-        });
+    let page = req.params.page;
+    let id = req.user.id;
+    postsService
+        .getAllPostByUserId({ id })
+        .then(posts => {
+            // res.json({posts});
+            res.render('writers/posts', { posts });
+        })
+        .catch(err => {
+            res.json({ err });
+        })
 
-    }
-
-    res.render('writers/posts', { posts });
 }
+
+
 
 const renderAddPostPage = (req, res, next) => {
     categoriesSerivce
@@ -34,12 +31,19 @@ const renderAddPostPage = (req, res, next) => {
 const renderEditPostPage = (req, res, next) => {
     let slug = req.params.slug
     let WriterId = 2;
-    postsService
-        .get({ slug, WriterId })
-        .then(post => {
-            return res.json({ post });
-            res.render('writers/posts/edit');
-        })
+    Promise.all([
+        postsService.get({ slug, WriterId }),
+        categoriesSerivce.getAllCategories()
+    ]).then(data => {
+        let post = data[0];
+        let allCategories = data[1];
+        if (post && allCategories) {
+            res.render('writers/posts/edit', { post, allCategories });
+        } else {
+            res.status(404).json("vcl");
+        }
+
+    })
 
 }
 
@@ -48,8 +52,10 @@ const addPost = (req, res, next) => {
     if (!req.user) {
         res.status(500).json({ err: "please login" });
     } else {
+
         let param = JSON.parse(req.body.data);
-        param.username = req.user.username;
+        console.log(param);
+        param.WriterId = req.user.id;
         postsService
             .add(param)
             .then(result => {
@@ -59,14 +65,54 @@ const addPost = (req, res, next) => {
                 res.status(500).json({ err });
             })
     }
-
-
 }
 
-router.get('/posts', renderPostListPage);
+const editPost = (req, res, next) => {
+    if (!req.user) {
+        res.status(500).json({ err: "please login" });
+    } else {
+        let param = JSON.parse(req.body.data);
+
+
+        param.WriterId = req.user.id;
+        postsService
+            .edit(param)
+            .then(result => {
+                res.status(200).json({ result });
+            })
+            .catch(err => {
+                res.status(500).json({ err });
+            })
+    }
+}
+
+const deletePost = (req, res, next) => {
+    if (!req.user) {
+        res.status(500).json({ err: "please login" });
+    } else {
+        let slug = req.params.slug;
+        let WriterId = req.user.id;
+        postsService
+            ._delete({ slug, WriterId })
+            .then(() => {
+                res.redirect('/writers/posts');
+            })
+            .catch(err => {
+                res.status(500).json({ err });
+            })
+    }
+}
+
+
+
 router.get('/posts/add', renderAddPostPage);
 router.get('/posts/edit/:slug', renderEditPostPage);
+router.get('/posts/delete/:slug', deletePost);
 
-router.post('/posts/add', upload.array('images', 10), addPost);
+router.get('/posts', (req, res, next) => res.redirect('/writers/posts/1'));
+router.get('/posts/:page', renderPostListPage);
+
+router.post('/posts/add', upload.array('images'), addPost);
+router.post('/posts/edit', upload.array('images'), editPost);
 
 module.exports = router;

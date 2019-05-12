@@ -146,6 +146,7 @@ function mainCateSelect() {
     $('#main-cate').on('change', function (e) {
         let valueSelected = this.value;
         let subCates = allCategories.find(aC => aC.id === parseInt(valueSelected)).SubCategories;
+        console.log("allCategories",allCategories);
         $('#sub-cate')
             .html('')
             .append($('<option>', {
@@ -216,6 +217,8 @@ function appendImgsToFormData(formData, data, slug) {
 
     formData.append('images', thumbnailImgBlob, thumbnailImgId);
     formData.append("data", JSON.stringify(postData));
+
+    console.log("JSON.stringify(postData)",JSON.stringify(postData));
 }
 
 //validate input data
@@ -269,7 +272,7 @@ function validateAddPostForm() {
             tags,
             delta
         }
-    
+
         appendImgsToFormData(formData, data, slug);
         showModal({ id: 'add-post-confirm-modal' });
         submitPost(formData);
@@ -331,7 +334,7 @@ function submitPost(formData) {
 
 //MAIN
 //this function init all event for add post page
-function initAddPostComponentEvent() {
+function initAddPostPageEvent() {
 
     var title = "Thông báo";
     var content = `Bạn có chắc chắn muốn đăng tải bài viết này hay không ?
@@ -342,8 +345,11 @@ function initAddPostComponentEvent() {
     initSuccessModal("add-post-success-modal", linkTo);
     initFailureModal("add-post-failure-modal");
 
-
-    allCategories = JSON.parse($('#main-categories').html());
+    allCategories = $('#main-categories').html();
+    if(allCategories && typeof allCategories !== 'undefined'){
+        allCategories = JSON.parse(allCategories);
+    }
+   
     initQuillEditor();
     initQuillEditorEvent()
     addTagEvent();

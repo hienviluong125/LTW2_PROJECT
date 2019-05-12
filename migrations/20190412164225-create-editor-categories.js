@@ -8,13 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      WriterId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Writers',
-          key: 'id',
-        }
-      },
       SubCategoryId: {
         type: Sequelize.INTEGER,
         references: {

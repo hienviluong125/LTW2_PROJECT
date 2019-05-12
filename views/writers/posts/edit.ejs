@@ -1,0 +1,136 @@
+<div class="container pt-3">
+    <!-- Form -->
+    <div id="main-categories" style="display: none"><%= JSON.stringify(allCategories)%></div>
+    <div class="widget has-shadow">
+        <div class="widget-header bordered no-actions d-flex align-items-center">
+            <h3>Sửa bài viết</h3>
+        </div>
+        <div class="widget-body">
+            <form class="needs-validation" id="edit-post-form" enctype="multipart/form-data" novalidate>
+                <input type="hidden" name="id" class="hidden_id" value="<%= post.id %>">
+                <div class="form-group row d-flex align-items-center mb-2">
+                    <label class="col-lg-2 form-control-label d-flex">Tiêu đề</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" id="title" placeholder="Nhập tiêu đề..."
+                            value="<%= post.title %>" required>
+                        <div id="title-invalid" class="invalid-feedback">
+                            Tiêu đề tối thiểu phải gồm 10 ký tự
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row d-flex align-items-center mb-2">
+                    <label class="col-lg-2 form-control-label d-flex">Chuyên mục cha</label>
+                    <div class="col-lg-5">
+                        <div class="select">
+                            <select name="account" id="main-cate" class="custom-select form-control" required>
+                                <option value="" disabled>Chọn chuyên mục</option>
+                                <% allCategories.forEach(eachCate => { %>
+                                    <% if(post.MainCategory.id === eachCate.id){ %>
+                                        <option value="<%= eachCate.id %>" selected><%= eachCate.name %></option>
+                                    <% } else{ %>
+                                        <option value="<%= eachCate.id %>"><%= eachCate.name %></option>
+                                    <% } %>
+                                <% }); %>
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn chuyên mục
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row d-flex align-items-center mb-2">
+                    <label class="col-lg-2 form-control-label d-flex">Chuyên mục con</label>
+                    <div class="col-lg-5">
+                        <div class="select">
+
+                            <%
+                                var cateIndex = -1;
+                                var mainCate = allCategories.find(eachCate => eachCate.id === post.MainCategory.id);
+                                <!-- var subCate = mainCate.SubCategories.find(eachCate => eachCate.id === post.SubCategory.id); -->
+                            %>
+
+                            <select name="account" id="sub-cate" class="custom-select form-control" required>
+                                <option value="" disabled>Chọn chuyên mục</option>
+                                <% mainCate.SubCategories.forEach(eachCate => { %>
+                                    <% if(post.SubCategory.id === eachCate.id){ %>
+                                        <option value="<%= eachCate.id %>" selected><%= eachCate.name %></option>
+                                    <% } else{ %>
+                                        <option value="<%= eachCate.id %>"><%= eachCate.name %></option>
+                                    <% } %>
+                                <% }); %>
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn chuyên mục
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row d-flex align-items-center mb-2">
+                    <label class="col-lg-2 form-control-label d-flex">Nội dung tóm tắt</label>
+                    <div class="col-lg-10">
+                        <input type="text" id="short-content" value="<%= post.shortContent %>" class="form-control"
+                            placeholder="Nhập nội dung tóm tắt..." required>
+                        <div id="short-content-invalid" class="invalid-feedback">
+                            Nội dung tóm tắt tối thiểu phải gồm 10 ký tự
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row d-flex align-items-center mb-2">
+                    <label class="col-lg-2 form-control-label d-flex">
+                        Nhãn
+                    </label>
+                    <div class="col-lg-10">
+                        <div class="tags-container">
+                            <% post.Tags.forEach(t => { %>
+                            <div class="tags">
+                                <span><%= t.name %></span>
+                                &ensp;
+                                <i class="ion-close-round tag-close-btn"></i>
+                            </div>
+                            <% }); %>
+
+                            <input class="tag-input" type="text" placeholder="Enter để thêm tag...">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group row d-flex align-items-center mb-2">
+                    <label class="col-lg-2 form-control-label">Ảnh đại diện</label>
+                    <input type="file" id="thumbnail" />
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" class="thumbnail-btn btn btn-warning ripple">
+                                    Chọn hình
+                                </button>
+                            </span>
+                            <input type="text" id="thumbnail-name" class="form-control post-thumbnail-name" value="<%= post.thumbnail %>" readonly>
+                            <div id="thumbnail-name-invalid" class="mt-1 invalid-feedback">
+                                Vui lòng chọn ảnh đại diện
+                            </div>
+                        </div>
+                        <img class="mt-2 post-thumbnail-image" src="/assets/img/posts/<%= post.thumbnail %>">
+                    </div>
+
+                </div>
+                <div class="form-group row mb-2 mt-1">
+                    <label class="col-lg-2 form-control-label d-flex">
+                        Nội dung bài viết
+                    </label>
+
+                    <div class="col-xl-12">
+                        <div id="content-invalid" class="invalid-feedback mb-2">
+                            Nội dung bài viết tối thiểu phải gồm 20 ký tự
+                        </div>
+                        <div id="editor-container" class="custom-quill-editor-container"></div>
+                    </div>
+
+                </div>
+                <div class="text-left">
+                    <button class="btn btn-warning btn-lg" id="edit-post-btn" type="submit">Sửa bài</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Form -->
+</div>

@@ -2,13 +2,19 @@ var API_URL = 'http://localhost:4200';
 $(document).ready(function () {
 
     initCarousel();
-    initAddPostComponentEvent();
+    initAddPostPageEvent();
+    initPostListPageEvent();
+    initEditPostPageEvent();
+
 
 
 
 
 });
 
+function initEventWithRouter(param){
+
+}
 
 function initCarousel() {
     $('.owl-carousel').owlCarousel({
