@@ -23,6 +23,13 @@ module.exports = {
       role: {
         type: Sequelize.STRING,
       },
+      resetPasswordToken : {
+        type: Sequelize.STRING
+      },
+      resetPasswordExpires : {
+        type: Sequelize.DATE,
+      }
+      ,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

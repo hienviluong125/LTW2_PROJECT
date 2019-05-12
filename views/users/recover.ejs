@@ -49,45 +49,62 @@ Author: SAEROX
                             </a>
                         </div>
                         <% if(submitted == false){ %>
-                        <h3>Password Recovery</h3>
+                        <h3>Password Recovery for <%= email %></h3>
                         <% if(typeof flash !== 'undefined'){ %>
-                            <%- include('./../layouts/blocks/flash-message.ejs', {msg: flash.msg, className: flash.className}); %>
+                            <% flash.forEach(f => { %>
+                                <%- include('./../layouts/blocks/flash-message.ejs', {msg: f.msg, className: f.className}); %>
+                                <% }) %>          
                         <% } %>
-                            <form action="/users/forgot" method="POST">
+                            <form action="/users/reset" method="POST">
+                                <input type="hidden" name="userId" value="<%= userId %>">
+                                <input type="hidden" name="email" value="<%= email %>">
+                                <input type="hidden" name="token" value="<%= token %>">
                                 <div class="group material-input">
-                                    <input type="email" name="email" required>
+                                    <input type="password" name="password" required>
                                     <span class="highlight"></span>
                                     <span class="bar"></span>
-                                    <label>Email</label>
+                                    <label>New password</label>
                                 </div>
                                 <div class="button text-center">
-                                    <button type="submit" class="btn btn-lg btn-gradient-01">Reset Password</button>
+                                    <button type="submit" class="btn btn-lg btn-gradient-01">Confirm</button>
                                 </div>
                             </form>
-                        <% }else{ %>
-                            <h3 class='text-center'>Recovery link has sent to <%= email %>, check your email.</h3>
                         <% } %>
                         <div class="row">
-                            <div class="col-lg-6">
-                                <div class="back">
-                                    <a href="/index">
-                                        <div class="c-icon">
-                                                <i class="la la-home"></i>
+                                <div class="col-lg-6">
+                                        <div class="back">
+                                            <a href="/index">
+                                                <div class="c-icon">
+                                                        <i class="la la-home"></i>
+                                                </div>
+                                                <div class="c-class">Home</div>
+                                            </a>
                                         </div>
-                                        <div class="c-class">Home</div>
-                                    </a>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="back">
+                                            <a href="/users/login">
+                                                <div class="c-icon">
+                                                        <i class="la la-key"></i>
+                                                </div>
+                                                <div class="c-class">Log in</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                            <!-- <div class="col-lg-6">
+                                    <div class="c-icon">
+                                            <i class="la la-home"></i>
+                                        </div>
+                                        <div class="c-class">la-home</div>
+                                <div class="back">
+                                    <a href="/index">Home</a>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="back">
-                                    <a href="/users/login">
-                                        <div class="c-icon">
-                                                <i class="la la-key"></i>
-                                        </div>
-                                        <div class="c-class">Log in</div>
-                                    </a>
+                                    <a href="/users/login">Sign In</a>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>      
                     </div>        
                 </div>

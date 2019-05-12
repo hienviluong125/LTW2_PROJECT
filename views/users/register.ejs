@@ -81,7 +81,7 @@
                                     </div>
                                 </div> -->
                                 <div class="col ">
-                                    <a href="pages-forgot-password.html">Forgot Password ?</a>
+                                    <a href="/users/forgot">Forgot Password ?</a>
                                 </div>
                             </div>
                             
@@ -91,6 +91,10 @@
                         <div role="tabpanel" class="tab-pane show <% if(active == 'register'){ %>
                                 <%= 'active' %>
                                 <% } %>" id="signup" aria-labelledby="signup-tab">
+                                <% if (typeof danger !== 'undefined' && danger.length > 0) { %>
+                                    <% danger.forEach(succ => { %> 
+                                    <%- include('./../layouts/blocks/flash-message.ejs', {msg: succ.message, className : 'danger'}) %>
+                                <% });} %>
                             <h3>Create An Account</h3>
                             <form action="/users/register" method="POST">
                                 

@@ -1,5 +1,17 @@
 const writerModel = require('./../models/index').Writers;
 
+function findOne(userId){
+    if(Number.isNaN(userId)){
+        throw new Error("Can not parse userId");
+    }
+    return writerModel.findOne({
+        raw: true,
+        where: {
+            UserId: +userId
+        }
+    });
+}
+
 function create(user){
 
     return writerModel.create({
@@ -8,6 +20,7 @@ function create(user){
     });
 }
 
-module.exports = {
-    create
-}
+module.exports ={
+    create,
+    findOne
+};

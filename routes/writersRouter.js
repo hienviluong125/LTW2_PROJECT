@@ -2,6 +2,7 @@ const router = require('express').Router();
 const upload = require('./../helpers/uploader');
 const postsService = require('./../services/postsService');
 const categoriesSerivce = require('./../services/categoriesService');
+const middleware = require('./../middlewares/index');
 
 const renderPostListPage = (req, res, next) => {
     let page = req.params.page;
@@ -103,7 +104,7 @@ const deletePost = (req, res, next) => {
     }
 }
 
-
+router.all('*',middleware.Authentication);
 
 router.get('/posts/add', renderAddPostPage);
 router.get('/posts/edit/:slug', renderEditPostPage);
