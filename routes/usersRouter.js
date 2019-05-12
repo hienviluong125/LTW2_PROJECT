@@ -4,6 +4,7 @@ const subService = require('./../services/subscriberService');
 const writerService = require('./../services/writerService');
 const passport = require('passport');
 const mail = require('../config/mailer');
+const htmlDateParser = require('../utils/htmlDateFormat');
 
 const logout = (req, res, next) => {
     req.logout();
@@ -185,33 +186,47 @@ const recoveryPasswordHandler = (req, res, next) => {
 }
 
 const renderProfilePage = (req, res, next) => {
-    // if(typeof res.locals.user !== 'undefined' && req.params.id == res.locals.user.id){
-    //     res.redirect('/users/profile/me');   
-    // }else{
-        Promise.all([usersService.findOne(+req.params.id), writerService.findOne(+req.params.id)])
-        .then(values => {
-            let penName;
-            if(values[1] !== null){
-                penName = values[1].PenName
+    Promise.all([usersService.findOne(+req.params.id), writerService.findOne(+req.params.id)])
+    .then(values => {
+        let penName;
+        if(values[1] !== null){
+            penName = values[1].PenName;
+        }
+        if(values[0] == null){
+            next(new Error('Can not find user'));
+        }else {
+            if(values[0].DoB !== null){               
+                values[0].DoB = htmlDateParser.parse(values[0].DoB);
             }
             res.render('users/profile.ejs', {
                 user: values[0],
                 penName,
-                editStatus: (res.locals.isLoggedIn && +req.params.id === +res.locals.user.id) ? '' : 'disabled'
+                editStatus: (res.locals.isLoggedIn && +req.params.id === +res.locals.user.id) ? '' : 'disabled',
+                flash: req.flash('update-success')
             });
-        })
-        .catch(err => {
-            next(err);
-        })   
-    //}
+        }     
+    })
+    .catch(err => {
+        next(err);
+    })   
 }
 
 const updateUserProfile = (req, res, next) => {
     if(res.locals.isLoggedIn && +req.params.id === + res.locals.user.id){
-        console.log(req.body);
-        res.end("Yety");
+        let user = req.body;
+        user.DoB = new Date(req.body.DoB);
+        user.id = res.locals.user.id;
+        usersService.updateInfo(user)
+        .then(changedRows => {
+            req.flash('update-success', {message : "Update infomation successfully"});
+            res.redirect(`/users/profile/${res.locals.user.id}`);
+        })
+        .catch(err => {
+            next(err);
+        })
     }else{
-        res.end("fuck off");
+        req.flash('errors', {message: 'You need to log in to update your personal info.'});
+        res.redirect('/users/login');
     }
 }
 

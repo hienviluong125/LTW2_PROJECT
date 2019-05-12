@@ -97,6 +97,11 @@ async function changePassword(user, newPassword){
     }   
 }
 
+function updateInfo(user){
+    return User.update(user, {
+        where: {id: user.id}
+    });
+}
 
 
 module.exports = {
@@ -108,5 +113,6 @@ module.exports = {
     generateRecoveryPasswordToken,
     findOne,
     decodeRecoveryPasswordToken,
-    changePassword
+    changePassword,
+    updateInfo
 }

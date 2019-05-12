@@ -19,20 +19,47 @@
         <!-- End Page Header -->
         <div class="row flex-row">
             <!-- Begin Widget -->
-            <!-- <div class="col-xl-3"> 
+            <div class="col-xl-3"> 
                  <div class="widget has-shadow">
                     <div class="widget-body">
-                        <div class="mt-5">
-                            <img src="/assets/img/avatar/avatar-01.jpg" alt="..." style="width: 120px;" class="avatar rounded-circle d-block mx-auto">
-                        </div>
-                        <h3 class="text-center mt-3 mb-1">David Green</h3>
-                        <p class="text-center">dgreen@example.com</p>
+                        
+                        <h3 class="text-center mt-3 mb-1"> <%= user.username %> </h3>
+                        <p class="text-center"> <%= user.email %> </p>
                         <div class="em-separator separator-dashed"></div>
                         <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link" href="javascript:void(0)"><i class="la la-bell la-2x align-middle pr-2"></i>Notifications</a>
-                            </li>
-                            <li class="nav-item">
+                            
+
+                            <% if(_locals.isLoggedIn) { %>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/users/profile/update/password"><i class="la la-key la-2x align-middle pr-2"></i>Change your password</a>
+                                </li>
+
+                                <% if(_locals.user.role == 'writer'){ %>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="javascript:void(0)"><i class="la la-clipboard la-2x align-middle pr-2"></i>Posts</a>
+                                </li>
+                                <% } %>
+                                <% if(_locals.user.role == 'sub'){ %>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/subscribers/extend"><i
+                                            class="la la-credit-card la-2x align-middle pr-2"></i>Subscriptions</a>
+                                </li>
+                                <% } %>
+                                
+                                <% if(_locals.user.role == 'admin'){ %>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin"><i class="la la-database la-2x align-middle pr-2"></i>Dashboard</a>
+                                </li>
+                                <% } %>
+                            <% } else { %>
+                                <% if(user.role == 'writer'){ %>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="javascript:void(0)"><i class="la la-clipboard la-2x align-middle pr-2"></i>Posts</a>
+                                    </li>
+                                <% } %>
+                            <% } %>
+                            <!-- <li class="nav-item">
                                 <a class="nav-link" href="javascript:void(0)"><i class="la la-bolt la-2x align-middle pr-2"></i>Activity</a>
                             </li>
                             <li class="nav-item">
@@ -49,11 +76,11 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="javascript:void(0)"><i class="la la-question-circle la-2x align-middle pr-2"></i>FAQ</a>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                 </div>
-            </div> -->
+            </div>
             <!-- End Widget -->
             
             <div class="col-xl-9 mx-auto">
@@ -61,6 +88,11 @@
                     <div class="widget-header bordered no-actions d-flex align-items-center">
                         <h4>Personal Profile</h4>
                     </div>
+                    <% if(typeof flash !== 'undefined'){ %>
+                        <% flash.forEach(info => { %>
+                            <%- include('./../layouts/blocks/flash-message.ejs', { msg: info.message, className:'success' }) %>
+                        <% }) %>
+                    <% } %>
                     <div class="widget-body">
                         <div class="col-10 ml-auto">
                             <div class="section-title mt-3 mb-3">
@@ -91,7 +123,11 @@
                             <div class="form-group row d-flex align-items-center mb-5">
                                 <label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Birthday</label>
                                 <div class="col-lg-6">
-                                    <input <%= editStatus %> type="text" class="form-control" name="DoB" value="<%= user.DoB %>" placeholder="<%= user.DoB === null ? 'Not set yet' : user.DoB.toDateString() %>">     
+                                <% if(_locals.isLoggedIn && _locals.user.id == user.id) { %>
+                                	<input type="date" class="form-control" name="DoB" value="<%= user.DoB %>" >    
+                                <% } else { %>
+                                    <input <%= editStatus %> type="text" class="form-control" name="DoB" value="<%= user.DoB %>" placeholder="<%= user.DoB === null ? 'Not set yet' : user.DoB %>">     
+                                <% } %>
                                 </div>
                             </div>
 
