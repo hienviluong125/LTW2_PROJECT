@@ -4375,7 +4375,7 @@ function fill_window(s) {
 
   /* If the WIN_INIT bytes after the end of the current data have never been
    * written, then zero those bytes in order to avoid memory check reports of
-   * the use of uninitialized (or uninitialised as Julian writes) bytes by
+   * the use of uninitialized (or uninitialised as Julian Writers) bytes by
    * the longest match routines.  Update the high water mark for the next
    * time through here.  WIN_INIT is set to MAX_MATCH since the longest match
    * routines allow scanning to strstart + MAX_MATCH, ignoring lookahead.

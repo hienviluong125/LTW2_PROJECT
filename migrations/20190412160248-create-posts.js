@@ -37,13 +37,23 @@ module.exports = {
         type: Sequelize.TEXT
       },
       WriterId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       thumbnail: {
         type: Sequelize.STRING
       },
+      slug :{
+        type:Sequelize.STRING
+      },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull:false,
+        defaultValue:'pending'
+      },
+      views: {
+        type:Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
       },
       createdAt: {
         allowNull: false,

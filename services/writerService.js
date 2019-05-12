@@ -1,4 +1,4 @@
-const writerModel = require('./../models/index').Writes;
+const writerModel = require('./../models/index').Writers;
 
 function findOne(userId){
     if(Number.isNaN(userId)){

@@ -557,20 +557,20 @@
 	 */
 	Owl.prototype.setup = function() {
 		var viewport = this.viewport(),
-			overwrites = this.options.responsive,
+			overWriters = this.options.responsive,
 			match = -1,
 			settings = null;
 
-		if (!overwrites) {
+		if (!overWriters) {
 			settings = $.extend({}, this.options);
 		} else {
-			$.each(overwrites, function(breakpoint) {
+			$.each(overWriters, function(breakpoint) {
 				if (breakpoint <= viewport && breakpoint > match) {
 					match = Number(breakpoint);
 				}
 			});
 
-			settings = $.extend({}, this.options, overwrites[match]);
+			settings = $.extend({}, this.options, overWriters[match]);
 			if (typeof settings.stagePadding === 'function') {
 				settings.stagePadding = settings.stagePadding();
 			}
