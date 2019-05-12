@@ -87,10 +87,8 @@ function decodeRecoveryPasswordToken(user, token){
 
 async function changePassword(user, newPassword){
     try{
-        console.log("old pass: ", user.password);
-        console.log("user: ", user);
         let hash = await bcrypt.hash(newPassword, crypto.iteration);
-        console.log("new hash:", hash);
+        console.log("password changed for userID: ", user.id);
         return User.update({password: hash}, {
             where: {id: user.id}
         });

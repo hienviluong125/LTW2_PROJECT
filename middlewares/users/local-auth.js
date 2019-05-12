@@ -12,11 +12,7 @@ function registerStatus(req, res, next){
 		res.locals.isLoggedIn = (req.isAuthenticated()) ? true : false;
 	}
     if(res.locals.isLoggedIn && typeof res.locals.user === 'undefined'){
-        res.locals.user = {
-			id: req.user.dataValues.id,
-			email: req.user.dataValues.email,
-			role: req.user.dataValues.role,
-		};
+        res.locals.user = req.user;
     }
     next();
 }

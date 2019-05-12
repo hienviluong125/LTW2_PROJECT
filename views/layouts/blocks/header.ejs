@@ -90,10 +90,17 @@
                             </li>
                             <li><a href="maps-leaflet.html">Contact</a></li>
                         </ul>
+                        <% if(!_locals.isLoggedIn){ %>
                         <ul class="navbar-nav ml-auto">
-                            <li><a href="maps-leaflet.html"> Sign up </a></li>
-                            <li><a href="maps-leaflet.html">Login</a></li>
+                            <li><a href="/users/register"> Sign up </a></li>
+                            <li><a href="/users/login">Login</a></li>
                         </ul>
+                        <% }else{ %>
+                            <ul class="navbar-nav ml-auto">
+                                <li><a href="/users/profile/<%= _locals.user.id %>"> Profile </a></li> 
+                                <li><a href="/users/logout"> Log out </a></li> 
+                            </ul>
+                        <% } %>
                     </div>
                 </nav>
             </div>

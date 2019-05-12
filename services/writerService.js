@@ -13,7 +13,6 @@ function findOne(userId){
 }
 
 function create(user){
-
     return writerModel.create({
         UserId: user.id,
         PenName: user.username

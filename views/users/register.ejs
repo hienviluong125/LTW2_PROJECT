@@ -36,6 +36,7 @@
                 <!-- Begin Form -->
                 
                 <div class="authentication-form-2 mx-auto">
+
                         <% if (typeof success !== 'undefined' && success.length > 0) { %>
                             <% success.forEach(succ => { %> 
                             <%- include('./../layouts/blocks/flash-message.ejs', {msg: succ.message, className : 'success'}) %>

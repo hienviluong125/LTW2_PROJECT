@@ -185,22 +185,36 @@ const recoveryPasswordHandler = (req, res, next) => {
 }
 
 const renderProfilePage = (req, res, next) => {
-    Promise.all([usersService.findOne(+req.params.id), writerService.findOne(+req.params.id)])
-    .then(values => {
-        let penName;
-        if(values[1] !== null){
-            penName = values[1].PenName
-        }
-        console.log(values);
-        res.render('users/profile.ejs', {
-            user: values[0],
-            penName
-        });
-    })
-    .catch(err => {
-        next(err);
-    })   
+    // if(typeof res.locals.user !== 'undefined' && req.params.id == res.locals.user.id){
+    //     res.redirect('/users/profile/me');   
+    // }else{
+        Promise.all([usersService.findOne(+req.params.id), writerService.findOne(+req.params.id)])
+        .then(values => {
+            let penName;
+            if(values[1] !== null){
+                penName = values[1].PenName
+            }
+            res.render('users/profile.ejs', {
+                user: values[0],
+                penName,
+                editStatus: (res.locals.isLoggedIn && +req.params.id === +res.locals.user.id) ? '' : 'disabled'
+            });
+        })
+        .catch(err => {
+            next(err);
+        })   
+    //}
 }
+
+const updateUserProfile = (req, res, next) => {
+    if(res.locals.isLoggedIn && +req.params.id === + res.locals.user.id){
+        console.log(req.body);
+        res.end("Yety");
+    }else{
+        res.end("fuck off");
+    }
+}
+
 
 router.get('/register',renderRegisterPage);
 router.get('/login',renderLoginPage);
@@ -209,9 +223,10 @@ router.get('/forgot', renderForgotPage);
 router.get('/reset/:id/:token', renderRecoveryPasswordPage);
 router.get('/profile/:id', renderProfilePage);
 
+
 router.post('/register', registerAccount);
 router.post('/login', loginHandle);
 router.post('/forgot', forgotHandler);
 router.post('/reset', recoveryPasswordHandler);
-
+router.post('/profile/:id', updateUserProfile);
 module.exports = router;
