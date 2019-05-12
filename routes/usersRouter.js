@@ -204,12 +204,14 @@ const renderProfilePage = (req, res, next) => {
 
 router.get('/register',renderRegisterPage);
 router.get('/login',renderLoginPage);
-router.post('/register', registerAccount);
-router.post('/login', loginHandle);
 router.get('/logout', logout);
 router.get('/forgot', renderForgotPage);
-router.post('/forgot', forgotHandler);
 router.get('/reset/:id/:token', renderRecoveryPasswordPage);
-router.post('/reset', recoveryPasswordHandler);
 router.get('/profile/:id', renderProfilePage);
+
+router.post('/register', registerAccount);
+router.post('/login', loginHandle);
+router.post('/forgot', forgotHandler);
+router.post('/reset', recoveryPasswordHandler);
+
 module.exports = router;
