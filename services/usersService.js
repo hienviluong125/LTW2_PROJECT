@@ -103,6 +103,19 @@ function updateInfo(user){
     });
 }
 
+function validateNewPasswords(password, repassword){
+    let errors = [];
+    if(!password || !repassword){
+        errors.push({message:"Please fill in all fields."});
+    }
+    if(password.length < 6 || repassword.length < 6){
+        errors.push({message:"Password must have at least 6 characters.", className:"warning"});
+    }
+    if(password !== repassword){
+        errors.push({message:"Passwords do not match.", className:"warning"});
+    }
+    return errors;
+}
 
 module.exports = {
     getAllUsers,
@@ -114,5 +127,6 @@ module.exports = {
     findOne,
     decodeRecoveryPasswordToken,
     changePassword,
-    updateInfo
+    updateInfo,
+    validateNewPasswords
 }

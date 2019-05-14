@@ -5,6 +5,7 @@ const writerService = require('./../services/writerService');
 const passport = require('passport');
 const mail = require('../config/mailer');
 const htmlDateParser = require('../utils/htmlDateFormat');
+const middleware = require('./../middlewares/index');
 
 const logout = (req, res, next) => {
     req.logout();
@@ -230,12 +231,38 @@ const updateUserProfile = (req, res, next) => {
     }
 }
 
+const renderChangePasswordPage = (req, res, next) => {
+    res.render('users/change-password',{
+        flash: req.flash('change-password-errors')
+    });
+}
+
+const changePasswordHandler = (req, res, next) => { 
+    let password = req.body.password, repassword = req.body.repassword;
+    let errors = usersService.validateNewPasswords(password, repassword);
+    if(errors.length > 0){
+        req.flash('change-password-errors', errors);
+        res.redirect('/users/profile/changepassword');
+    }else{
+        usersService.changePassword(req.user, password)
+        .then(changedRows => {
+            req.flash('update-success', {message : "Update password successfully"});
+            res.redirect(`/users/profile/${res.locals.user.id}`);
+        })
+        .catch(err => {
+            next(err);
+        })
+    }
+}
+
+
 
 router.get('/register',renderRegisterPage);
 router.get('/login',renderLoginPage);
 router.get('/logout', logout);
 router.get('/forgot', renderForgotPage);
 router.get('/reset/:id/:token', renderRecoveryPasswordPage);
+router.get('/profile/changepassword', middleware.Authentication, renderChangePasswordPage);
 router.get('/profile/:id', renderProfilePage);
 
 
@@ -243,5 +270,7 @@ router.post('/register', registerAccount);
 router.post('/login', loginHandle);
 router.post('/forgot', forgotHandler);
 router.post('/reset', recoveryPasswordHandler);
-router.post('/profile/:id', updateUserProfile);
+router.post('/profile/changepassword', middleware.Authentication, changePasswordHandler);
+router.post('/profile/:id',  middleware.Authentication, updateUserProfile);
+
 module.exports = router;
