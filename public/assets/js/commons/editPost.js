@@ -1,3 +1,4 @@
+var quil2 = null;
 //validate input data
 function validateEditPostForm() {
     //reset all invalid alert display false
@@ -6,7 +7,7 @@ function validateEditPostForm() {
     let title = $('#title')
     let thumbnailName = $('#thumbnail-name')
     let shortContent = $('#short-content')
-    let delta = quill.getContents();
+    let delta = quill2.getContents();
     let mainCate = parseInt($('#main-cate option:selected').val());
     let subCate = parseInt($('#sub-cate option:selected').val());
     let tags = getAllTagsValue();
@@ -28,7 +29,7 @@ function validateEditPostForm() {
         $('#' + invalidId).css('display', 'block');
         isAllow = false;
     }
-    if (isQuillEmpty(quill)) {
+    if (isQuillEmpty(quill2)) {
         let invalidId = `content-invalid`;
         $('#' + invalidId).css('display', 'block');
         isAllow = false;
@@ -114,10 +115,10 @@ function appendImgsToEditFormData(formData, data, slug) {
     let delta = data.delta;
     let index = 0;
     for (let o of delta.ops) {
-        if (typeof o.insert.image !== 'undefined') {
+        if (typeof o.insert.image !== 'undefined' && o.insert.image.indexOf('base64') !== -1) {
             let imgBlob = dataURItoBlob(o.insert.image);
             let imgName = imgBlob.type.replace('image/', '');
-            let imgId = slug + '-' + index.toString() + '.' + imgName;
+            let imgId =  '/assets/img/posts/' + slug + '-' + index.toString() + '.' + imgName;
             formData.append('images', imgBlob, imgId);
             o.insert = { image: imgId }
             index++;
@@ -156,16 +157,50 @@ function appendImgsToEditFormData(formData, data, slug) {
     formData.append("data", JSON.stringify(postData));
 }
 
+function initQuillEditEditor(deltaObj) {
+    quill2 = new Quill('#edit-editor-container', {
+        theme: 'snow',
+        placeholder: 'Viết bài tại đây...',
+        modules: {
+            imageResize: {
+                modules: ['Resize', 'DisplaySize']
+            },
+            toolbar: [
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ align: '' }],
+                [{ align: 'right' }],
+                [{ align: 'center' }],
+                [{ align: 'justify' }],
+                ['link', 'image', 'video'],
+                ['clean']
+            ]
+        }
+    });
+
+    console.log("deltaObj",deltaObj);
+
+    quill2.setContents(JSON.parse(deltaObj));
+}
+
 function initEditPostPageEvent() {
-    var title = "Thông báo";
-    var content = `Bạn có chắc chắn muốn chỉnh sửa bài viết này hay không ?
+    let title = "Thông báo";
+    let content = `Bạn có chắc chắn muốn chỉnh sửa bài viết này hay không ?
     Nếu chỉnh sửa sẽ cần phải chờ một khoảng thời gian kiểm duyệt từ quản trị viên`;
-    var linkTo = "writers/posts";
+    let linkTo = "writers/posts";
+   
     initConfirmModal("edit-post-confirm-modal", title, content);
     initLoadingModal("edit-post-loading-modal");
     initSuccessModal("edit-post-success-modal", linkTo);
     initFailureModal("edit-post-failure-modal");
-
     submitEditButtonClicked();
+    let deltaContent = $('#delta-content').html();
+    initQuillEditEditor(deltaContent);
+    
+   
+
+
+    
 
 }

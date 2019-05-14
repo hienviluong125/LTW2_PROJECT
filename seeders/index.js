@@ -53,30 +53,30 @@ async function creatTags({ tags }) {
     }));
 }
 
-const randomImgs = ['01.jpg','02.jpg','03.jpg','04.jpg','05.jpg'];
+const randomImgs = ['01.jpg', '02.jpg', '03.jpg', '04.jpg', '05.jpg'];
 
 (async function () {
 
-    await db.Writers.destroy({where:{}});
-    await db.Subscribers.destroy({where:{}});
-    
-    await db.EditorCategories.destroy({where:{}});
-    await db.Editors.destroy({where:{}});
+    await db.Writers.destroy({ where: {} });
+    await db.Subscribers.destroy({ where: {} });
 
-  
-    await db.PostTags.destroy({where:{}});
-    await db.Posts.destroy({where:{}});
-    await db.Tags.destroy({where:{}});
-   
+    await db.EditorCategories.destroy({ where: {} });
+    await db.Editors.destroy({ where: {} });
 
-    await db.SubCategories.destroy({where:{}});
-    await db.MainCategories.destroy({where:{}});
-    
 
-    await db.Users.destroy({where:{}});
+    await db.PostTags.destroy({ where: {} });
+    await db.Posts.destroy({ where: {} });
+    await db.Tags.destroy({ where: {} });
 
-    
-  
+
+    await db.SubCategories.destroy({ where: {} });
+    await db.MainCategories.destroy({ where: {} });
+
+
+    await db.Users.destroy({ where: {} });
+
+
+
 
     //tạo category
     await seedCategory();
@@ -86,44 +86,40 @@ const randomImgs = ['01.jpg','02.jpg','03.jpg','04.jpg','05.jpg'];
     await seedUsers();
 
     //tạo posts cho 3 user aaa,bbb,ccc
-    await seedPosts('aaa@gmail.com','Tài chính');
-    await seedPosts('bbb@gmail.com','Âm nhạc');
-    await seedPosts('ccc@gmail.com','Nhân vật');
+    // await seedPosts('aaa@gmail.com','Tài chính');
+    // await seedPosts('bbb@gmail.com','Âm nhạc');
+    // await seedPosts('ccc@gmail.com','Nhân vật');
 
 
     //tạo editor
     // xxx yyy zzz
     await seedEditor();
 
-    //tạo editor sub category - editor quản lý chuyên mục
-    await seedEditorCategory('xxx@gmail.com','Tài chính')
-    await seedEditorCategory('yyy@gmail.com','Âm nhạc');
-    await seedEditorCategory('zzz@gmail.com','Nhân vật');
+    // tạo editor sub category - editor quản lý chuyên mục
+    await seedEditorCategory('xxx@gmail.com', 'Tài chính')
+    await seedEditorCategory('yyy@gmail.com', 'Âm nhạc');
+    await seedEditorCategory('zzz@gmail.com', 'Nhân vật');
+
+    await seedUsers
+
+
+
 
 
 
 
 })()
 
-async function seedPosts(username,subcatename) {
-    let userInfo = await db.Users.findOne({where:{username}},{raw: true});
+async function seedPosts(username, subcatename) {
+    let userInfo = await db.Users.findOne({ where: { username } }, { raw: true });
     let WriterId = userInfo.id;
-    
-    let subCateInfo = await db.SubCategories.findOne({where:{name:subcatename}},{raw: true});
+
+    let subCateInfo = await db.SubCategories.findOne({ where: { name: subcatename } }, { raw: true });
     let SubCategoryId = subCateInfo.id;
     let MainCategoryId = subCateInfo.MainCategoryId;
     for (let index = 0; index < 20; index++) {
-        var deltaOps = {
-            "ops": [
-                {
-                    "attributes": {
-                        "link": "https://www.youtube.com/?gl=VN"
-                    },
-                    "insert": faker.lorem.sentences(250)
-                },
-                { "insert": "\n" }
-            ]
-        }
+        var deltaOps = "";
+
         let title = faker.name.title()
         await postsService.add({
             WriterId: WriterId,
@@ -132,9 +128,9 @@ async function seedPosts(username,subcatename) {
             slug: str_to_slug(title),
             MainCategoryId,
             SubCategoryId,
-            content: JSON.stringify(deltaOps),
+            content: JSON.stringify(JSON.parse(JSON.stringify(deltaOps))),
             tags: [faker.name.jobType(), faker.name.jobType(), faker.name.jobType()],
-            thumbnail: randomImgs[getRandomInt(0,4)]
+            thumbnail: randomImgs[getRandomInt(0, 4)]
         })
     }
 }
@@ -143,33 +139,13 @@ async function seedCategory() {
     var _mainCates = [
         {
             name: "Công nghệ",
-            _subCates: [
-                {
-                    name: "Trải nghiệm",
-                },
-                {
-                    name: "Thị trường",
-                },
-                {
-                    name: "Thủ thuật",
-                }
+            _subCates: [{ name: "Trải nghiệm", }, { name: "Thị trường", }, { name: "Thủ thuật", }
             ]
         },
         {
             name: "Kinh doanh",
             _subCates: [
-                {
-                    name: "Tài chính",
-                },
-                {
-                    name: "Doanh nghiệp",
-                },
-                {
-                    name: "Mua sắm",
-                },
-                {
-                    name: "Đầu tư",
-                }
+                { name: "Tài chính", }, { name: "Doanh nghiệp", }, { name: "Mua sắm", }, { name: "Đầu tư", }
             ]
         },
         {
@@ -277,7 +253,7 @@ async function seedUsers() {
 }
 
 
-async function seedEditor(){
+async function seedEditor() {
     const emails1 = ['xxx', 'yyy', 'zzz'];
     await Promise.all(emails1.map(async e => {
         let hash = await bcrypt.hash(e + e, crypto.iteration)
@@ -288,19 +264,19 @@ async function seedEditor(){
             role: 'editor'
         });
         let id = userResult.dataValues.id
-        return await db.Editors.create({UserId: id });
+        return await db.Editors.create({ UserId: id });
 
     }))
 }
 
-async function seedEditorCategory(username,subcatename){
-    let userInfo = await db.Users.findOne({where:{username}},{raw: true});
+async function seedEditorCategory(username, subcatename) {
+    let userInfo = await db.Users.findOne({ where: { username } }, { raw: true });
     let UserId = userInfo.id;
-    
-    let subCateInfo = await db.SubCategories.findOne({where:{name:subcatename}},{raw: true});
+
+    let subCateInfo = await db.SubCategories.findOne({ where: { name: subcatename } }, { raw: true });
     let SubCategoryId = subCateInfo.id;
     return db.EditorCategories.create({
-        UserId,SubCategoryId
+        UserId, SubCategoryId
     })
 }
 

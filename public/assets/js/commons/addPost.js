@@ -191,7 +191,7 @@ function appendImgsToFormData(formData, data, slug) {
         if (typeof o.insert.image !== 'undefined') {
             let imgBlob = dataURItoBlob(o.insert.image);
             let imgName = imgBlob.type.replace('image/', '');
-            let imgId = slug + '-' + index.toString() + '.' + imgName;
+            let imgId = '/assets/img/posts/' + slug + '-' + index.toString() + '.' + imgName;
             formData.append('images', imgBlob, imgId);
             o.insert = { image: imgId }
             index++;
@@ -201,7 +201,7 @@ function appendImgsToFormData(formData, data, slug) {
     let thumbnailImage = $('.post-thumbnail-image').attr('src');
     let thumbnailImgBlob = dataURItoBlob(thumbnailImage);
     let thumbnailImgName = thumbnailImgBlob.type.replace('image/', '');
-    let thumbnailImgId = slug + '-' + index.toString() + '.' + thumbnailImgName;
+    let thumbnailImgId =  slug + '-' + index.toString() + '.' + thumbnailImgName;
 
     let postData = {
         title: data.title,

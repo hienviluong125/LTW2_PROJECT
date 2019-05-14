@@ -107,11 +107,13 @@ async function _delete({ slug, WriterId }) {
 }
 
 
-async function getAllPostByUserId({ id }) {
+async function getAllPostByUserId({ id, limit, offset }) {
     return db.Posts.findAll({
         where: {
             WriterId: id
         },
+        limit: limit,
+        offset: offset,
         include: [
             db.MainCategories,
             db.SubCategories,
@@ -119,6 +121,44 @@ async function getAllPostByUserId({ id }) {
             db.Tags
         ]
     });
+}
+
+// pending - verified - published - rejected
+async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset }) {
+    let data = await db.Users
+        .findOne({
+            // include:[db.Users],
+            attributes: ['id'],
+            where: {
+                id: EditorId
+            },
+            include: [{
+                model: db.SubCategories,
+                where: SubCate === 'all' ? {} : {
+                    slug: SubCate
+                },
+                include: [{
+                    model: db.Posts,
+                    limit: limit,
+                    offset: offset,
+                    include: [
+                        db.MainCategories,
+                        db.SubCategories,
+                        db.Users,
+                        db.Tags
+                    ]
+                }]
+            }]
+        });
+    let allPostWithSubcategory = data.dataValues.SubCategories;
+    let mergedPosts = [];
+    for (let eachsub of allPostWithSubcategory) {
+        mergedPosts = [...mergedPosts, ...eachsub.Posts]
+    }
+    return {
+        SubCategory: 'all',
+        posts: mergedPosts
+    }
 }
 
 
@@ -129,5 +169,6 @@ module.exports = {
     get,
     edit,
     getAllPostByUserId,
-    _delete
+    _delete,
+    getAllPostManagedByEditor
 };

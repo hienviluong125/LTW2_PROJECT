@@ -13,9 +13,9 @@ function registerStatus(req, res, next){
 	}
     if(res.locals.isLoggedIn && typeof res.locals.user === 'undefined'){
         res.locals.user = {
-			id: req.user.dataValues.id,
-			email: req.user.dataValues.email,
-			role: req.user.dataValues.role,
+			id: req.user.id,
+			email: req.user.email,
+			role: req.user.role,
 		};
     }
     next();

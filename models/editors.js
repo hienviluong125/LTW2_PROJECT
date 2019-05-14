@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Editors.associate = function(models) {
     // associations can be defined here
+    // Editors.hasMany(models.EditorCategories);
   };
   return Editors;
 };
