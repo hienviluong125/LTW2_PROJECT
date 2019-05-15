@@ -10,6 +10,10 @@
 
                <% if(_locals.isLoggedIn) { %>
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/profile/<%= _locals.user.id %>"><i class="la la-user la-2x align-middle pr-2"></i>Your Profile</a>
+                    </li>
+
                    <li class="nav-item">
                        <a class="nav-link" href="/users/profile/changepassword"><i class="la la-key la-2x align-middle pr-2"></i>Change your password</a>
                    </li>

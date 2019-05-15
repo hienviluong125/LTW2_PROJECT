@@ -5,10 +5,22 @@ function create(UserId){
     date.setDate(date.getDate() + 7);
     return subscriberModel.create({
         UserId,
-        expireDate: date
+        expireDate: date,
+        status: 'valid'
     });
 }
 
+function getLatestSubscription(UserId){
+    return subscriberModel.findOne({
+        raw: true,
+        where:{
+            UserId
+        },
+        order: [ [ 'createdAt', 'DESC' ]]
+    })
+}
+
 module.exports = {
-    create
+    create,
+    getLatestSubscription
 }

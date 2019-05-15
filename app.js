@@ -39,6 +39,7 @@ const usersRouter = require('./routes/usersRouter');
 const postsRouter = require('./routes/postsRouter');
 const writersRouter = require('./routes/writersRouter');
 const editorsRouter = require('./routes/editorsRouter');
+const subscriberRouter = require('./routes/subscriberRouter');
 
 //================End Routes require =================
 
@@ -57,6 +58,7 @@ app.use('/users', usersRouter);
 app.use('/posts',postsRouter);
 app.use('/writers',writersRouter);
 app.use('/editors',editorsRouter);
+app.use('/subscribers', subscriberRouter);
 
 //================ End Routes =================
 
