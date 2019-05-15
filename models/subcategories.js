@@ -9,6 +9,12 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     SubCategories.belongsTo(models.MainCategories);
     SubCategories.hasMany(models.Posts);
+    SubCategories.belongsToMany(models.Users, {
+      through: {
+        model: models.EditorCategories
+      },
+      foreignKey: 'SubCategoryId'
+    });
   };
   return SubCategories;
 };

@@ -7,7 +7,23 @@ async function getAllCategories(){
     });
 }
 
+async function getAllSubCategoriesOfEditor({EditorId}){
+    let subCates = await db.Users.findOne({
+        attributes:['id'],
+        where: {
+            id: EditorId
+        },
+        include: [{
+            attributes:['name','id','slug'],
+            model: db.SubCategories,
+        }]
+    });
+
+    return subCates.SubCategories;
+
+}
 
 module.exports ={
-    getAllCategories
+    getAllCategories,
+    getAllSubCategoriesOfEditor
 };

@@ -6,20 +6,20 @@ const middleware = require('./../middlewares/index');
 
 const renderPostListPage = (req, res, next) => {
     let page = req.params.page;
+    let limit = 8;
+    let offset = limit * (page - 1);
+
     let id = req.user.id;
     postsService
-        .getAllPostByUserId({ id })
+        .getAllPostByUserId({ id, limit, offset })
         .then(posts => {
-            // res.json({posts});
-            res.render('writers/posts', { posts });
+            res.render('writers/posts', { posts, page });
         })
         .catch(err => {
             res.json({ err });
         })
 
 }
-
-
 
 const renderAddPostPage = (req, res, next) => {
     categoriesSerivce
@@ -41,7 +41,7 @@ const renderEditPostPage = (req, res, next) => {
         if (post && allCategories) {
             res.render('writers/posts/edit', { post, allCategories });
         } else {
-            res.status(404).json("vcl");
+            return next();
         }
 
     })
@@ -73,8 +73,6 @@ const editPost = (req, res, next) => {
         res.status(500).json({ err: "please login" });
     } else {
         let param = JSON.parse(req.body.data);
-
-
         param.WriterId = req.user.id;
         postsService
             .edit(param)
@@ -104,7 +102,11 @@ const deletePost = (req, res, next) => {
     }
 }
 
-router.all('*',middleware.Authentication);
+router.all(
+    '*',
+    middleware.Authentication,
+    middleware.Authorization(['writer'])
+);
 
 router.get('/posts/add', renderAddPostPage);
 router.get('/posts/edit/:slug', renderEditPostPage);
