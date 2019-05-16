@@ -146,7 +146,6 @@ function mainCateSelect() {
     $('#main-cate').on('change', function (e) {
         let valueSelected = this.value;
         let subCates = allCategories.find(aC => aC.id === parseInt(valueSelected)).SubCategories;
-        console.log("allCategories",allCategories);
         $('#sub-cate')
             .html('')
             .append($('<option>', {
@@ -201,7 +200,7 @@ function appendImgsToFormData(formData, data, slug) {
     let thumbnailImage = $('.post-thumbnail-image').attr('src');
     let thumbnailImgBlob = dataURItoBlob(thumbnailImage);
     let thumbnailImgName = thumbnailImgBlob.type.replace('image/', '');
-    let thumbnailImgId =  slug + '-' + index.toString() + '.' + thumbnailImgName;
+    let thumbnailImgId = slug + '-' + index.toString() + '.' + thumbnailImgName;
 
     let postData = {
         title: data.title,
@@ -218,7 +217,7 @@ function appendImgsToFormData(formData, data, slug) {
     formData.append('images', thumbnailImgBlob, thumbnailImgId);
     formData.append("data", JSON.stringify(postData));
 
-    console.log("JSON.stringify(postData)",JSON.stringify(postData));
+    console.log("JSON.stringify(postData)", JSON.stringify(postData));
 }
 
 //validate input data
@@ -314,15 +313,18 @@ function submitPost(formData) {
             success: function (data) {
                 setTimeout(function () {
                     hideModal({ id: 'add-post-loading-modal' });
+                    var linkTo = "writers/posts";
+                    initSuccessModal("add-post-success-modal", linkTo);
                     showModal({ id: 'add-post-success-modal', backdrop: 'static', keyboard: false });
                 }, 500)
 
 
             },
             error: function (error) {
-                // console.log(error);
+                let { responseJSON } = error;
                 setTimeout(function () {
                     hideModal({ id: 'add-post-loading-modal' });
+                    initFailureModal("add-post-failure-modal",responseJSON.err);
                     showModal({ id: 'add-post-failure-modal', backdrop: 'static', keyboard: false });
                 }, 500)
             }
@@ -339,17 +341,17 @@ function initAddPostPageEvent() {
     var title = "Thông báo";
     var content = `Bạn có chắc chắn muốn đăng tải bài viết này hay không ?
     Nếu đăng tải sẽ cần phải chờ một khoảng thời gian kiểm duyệt từ quản trị viên`;
-    var linkTo = "writers/posts";
+    
     initConfirmModal("add-post-confirm-modal", title, content);
     initLoadingModal("add-post-loading-modal");
-    initSuccessModal("add-post-success-modal", linkTo);
-    initFailureModal("add-post-failure-modal");
+    
+    
 
     allCategories = $('#main-categories').html();
-    if(allCategories && typeof allCategories !== 'undefined'){
+    if (allCategories && typeof allCategories !== 'undefined') {
         allCategories = JSON.parse(allCategories);
     }
-   
+
     initQuillEditor();
     initQuillEditorEvent()
     addTagEvent();

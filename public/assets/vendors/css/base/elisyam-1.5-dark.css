@@ -2099,6 +2099,9 @@ span.badge-pulse-orange {
 .badge-text.danger {
   background:#fe195e; 
 }
+.badge-text.warning{
+  background:#f0ad4e;
+}
 
 .badge-rounded {
   background: #5d5386;

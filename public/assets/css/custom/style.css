@@ -121,6 +121,24 @@
     outline:none;
 }
 
+.page-active{
+    background:#2c304d;
+    color:white;
+}
+.page-item > a{
+    color:#2c304d;
+}
+
+.custom-page-disabled > a{
+    pointer-events: none;
+    color:#868bac;
+}
+
+.page-active > a {
+    pointer-events: none;
+}
+
+
 .tags-container .tag-input::placeholder{
 }
 .tag-close-btn:hover{

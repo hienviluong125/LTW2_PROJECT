@@ -86,9 +86,9 @@ const randomImgs = ['01.jpg', '02.jpg', '03.jpg', '04.jpg', '05.jpg'];
     await seedUsers();
 
     //tạo posts cho 3 user aaa,bbb,ccc
-    // await seedPosts('aaa@gmail.com','Tài chính');
-    // await seedPosts('bbb@gmail.com','Âm nhạc');
-    // await seedPosts('ccc@gmail.com','Nhân vật');
+    await seedPosts('aaa@gmail.com','Trải nghiệm');
+    await seedPosts('bbb@gmail.com','Âm nhạc');
+    await seedPosts('ccc@gmail.com','Nhân vật');
 
 
     //tạo editor
@@ -96,11 +96,11 @@ const randomImgs = ['01.jpg', '02.jpg', '03.jpg', '04.jpg', '05.jpg'];
     await seedEditor();
 
     // tạo editor sub category - editor quản lý chuyên mục
-    await seedEditorCategory('xxx@gmail.com', 'Tài chính')
+    await seedEditorCategory('xxx@gmail.com', 'Trải nghiệm')
     await seedEditorCategory('yyy@gmail.com', 'Âm nhạc');
     await seedEditorCategory('zzz@gmail.com', 'Nhân vật');
 
-    await seedUsers
+    // await seedUsers
 
 
 
@@ -117,7 +117,7 @@ async function seedPosts(username, subcatename) {
     let subCateInfo = await db.SubCategories.findOne({ where: { name: subcatename } }, { raw: true });
     let SubCategoryId = subCateInfo.id;
     let MainCategoryId = subCateInfo.MainCategoryId;
-    for (let index = 0; index < 20; index++) {
+    for (let index = 0; index < 85; index++) {
         var deltaOps = "";
 
         let title = faker.name.title()
@@ -222,6 +222,22 @@ async function seedCategory() {
     }
 }
 
+async function seedUserWithId(id,email){
+    const emails1 = [email];
+    await Promise.all(emails1.map(async e => {
+        let hash = await bcrypt.hash(e + e, crypto.iteration)
+        let userResult = await db.Users.create({
+            username: e + '@gmail.com',
+            email: e + '@gmail.com',
+            password: hash,
+            role: 'writer',
+            id
+        });
+        let id = userResult.dataValues.id
+        return await db.Writers.create({ PenName: e + '@gmail.com', UserId: id });
+
+    }))
+}
 
 async function seedUsers() {
     const emails1 = ['aaa', 'bbb', 'ccc'];

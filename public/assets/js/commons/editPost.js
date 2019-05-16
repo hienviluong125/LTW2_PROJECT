@@ -95,14 +95,19 @@ function submitEditPost(formData) {
             success: function (data) {
                 setTimeout(function () {
                     hideModal({ id: 'edit-post-loading-modal' });
+                    let linkTo = "writers/posts";
+                    initSuccessModal("edit-post-success-modal", linkTo);
                     showModal({ id: 'edit-post-success-modal', backdrop: 'static', keyboard: false });
                 }, 500)
 
 
             },
             error: function (error) {
+                let { responseJSON } = error;
+                console.log(responseJSON.err);
                 setTimeout(function () {
                     hideModal({ id: 'edit-post-loading-modal' });
+                    initFailureModal("edit-post-failure-modal",responseJSON.err);
                     showModal({ id: 'edit-post-failure-modal', backdrop: 'static', keyboard: false });
                 }, 500)
             }
@@ -118,7 +123,7 @@ function appendImgsToEditFormData(formData, data, slug) {
         if (typeof o.insert.image !== 'undefined' && o.insert.image.indexOf('base64') !== -1) {
             let imgBlob = dataURItoBlob(o.insert.image);
             let imgName = imgBlob.type.replace('image/', '');
-            let imgId =  '/assets/img/posts/' + slug + '-' + index.toString() + '.' + imgName;
+            let imgId = '/assets/img/posts/' + slug + '-' + index.toString() + '.' + imgName;
             formData.append('images', imgBlob, imgId);
             o.insert = { image: imgId }
             index++;
@@ -158,49 +163,51 @@ function appendImgsToEditFormData(formData, data, slug) {
 }
 
 function initQuillEditEditor(deltaObj) {
-    quill2 = new Quill('#edit-editor-container', {
-        theme: 'snow',
-        placeholder: 'Viết bài tại đây...',
-        modules: {
-            imageResize: {
-                modules: ['Resize', 'DisplaySize']
-            },
-            toolbar: [
-                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ align: '' }],
-                [{ align: 'right' }],
-                [{ align: 'center' }],
-                [{ align: 'justify' }],
-                ['link', 'image', 'video'],
-                ['clean']
-            ]
-        }
-    });
+    if (!isEmpty($('#edit-editor-container'))) {
+        quill2 = new Quill('#edit-editor-container', {
+            theme: 'snow',
+            placeholder: 'Viết bài tại đây...',
+            modules: {
+                imageResize: {
+                    modules: ['Resize', 'DisplaySize']
+                },
+                toolbar: [
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ align: '' }],
+                    [{ align: 'right' }],
+                    [{ align: 'center' }],
+                    [{ align: 'justify' }],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                ]
+            }
+        });
 
-    console.log("deltaObj",deltaObj);
-
-    quill2.setContents(JSON.parse(deltaObj));
+        quill2.setContents(JSON.parse(deltaObj));
+    }
 }
 
 function initEditPostPageEvent() {
     let title = "Thông báo";
     let content = `Bạn có chắc chắn muốn chỉnh sửa bài viết này hay không ?
     Nếu chỉnh sửa sẽ cần phải chờ một khoảng thời gian kiểm duyệt từ quản trị viên`;
-    let linkTo = "writers/posts";
-   
+  
+
     initConfirmModal("edit-post-confirm-modal", title, content);
     initLoadingModal("edit-post-loading-modal");
-    initSuccessModal("edit-post-success-modal", linkTo);
-    initFailureModal("edit-post-failure-modal");
+   
+   
     submitEditButtonClicked();
     let deltaContent = $('#delta-content').html();
-    initQuillEditEditor(deltaContent);
-    
-   
+    if (deltaContent && typeof deltaContent !== 'undefined') {
+        initQuillEditEditor(deltaContent);
+    }
 
 
-    
+
+
+
 
 }
