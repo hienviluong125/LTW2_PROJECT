@@ -55,7 +55,7 @@ const registerAccount = async (req, res, next) => {
                 console.log("user created: ", user.email);
                     let result;
                     if(type == 'sub'){
-                        result = subService.create(user.id);
+                        result = subService.create(user.id, true);
                     }else if(type == 'writer'){
                         result = writerService.create(user);
                     }

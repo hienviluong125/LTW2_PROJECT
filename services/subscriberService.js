@@ -1,14 +1,20 @@
 const subscriberModel = require('./../models/index').Subscribers;
 
-function create(UserId){
+function getRenewalDate(){
     let date = new Date();
     date.setDate(date.getDate() + 7);
+    return date;
+}
+
+function create(UserId, isFirstTime = false ){
+    let date = getRenewalDate();
     return subscriberModel.create({
         UserId,
         expireDate: date,
-        status: 'valid'
+        status: isFirstTime? 'valid' : 'pending'
     });
 }
+
 
 function getLatestSubscription(UserId){
     return subscriberModel.findOne({
@@ -20,7 +26,24 @@ function getLatestSubscription(UserId){
     })
 }
 
+async function renewSubscription(UserId){
+    try{
+        let latestSub = await getLatestSubscription(UserId);
+        latestSub.status = 'valid';
+        latestSub.expireDate = getRenewalDate();
+        return subscriberModel.update(latestSub, {
+            where: {
+                UserId: latestSub.UserId,
+                id: latestSub.id
+            }
+        })
+    }catch(err){
+        throw err;
+    }
+}
+
 module.exports = {
     create,
-    getLatestSubscription
+    getLatestSubscription,
+    renewSubscription
 }
