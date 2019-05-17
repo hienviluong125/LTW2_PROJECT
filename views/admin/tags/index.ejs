@@ -29,6 +29,10 @@
                     <!-- Begin Widget 07 -->
                     <div class="widget widget-07 has-shadow">
                         <!-- Begin Widget Header -->
+                        <% if(typeof flash !== 'undefined' && flash.length > 0){ %>
+
+                            <%- include('./../../layouts/blocks/flash-message.ejs', {className: flash[0].className, msg: flash[0].message}) %>
+                        <% } %>
                         <div class="widget-header bordered d-flex align-items-center">
                             <h2>Tags Overview</h2>
                             
@@ -42,21 +46,22 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Tag name</th>
+                                            <th>Slug</th>
                                             <th class='text-right'>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% for(let i = 1; i < 15; i++){ %>
+                                        <% tags.forEach(tag => { %>
                                         <tr>
-                                            <td><span class='text-primary'> <%= i %> </span></td>
-                                            <td><span class="text-primary">054-01-FR</span></td>
-                                            
+                                            <td><span class='text-primary'> <%= tag.id %> </span></td>
+                                            <td><span class="text-primary"> <%= tag.name %> </span></td>
+                                            <td><span class="text-primary"> <%= tag.slug %> </span></td>
                                             <td class="td-actions text-right">
-                                                <a href="#"><i class="la la-edit edit"></i></a>
-                                                <a href="#"><i class="la la-close delete"></i></a>
+                                                <a href="/admin/tags/edit/<%= tag.id %>"><i class="la la-edit edit"></i></a>
+                                                <a href="/admin/tags/delete/<%= tag.id %>"><i class="la la-close delete"></i></a>
                                             </td>
                                         </tr>
-                                        <% } %>
+                                        <% }) %>
                                     </tbody>
                                 </table>
                             </div>
@@ -65,9 +70,9 @@
                         <!-- Begin Widget Footer -->
                         <div class="widget-footer d-flex align-items-center">
                             <div class="mr-auto p-2">
-                                <span class="display-items">Showing 1-30 / 150 Results</span>
+                                <span class="display-items">Showing <%= tags.length %> Results</span>
                             </div>
-                            <div class="p-2">
+                            <!-- <div class="p-2">
                                 <nav aria-label="...">
                                     <ul class="pagination justify-content-end">
                                         <li class="page-item disabled">
@@ -83,7 +88,7 @@
                                         </li>
                                     </ul>
                                 </nav>
-                            </div>
+                            </div> -->
                         </div>
                         <!-- End Widget Footer -->
                     </div>

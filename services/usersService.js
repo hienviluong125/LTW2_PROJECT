@@ -117,6 +117,14 @@ function validateNewPasswords(password, repassword){
     return errors;
 }
 
+function deleteUser(id){
+    return User.destroy({
+        where:{
+            id
+        }
+    })
+}  
+
 module.exports = {
     getAllUsers,
     validateRegisterData,
@@ -128,5 +136,6 @@ module.exports = {
     decodeRecoveryPasswordToken,
     changePassword,
     updateInfo,
-    validateNewPasswords
+    validateNewPasswords,
+    deleteUser
 }

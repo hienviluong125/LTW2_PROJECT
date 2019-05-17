@@ -1,0 +1,62 @@
+<!-- Begin Content -->
+<div class="content-inner profile">
+    <div class="container-fluid">
+        <!-- Begin Page Header-->
+        <div class="row">
+            <div class="page-header">
+                <div class="d-flex align-items-center">
+                    <h2 class="page-header-title">Dashboard</h2>
+                    <div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/"><i class="ti ti-home"></i></a></li>
+                            
+                            <li class="breadcrumb-item"><a href="/admin"><i class="ti ti-folder"></i></a></li>
+
+                            <li class="breadcrumb-item active">Tags</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Page Header -->
+        <div class="row flex-row">
+            <!-- Begin Widget -->
+            <%- include('./../common/dashboard-widget.ejs') %>
+            <!-- End Widget -->
+
+            <!-- put your stuffs here -->        
+            <div class="col-xl-9">
+                <div class="widget-body">
+                    <form class="form-horizontal" action="" method="POST">
+                            <div class="form-group row d-flex align-items-center mb-5">
+                                    <label class="col-lg-3 form-control-label">#</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" disabled value="<%= tag.id %>" class="form-control">
+                                        <input type="hidden" name="id" value="<%= tag.id %>">
+                                    </div>
+                            </div>
+                            <div class="form-group row d-flex align-items-center mb-5">
+                                    <label class="col-lg-3 form-control-label">Name</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" name="name" value="<%= tag.name %>" placeholder="<%= tag.name %>" class="form-control">
+                                    </div>
+                            </div>
+                            <div class="form-group row d-flex align-items-center mb-5">
+                                    <label class="col-lg-3 form-control-label">Slug</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" name="slug"value="<%= tag.slug %>" placeholder="<%= tag.slug %>" class="form-control">
+                                    </div>
+                            </div>
+                            <div class="em-separator separator-dashed"></div>
+                            
+                            <div class="text-center">
+                                <button class="btn btn-gradient-01" type="submit">Save Changes</button>
+                            </div>
+                    </form>
+                </div>
+            </div>
+            <!-- end your stuffs here -->
+        </div>
+        <!-- End Row -->
+    </div>
+</div>

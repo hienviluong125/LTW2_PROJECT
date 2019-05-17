@@ -37,8 +37,57 @@ async function removeTagsOfPost({ postId }) {
     });
 }
 
+function getAll(){
+    return db.Tags.findAll({
+        raw:true,
+        order: [ [ 'id', 'ASC' ]]
+    });
+}
+
+function findOne(id){
+    return db.Tags.findOne({
+        where: {
+            id
+        },
+        raw: true
+    });
+}
+
+function update(tag){
+    return db.Tags.update(tag, {
+        where:{id: tag.id}
+    });
+}
+
+function removeTagById(tagId){
+    return db.PostTags.destroy({
+        where:{
+            TagId:tagId
+        }
+    })
+}
+
+async function deleteTag(id){
+    try{
+        let deletedRows = await removeTagById(+id);
+        console.log(`deleted ${deletedRows} post-tag.`);
+        return db.Tags.destroy({
+            where:{
+                id
+            }
+        });
+    }
+    catch(err){
+        throw err;
+    }
+}
+
 module.exports = {
     creatTags,
     addTagsToPost,
-    removeTagsOfPost
+    removeTagsOfPost,
+    getAll,
+    findOne,
+    update,
+    deleteTag
 }
