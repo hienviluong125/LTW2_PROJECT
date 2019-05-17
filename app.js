@@ -33,11 +33,9 @@ app.use(require('./middlewares/users/local-auth').registerStatus);
 //FOR DEV
 // app.use((req,res,next) => {
 //     res.locals.user = {
-//         id: 10,
-//         role: 'writer'
+//         id: 8,
+//         role: 'editor'
 
-//         // id: 16,
-//         // role: 'editor'
 //     };
 //     next();
 // })
@@ -48,7 +46,8 @@ const usersRouter = require('./routes/usersRouter');
 const postsRouter = require('./routes/postsRouter');
 const writersRouter = require('./routes/writersRouter');
 const editorsRouter = require('./routes/editorsRouter');
-
+const subscriberRouter = require('./routes/subscriberRouter');
+const adminRouter = require('./routes/adminRouter');
 //================End Routes require =================
 
 
@@ -66,7 +65,8 @@ app.use('/users', usersRouter);
 app.use('/posts',postsRouter);
 app.use('/writers',writersRouter);
 app.use('/editors',editorsRouter);
-
+app.use('/subscribers', subscriberRouter);
+app.use('/admin', adminRouter);
 //================ End Routes =================
 
 

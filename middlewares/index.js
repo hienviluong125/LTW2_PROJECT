@@ -1,5 +1,4 @@
 const Authentication = (req, res, next) => {
-    return next();
     if (req.user && typeof req.user !== 'undefined') {
         next();
     } else {
@@ -10,7 +9,6 @@ const Authentication = (req, res, next) => {
 
 const Authorization = (roles) => {
     return (req, res, next) => {
-        return next();
         if(req.user && typeof req.user !== 'undefined'){
             if(roles.includes(req.user.role)){
                 return next();

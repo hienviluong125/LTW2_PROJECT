@@ -4,6 +4,8 @@ const subService = require('./../services/subscriberService');
 const writerService = require('./../services/writerService');
 const passport = require('passport');
 const mail = require('../config/mailer');
+const htmlDateParser = require('../utils/htmlDateFormat');
+const middleware = require('./../middlewares/index');
 
 const logout = (req, res, next) => {
     req.logout();
@@ -53,7 +55,7 @@ const registerAccount = async (req, res, next) => {
                 console.log("user created: ", user.email);
                     let result;
                     if(type == 'sub'){
-                        result = subService.create(user.id);
+                        result = subService.create(user.id, true);
                     }else if(type == 'writer'){
                         result = writerService.create(user);
                     }
@@ -189,27 +191,86 @@ const renderProfilePage = (req, res, next) => {
     .then(values => {
         let penName;
         if(values[1] !== null){
-            penName = values[1].PenName
+            penName = values[1].PenName;
         }
-        console.log(values);
-        res.render('users/profile.ejs', {
-            user: values[0],
-            penName
-        });
+        if(values[0] == null){
+            next(new Error('Can not find user'));
+        }else {
+            if(values[0].DoB !== null){               
+                values[0].DoB = htmlDateParser.parse(values[0].DoB);
+            }
+            res.render('users/profile.ejs', {
+                user: values[0],
+                penName,
+                editStatus: (res.locals.isLoggedIn && +req.params.id === +res.locals.user.id) ? '' : 'disabled',
+                flash: req.flash('update-success')
+            });
+        }     
     })
     .catch(err => {
         next(err);
     })   
 }
 
+const updateUserProfile = (req, res, next) => {
+    if(res.locals.isLoggedIn && +req.params.id === + res.locals.user.id){
+        let user = req.body;
+        user.DoB = new Date(req.body.DoB);
+        user.id = res.locals.user.id;
+        usersService.updateInfo(user)
+        .then(changedRows => {
+            req.flash('update-success', {message : "Update infomation successfully"});
+            res.redirect(`/users/profile/${res.locals.user.id}`);
+        })
+        .catch(err => {
+            next(err);
+        })
+    }else{
+        req.flash('errors', {message: 'You need to log in to update your personal info.'});
+        res.redirect('/users/login');
+    }
+}
+
+const renderChangePasswordPage = (req, res, next) => {
+    res.render('users/change-password',{
+        flash: req.flash('change-password-errors')
+    });
+}
+
+const changePasswordHandler = (req, res, next) => { 
+    let password = req.body.password, repassword = req.body.repassword;
+    let errors = usersService.validateNewPasswords(password, repassword);
+    if(errors.length > 0){
+        req.flash('change-password-errors', errors);
+        res.redirect('/users/profile/changepassword');
+    }else{
+        usersService.changePassword(req.user, password)
+        .then(changedRows => {
+            req.flash('update-success', {message : "Update password successfully"});
+            res.redirect(`/users/profile/${res.locals.user.id}`);
+        })
+        .catch(err => {
+            next(err);
+        })
+    }
+}
+
+
+
 router.get('/register',renderRegisterPage);
 router.get('/login',renderLoginPage);
-router.post('/register', registerAccount);
-router.post('/login', loginHandle);
 router.get('/logout', logout);
 router.get('/forgot', renderForgotPage);
-router.post('/forgot', forgotHandler);
 router.get('/reset/:id/:token', renderRecoveryPasswordPage);
-router.post('/reset', recoveryPasswordHandler);
+router.get('/profile/changepassword', middleware.Authentication, renderChangePasswordPage);
 router.get('/profile/:id', renderProfilePage);
+
+
+router.post('/register', registerAccount);
+router.post('/login', loginHandle);
+router.post('/forgot', forgotHandler);
+router.post('/reset', recoveryPasswordHandler);
+router.post('/profile/changepassword', middleware.Authentication, changePasswordHandler);
+router.post('/profile/:id',  middleware.Authentication, updateUserProfile);
+
 module.exports = router;

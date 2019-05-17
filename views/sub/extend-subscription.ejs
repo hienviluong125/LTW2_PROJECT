@@ -1,0 +1,67 @@
+<!-- Begin Content -->
+<div class="content-inner profile">
+    <div class="container-fluid">
+        <!-- Begin Page Header-->
+        <div class="row">
+            <div class="page-header">
+                <div class="d-flex align-items-center">
+                    <h2 class="page-header-title">Profile</h2>
+                    <div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/"><i class="ti ti-home"></i></a></li>
+                            <li class="breadcrumb-item active">Subscription</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Page Header -->
+        <div class="row flex-row">
+            <!-- Begin Widget -->
+            <%- include('./../layouts/blocks/profile-widget.ejs', {user}) %>
+            <!-- End Widget -->
+            <div class="col-xl-9 mx-auto">
+                <div class="widget has-shadow">
+                    <div class="widget-header bordered no-actions d-flex align-items-center">
+                        <h4>Extend your subscriptions</h4>
+                    </div>
+                    <div class="widget-body">
+                        <% if(status =='pending'){ %>
+                            <div class="col-10 ml-auto">
+                                <div class="section-title mt-3 mb-3 text-center">
+                                    <h4>Your subscription extend request has sent, please wait for admin to validate..</h4>
+                                </div>
+                            </div>
+                        <% }else { %>
+                            <form class="form-horizontal" action="" method="POST">
+                                <input type="hidden" name="UserId" value="<%= _locals.user.id %>">
+                                <% if(!isPremium){ %>
+                                <div class="col-10 ml-auto">
+                                    <div class="section-title mt-3 mb-3 text-center">
+                                        <h4 class="mb-4">Your subscription has expired..</h4>
+                                        <div class="mt-4">
+                                            <button class="btn btn-gradient-01" type="submit">Click this button to extend!</button>
+                                        </div>                                       
+                                    </div>
+                                </div>                                
+                                <% }else { %>
+                                    <div class="col-10 ml-auto">
+                                        <div class="section-title mt-3 mb-3 text-center">
+                                            <h4>Your latest subscription lasts until: <%= date %></h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-10 ml-auto">
+                                        <div class="section-title mt-3 mb-3 text-center">
+                                            <h5>Enjoy your subscription while you can..</h5>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            </form>  
+                        <% } %>    
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Row -->
+    </div>
+</div>

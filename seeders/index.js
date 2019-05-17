@@ -86,7 +86,7 @@ const randomImgs = ['01.jpg', '02.jpg', '03.jpg', '04.jpg', '05.jpg'];
     await seedUsers();
 
     //tạo posts cho 3 user aaa,bbb,ccc
-    await seedPosts('aaa@gmail.com','Trải nghiệm');
+    await seedPosts('aaa@gmail.com','Tài chính');
     await seedPosts('bbb@gmail.com','Âm nhạc');
     await seedPosts('ccc@gmail.com','Nhân vật');
 

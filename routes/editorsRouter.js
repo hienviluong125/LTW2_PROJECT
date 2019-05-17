@@ -64,7 +64,7 @@ const verifyPost = (req, res, next) => {
     let EditorId = res.locals.user.id;
     let { WriterId, releaseDate, tags, PostId, SubCategoryId, MainCategoryId, prevRouter } = req.body;
     let str_date = releaseDate.split('/');
-    let day = parseInt(str_date[1]) + 1,
+    let day = parseInt(str_date[1]),
         month = parseInt(str_date[0]) - 1,
         year = parseInt(str_date[2]);
     releaseDate = new Date(year, month, day);

@@ -33,6 +33,11 @@ module.exports = {
       shortContent: {
         type: Sequelize.STRING
       },
+      isPremium: {
+        type: Sequelize.BOOLEAN,
+        allowNull:false,
+        defaultValue:false
+      },
       content: {
         type: Sequelize.TEXT
       },

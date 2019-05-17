@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container post-list-container">
     <div class="row">
         <h1 class="col-xl-10 col-md-10 col-sm-10 mt-3 mb-3">
             <%= status === 'all' ? 'Tất cả bài viết' : 'Bài viết ' +  getPostStatusColor(status).value.toLowerCase() %>
@@ -80,6 +80,12 @@
 
                 </div>
                 <div class="col-xl-2 col-md-2 col-sm-12">
+                    <% if(p.status === 'rejected'){ %>
+                    <a class="action-a-link float-right ml-2 " href="/writers/posts/request/<%= p.slug %>">
+                        <i class="la la-send send"></i>
+                    </a>
+                    <% } %>
+
                     <a class="action-a-link float-right prevent-btn" data-id="<%= p.id %>" href="/">
                         <i class="la la-trash trash"></i>
                     </a>
@@ -88,6 +94,10 @@
                         <i class="la la-edit edit"></i>
                     </a>
                     <% } %>
+
+
+
+
 
                 </div>
             </div>

@@ -1,6 +1,33 @@
 const db = require('./../models/index');
 const tagService = require('./tagService');
-const sequelize = require('sequelize');
+const { Op } = require('sequelize')
+
+async function getAllPosts() {
+    try {
+        await updateReleasedPost();
+        let posts = await db.Posts.findAll({
+            where: {
+                status: 'published',
+            },
+            include: [
+                db.MainCategories,
+                db.SubCategories,
+                db.Users,
+                db.Tags,
+                db.Notes
+            ]
+        });
+
+        // let count = await db.Posts.count({
+        //     where: queryOps,
+        // })
+        return { status: true, data: { posts } }
+    } catch (err) {
+        console.log(err);
+        return { status: false, err };
+    }
+
+}
 
 async function add({ WriterId, title, shortContent, slug, MainCategoryId, SubCategoryId, content, tags, thumbnail }) {
     try {
@@ -118,6 +145,7 @@ async function _delete({ slug, WriterId }) {
 // pending - verified - published - rejected
 async function getAllPostByUserId({ id, limit, offset, status }) {
     try {
+        await updateReleasedPost();
         let queryOps = {};
         if (status === 'all') {
             queryOps = { WriterId: id }
@@ -168,7 +196,7 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset }) {
                     include: [{
                         model: db.Posts,
                         where: {
-                            status: 'pending'
+                            'status': 'pending',
                         },
                         limit: limit,
                         offset: offset,
@@ -176,7 +204,7 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset }) {
                             db.MainCategories,
                             db.SubCategories,
                             db.Users,
-                            db.Tags
+                            db.Tags,
                         ]
                     }]
                 }]
@@ -234,14 +262,21 @@ async function rejectPost({ WriterId, EditorId, PostId, NoteContent }) {
             { status: 'rejected' },
             { where: { id: PostId } }
         );
-        await db.Notes.destroy({ where: { EditorId, WriterId, PostId } });
-        const result = await db.Notes.create({
-            status: 'rejected',
-            content: NoteContent,
-            EditorId,
-            WriterId,
-            PostId
-        });
+        let isNoteExist = await db.Notes.findOne({ where: { EditorId, WriterId, PostId } });
+        let result = null;
+        if (isNoteExist) {
+            result = await db.Notes.update(
+                { status: 'rejected', content: NoteContent, },
+                { where: { EditorId, WriterId, PostId } })
+        } else {
+            result = await db.Notes.create({
+                status: 'rejected',
+                content: NoteContent,
+                EditorId,
+                WriterId,
+                PostId
+            });
+        }
         return { status: true, data: result };
     } catch (err) {
         console.log({ err });
@@ -273,6 +308,39 @@ async function verifyPost({ releaseDate, tags, WriterId, EditorId, PostId, SubCa
     }
 };
 
+async function updateReleasedPost() {
+    try {
+        let now = new Date();
+        let data = await db.Posts.update(
+            {
+                status: 'published'
+            },
+            {
+                where: {
+                    status: 'verified',
+                    releaseDate: {
+                        [Op.lte]: now
+                    },
+                    createdAt: {
+                        [Op.lte]: now
+                    }
+                }
+            }
+        )
+        return data;
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+async function requestRejectedPost({ slug, WriterId }) {
+    return db.Posts.update(
+        { status: 'pending' },
+        { where: { status: 'rejected', slug, WriterId } }
+    );
+}
+
 
 module.exports = {
     add,
@@ -282,5 +350,8 @@ module.exports = {
     _delete,
     getAllPostManagedByEditor,
     rejectPost,
-    verifyPost
+    verifyPost,
+    updateReleasedPost,
+    requestRejectedPost,
+    getAllPosts
 };

@@ -1,0 +1,101 @@
+<!-- Begin Content -->
+<div class="content-inner profile">
+    <div class="container-fluid">
+        <!-- Begin Page Header-->
+        <div class="row">
+            <div class="page-header">
+                <div class="d-flex align-items-center">
+                    <h2 class="page-header-title">Dashboard</h2>
+                    <div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/"><i class="ti ti-home"></i></a></li>
+                            
+                            <li class="breadcrumb-item"><a href="/admin"><i class="ti ti-folder"></i></a></li>
+
+                            <li class="breadcrumb-item active">Tags</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Page Header -->
+        <div class="row flex-row">
+            <!-- Begin Widget -->
+            <%- include('./../common/dashboard-widget.ejs') %>
+            <!-- End Widget -->
+
+            <!-- put your stuffs here -->        
+            <div class="col-xl-9">
+                    <!-- Begin Widget 07 -->
+                    <div class="widget widget-07 has-shadow">
+                        <!-- Begin Widget Header -->
+                        <% if(typeof flash !== 'undefined' && flash.length > 0){ %>
+
+                            <%- include('./../../layouts/blocks/flash-message.ejs', {className: flash[0].className, msg: flash[0].message}) %>
+                        <% } %>
+                        <div class="widget-header bordered d-flex align-items-center">
+                            <h2>Tags Overview</h2>
+                            
+                        </div>
+                        <!-- End Widget Header -->
+                        <!-- Begin Widget Body -->
+                        <div class="widget-body">
+                            <div class="table-responsive table-scroll padding-right-10" style="max-height:580px;">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tag name</th>
+                                            <th>Slug</th>
+                                            <th class='text-right'>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% tags.forEach(tag => { %>
+                                        <tr>
+                                            <td><span class='text-primary'> <%= tag.id %> </span></td>
+                                            <td><span class="text-primary"> <%= tag.name %> </span></td>
+                                            <td><span class="text-primary"> <%= tag.slug %> </span></td>
+                                            <td class="td-actions text-right">
+                                                <a href="/admin/tags/edit/<%= tag.id %>"><i class="la la-edit edit"></i></a>
+                                                <a href="/admin/tags/delete/<%= tag.id %>"><i class="la la-close delete"></i></a>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- End Widget Body -->
+                        <!-- Begin Widget Footer -->
+                        <div class="widget-footer d-flex align-items-center">
+                            <div class="mr-auto p-2">
+                                <span class="display-items">Showing <%= tags.length %> Results</span>
+                            </div>
+                            <!-- <div class="p-2">
+                                <nav aria-label="...">
+                                    <ul class="pagination justify-content-end">
+                                        <li class="page-item disabled">
+                                            <span class="page-link"><i class="ion-chevron-left"></i></span>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item active">
+                                            <span class="page-link">2<span class="sr-only">(current)</span></span>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#"><i class="ion-chevron-right"></i></a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div> -->
+                        </div>
+                        <!-- End Widget Footer -->
+                    </div>
+                    <!-- End Widget 07 -->
+            </div>
+            <!-- end your stuffs here -->
+        </div>
+        <!-- End Row -->
+    </div>
+</div>

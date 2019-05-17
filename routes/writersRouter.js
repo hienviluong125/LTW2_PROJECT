@@ -79,6 +79,16 @@ const addPost = (req, res, next) => {
 
 }
 
+const requestRejectedPost = (req, res, next) => {
+    let slug = req.params.slug;
+    let WriterId = res.locals.user.id;
+    // res.redirect('/writers/posts/rejected/1');
+    postsService
+        .requestRejectedPost({ slug,WriterId })
+        .then(() => res.redirect('/writers/posts/rejected/1'))
+        .catch(err => next(err));
+}
+
 const editPost = (req, res, next) => {
     let param = JSON.parse(req.body.data);
     param.WriterId = res.locals.user.id;
@@ -120,8 +130,11 @@ router.get('/posts/add', renderAddPostPage);
 router.get('/posts/edit/:slug', renderEditPostPage);
 router.get('/posts/delete/:slug', deletePost);
 
+
+router.get('/posts/request/:slug', requestRejectedPost);
 router.get('/posts', (req, res, next) => res.redirect('/writers/posts/all/1'));
 router.get('/posts/:status/:page', renderPostListPage);
+
 
 router.post('/posts/add', upload.array('images'), addPost);
 router.post('/posts/edit', upload.array('images'), editPost);

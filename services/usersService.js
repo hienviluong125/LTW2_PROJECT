@@ -87,10 +87,8 @@ function decodeRecoveryPasswordToken(user, token){
 
 async function changePassword(user, newPassword){
     try{
-        console.log("old pass: ", user.password);
-        console.log("user: ", user);
         let hash = await bcrypt.hash(newPassword, crypto.iteration);
-        console.log("new hash:", hash);
+        console.log("password changed for userID: ", user.id);
         return User.update({password: hash}, {
             where: {id: user.id}
         });
@@ -99,7 +97,33 @@ async function changePassword(user, newPassword){
     }   
 }
 
+function updateInfo(user){
+    return User.update(user, {
+        where: {id: user.id}
+    });
+}
 
+function validateNewPasswords(password, repassword){
+    let errors = [];
+    if(!password || !repassword){
+        errors.push({message:"Please fill in all fields."});
+    }
+    if(password.length < 6 || repassword.length < 6){
+        errors.push({message:"Password must have at least 6 characters.", className:"warning"});
+    }
+    if(password !== repassword){
+        errors.push({message:"Passwords do not match.", className:"warning"});
+    }
+    return errors;
+}
+
+function deleteUser(id){
+    return User.destroy({
+        where:{
+            id
+        }
+    })
+}  
 
 module.exports = {
     getAllUsers,
@@ -110,5 +134,8 @@ module.exports = {
     generateRecoveryPasswordToken,
     findOne,
     decodeRecoveryPasswordToken,
-    changePassword
+    changePassword,
+    updateInfo,
+    validateNewPasswords,
+    deleteUser
 }

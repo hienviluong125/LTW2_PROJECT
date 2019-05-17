@@ -254,3 +254,7 @@ z-index: 1220;
 display: none;
 overflow: hidden;
 outline: 0; */
+
+.post-list-container{
+    min-height:1000px;
+}
