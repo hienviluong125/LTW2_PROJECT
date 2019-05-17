@@ -2,7 +2,7 @@ const db = require('./../models/index');
 const tagService = require('./tagService');
 const { Op } = require('sequelize')
 
-async function getAllPosts() {
+async function getAllPosts({offset,limit}) {
     try {
         await updateReleasedPost();
         let posts = await db.Posts.findAll({
@@ -18,10 +18,16 @@ async function getAllPosts() {
             ]
         });
 
+        let count = await db.Posts.count({
+            where: {
+                status: 'published',
+            },
+        })
+
         // let count = await db.Posts.count({
         //     where: queryOps,
         // })
-        return { status: true, data: { posts } }
+        return { status: true, data: { posts,count } }
     } catch (err) {
         console.log(err);
         return { status: false, err };

@@ -1,6 +1,7 @@
 <div class="container post-list-container">
     <div class="row">
-        <h1 class="col-xl-10 col-md-10 col-sm-10 mt-3 mb-3"><%= currentSubCate === 'all' ? 'Tất cả chuyên mục' : currentSubCate %></h1>
+        <h1 class="col-xl-10 col-md-10 col-sm-10 mt-3 mb-3">
+            <%= currentSubCate === 'all' ? 'Tất cả chuyên mục' : currentSubCate %></h1>
         <div class="col-xl-2 col-md-2 col-sm-12 mt-3 mb-3">
             <div class="btn-group">
                 <button type="button" class="btn btn-warning">Chuyên mục</button>
@@ -17,93 +18,94 @@
             </div>
         </div>
         <% if(posts.length < 1){ %>
-            <h2 class="col-xl-12 col-md-12 col-sm-12 text-center">Không có dữ liệu</h2>
+        <h2 class="col-xl-12 col-md-12 col-sm-12 text-center">Không có dữ liệu</h2>
         <% }else{ %>
-            <% posts.forEach(p => { %>
-            <div class="col-xl-12 col-md-12 col-sm-12 personal-post has-shadow col-md-12 mb-2">
-                <div class="row  p-3">
-                    <div class="col-xl-3 col-md-3 col-sm-12">
-                        <img class="personal-post-thumbnail" src="/assets/img/posts/<%= p.thumbnail %>">
+        <% posts.forEach(p => { %>
+        <div class="col-xl-12 col-md-12 col-sm-12 personal-post has-shadow col-md-12 mb-2">
+            <div class="row  p-3">
+                <div class="col-xl-3 col-md-3 col-sm-12">
+                    <img class="personal-post-thumbnail" src="/assets/img/posts/<%= p.thumbnail %>">
+                </div>
+                <div class="col-xl-7 col-md-7 pt-2">
+                    <h4 class="text-primary"><span class="font-weight-bold">Tiêu đề</span>: <%= p.title %></h4>
+
+                    <div class="mt-3">
+                        <span class="text-dark font-weight-bold">Chuyên mục: </span>
+                        <span class="text-dark"><%= p.MainCategory.name + " / " + p.SubCategory.name %></span>
                     </div>
-                    <div class="col-xl-7 col-md-7 pt-2">
-                        <h4 class="text-primary"><span class="font-weight-bold">Tiêu đề</span>: <%= p.title %></h4>
 
-                        <div class="mt-3">
-                            <span class="text-dark font-weight-bold">Chuyên mục: </span>
-                            <span class="text-dark"><%= p.MainCategory.name + " / " + p.SubCategory.name %></span>
-                        </div>
-
-                        <div class="mt-2">
-                            <span class="text-dark font-weight-bold">Tình trạng: </span>
-                            <span class="badge-text badge-text-small <%= getPostStatusColor(p.status).color %> mb-1"><%=  getPostStatusColor(p.status).value %></span>
-                        </div>
-
-                        <div class="mt-2">
-                            <span class="text-dark font-weight-bold">Nhãn: </span>
-                            <% p.Tags.forEach(t => { %>
-                            <button type="button" class="btn btn-sm btn-square mr-1 btn-tag-style"><%= t.name %></button>
-                            <% }); %>
-                        </div>
-
-                        <div class="mt-2">
-                            <div class="mt-2 text-dark font-weight-bold">Nội dung tóm tắt:</div>
-                            <div class="text-dark">
-                                <%= p.shortContent.length < 100 ? p.shortContent : p.shortContent.substring(0,100) + "..." %>
-                            </div>
-                        </div>
-
-
-
+                    <div class="mt-2">
+                        <span class="text-dark font-weight-bold">Tình trạng: </span>
+                        <span
+                            class="badge-text badge-text-small <%= getPostStatusColor(p.status).color %> mb-1"><%=  getPostStatusColor(p.status).value %></span>
                     </div>
-                    <div class="col-xl-2 col-md-2 col-sm-12">
-                        <a class="action-a-link float-right prevent-btn" data-id="<%= p.id %>" href="/">
-                            <i class="la la-ban ban"></i>
-                        </a>
-                        <a class="action-a-link float-right mr-2" href="/editors/posts/verify/<%= p.slug %>">
-                            <i class="la la-check-square"></i>
-                        </a>
+
+                    <div class="mt-2">
+                        <span class="text-dark font-weight-bold">Nhãn: </span>
+                        <% p.Tags.forEach(t => { %>
+                        <button type="button" class="btn btn-sm btn-square mr-1 btn-tag-style"><%= t.name %></button>
+                        <% }); %>
                     </div>
+
+                    <div class="mt-2">
+                        <div class="mt-2 text-dark font-weight-bold">Nội dung tóm tắt:</div>
+                        <div class="text-dark">
+                            <%= p.shortContent.length < 100 ? p.shortContent : p.shortContent.substring(0,100) + "..." %>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="col-xl-2 col-md-2 col-sm-12">
+                    <a class="action-a-link float-right prevent-btn" data-id="<%= p.id %>" href="/">
+                        <i class="la la-ban ban"></i>
+                    </a>
+                    <a class="action-a-link float-right mr-2" href="/editors/posts/verify/<%= p.slug %>">
+                        <i class="la la-check-square"></i>
+                    </a>
                 </div>
             </div>
+        </div>
 
 
-            <div id="modal-centered-<%= p.id %>" class="modal fade">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Thông báo</h4>
-                            <button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true">×</span>
-                                <span class="sr-only">close</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p class="text-dark">
-                                Xin hãy để lại cho tác giả một lý do mà bài viết này bị <span
-                                    class="text-danger font-weight-bold">TỪ CHỐI</span>
-                            </p>
-                            <form class="mt-2" action="/editors/posts/reject" method=POST>
-                                <div class="form-group row d-flex align-items-center ">
-                                    <label
-                                        class="col-lg-12 form-control-label d-flex justify-content-lg-start font-weight-bold">Chú
-                                        thích</label>
-                                    <div class="col-lg-12">
-                                        <input type="hidden" name="PostId" value="<%= p.id %>">
-                                        <input type="hidden" name="WriterId" value="<%= p.User.id %>">
-                                        <input type="text" class="form-control" name="NoteContent" pattern=".{10,}" required
-                                            title="Ít nhất 10 ký tự" placeholder="Nhập chú thích">
-                                    </div>
+        <div id="modal-centered-<%= p.id %>" class="modal fade">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thông báo</h4>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">×</span>
+                            <span class="sr-only">close</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-dark">
+                            Xin hãy để lại cho tác giả một lý do mà bài viết này bị <span
+                                class="text-danger font-weight-bold">TỪ CHỐI</span>
+                        </p>
+                        <form class="mt-2" action="/editors/posts/reject" method=POST>
+                            <div class="form-group row d-flex align-items-center ">
+                                <label
+                                    class="col-lg-12 form-control-label d-flex justify-content-lg-start font-weight-bold">Chú
+                                    thích</label>
+                                <div class="col-lg-12">
+                                    <input type="hidden" name="PostId" value="<%= p.id %>">
+                                    <input type="hidden" name="WriterId" value="<%= p.User.id %>">
+                                    <input type="text" class="form-control" name="NoteContent" pattern=".{10,}" required
+                                        title="Ít nhất 10 ký tự" placeholder="Nhập chú thích">
                                 </div>
-                                <button type="submit" class="btn btn-primary" >Chấp nhận</button>
-                                <button type="button" class="btn btn-shadow" data-dismiss="modal">Hủy</button>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                        </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Chấp nhận</button>
+                            <button type="button" class="btn btn-shadow" data-dismiss="modal">Hủy</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
                     </div>
                 </div>
             </div>
-            <% }); %>
+        </div>
+        <% }); %>
         <% } %>
 
     </div>
