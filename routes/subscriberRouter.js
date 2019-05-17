@@ -1,20 +1,21 @@
 const router = require('express').Router();
 const middleware = require('./../middlewares/index');
 const subService = require('./../services/subscriberService');
-const htmlDateParser = require('./../utils/htmlDateFormat');
 
-const renderExtendSubscriptionPage = (req, res, next) => {   
-    subService.getLatestSubscription(req.user.id)
-    .then(subscription => {
+const renderExtendSubscriptionPage = async (req, res, next) => {   
+    Promise.all([subService.getLatestSubscription(req.user.id), 
+        await subService.isPremium(req.user.id)
+    ])
+    .then(results => {
         res.render('sub/extend-subscription',{
-            date: subscription.expireDate,
-            status: subscription.status,
-            now: new Date()
-        });
+            date: results[0].expireDate,
+            status: results[0].status,
+            isPremium: results[1]
+        })
     })
     .catch(err => {
-        next(err);
-    })    
+        next(err)
+    });    
 }
 
 const extendSubscriptionHandler = (req, res, next) => {

@@ -1,0 +1,38 @@
+<div class="col-xl-3"> 
+    <div class="widget has-shadow">
+       <div class="widget-body">
+           
+           <h3 class="text-center mt-3 mb-1"> <%= _locals.user.username %> </h3>
+           <p class="text-center"> <%= _locals.user.email %> </p>
+           <div class="em-separator separator-dashed"></div>
+           <ul class="nav flex-column">
+               <% if(_locals.isLoggedIn) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="la la-home la-2x align-middle pr-2"></i>Homepage</a>
+                    </li>                    
+                   
+                   <li class="nav-item">
+                       <a class="nav-link" href="/admin"><i class="la la-database la-2x align-middle pr-2"></i>Dashboard</a>
+                   </li>
+
+                   <li class="nav-item">
+                        <a class="nav-link" href="/admin/tags"><i class="la la-tags la-2x align-middle pr-2"></i>Tags</a>
+                    </li>
+
+                   <li class="nav-item">
+                        <a class="nav-link" href="/admin/users"><i class="la la-users la-2x align-middle pr-2"></i>Users</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/posts"><i class="la la-newspaper-o la-2x align-middle pr-2"></i>Posts</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/categories"><i class="la la-archive la-2x align-middle pr-2"></i>Categories</a>
+                    </li>
+                   
+               <% } %>    
+           </ul>
+       </div>
+   </div>
+</div>

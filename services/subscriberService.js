@@ -42,8 +42,19 @@ async function renewSubscription(UserId){
     }
 }
 
+async function isPremium(UserId){
+    try{
+        let latestSub = await getLatestSubscription(UserId);
+        let now = new Date();
+        return (now.getTime() < latestSub.expireDate.getTime()) ? true : false;
+    }catch(err){
+        throw err;
+    }
+}
+
 module.exports = {
     create,
     getLatestSubscription,
-    renewSubscription
+    renewSubscription,
+    isPremium
 }

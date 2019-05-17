@@ -20,17 +20,11 @@
             <!-- Begin Widget -->
             <%- include('./../layouts/blocks/profile-widget.ejs', {user}) %>
             <!-- End Widget -->
-            
             <div class="col-xl-9 mx-auto">
                 <div class="widget has-shadow">
                     <div class="widget-header bordered no-actions d-flex align-items-center">
                         <h4>Extend your subscriptions</h4>
                     </div>
-                    <% if(typeof flash !== 'undefined'){ %>
-                        <% flash.forEach(info => { %>
-                            <%- include('./../layouts/blocks/flash-message.ejs', { msg: info.message, className:'success' }) %>
-                        <% }) %>
-                    <% } %>
                     <div class="widget-body">
                         <% if(status =='pending'){ %>
                             <div class="col-10 ml-auto">
@@ -41,7 +35,7 @@
                         <% }else { %>
                             <form class="form-horizontal" action="" method="POST">
                                 <input type="hidden" name="UserId" value="<%= _locals.user.id %>">
-                                <% if(now.getTime() > date.getTime()){ %>
+                                <% if(!isPremium){ %>
                                 <div class="col-10 ml-auto">
                                     <div class="section-title mt-3 mb-3 text-center">
                                         <h4 class="mb-4">Your subscription has expired..</h4>
@@ -70,3 +64,4 @@
         </div>
         <!-- End Row -->
     </div>
+</div>
