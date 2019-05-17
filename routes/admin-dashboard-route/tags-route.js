@@ -1,6 +1,11 @@
 const router = require('express').Router();
 const tagService = require('./../../services/tagService');
 
+const successRedirect = (req, res, message) => {
+    req.flash('tags-flash', {message, className:"success"});
+    res.redirect('/admin/tags');
+}
+
 const renderTagsDashboard = (req, res, next) =>{
     tagService.getAll()
     .then(tags => {
@@ -36,13 +41,16 @@ const renderDeleteTag = (req, res, next) => {
     })
 }
 
+const renderAddTag = (req,res, next) => {
+    res.render('admin/tags/add');
+}
+
 const updateTagHandler = (req, res, next) => {
     let tag = req.body;
     console.log(tag);
     tagService.update(tag)
     .then(changedRows => {
-        req.flash('tags-flash', {message: "Update tag successfully!", className:"success"});
-        res.redirect('/admin/tags');
+        successRedirect(req, res, "Tag updated successfully!");
     })
     .catch(err => {
         next(err);
@@ -53,8 +61,17 @@ const deleteTagHandler = (req, res, next) => {
     let tagId = req.body.id;
     tagService.deleteTag(+tagId)
     .then(changedRows => {
-        req.flash('tags-flash', {message: "Delete tag successfully!", className:"success"});
-        res.redirect('/admin/tags');
+        successRedirect(req, res, "Tag deleted sucessfully");
+    })
+    .catch(err => {
+        next(err);
+    })
+}
+
+const addTagHandler = (req, res, next) => {  
+    tagService.createOne(req.body.name)
+    .then(result => {
+        successRedirect(req, res, "Tag added successfully!");
     })
     .catch(err => {
         next(err);
@@ -62,9 +79,12 @@ const deleteTagHandler = (req, res, next) => {
 }
 
 router.get('/', renderTagsDashboard);
+router.get('/add', renderAddTag);
 router.get('/edit/:id', renderEditTag);
 router.get('/delete/:id', renderDeleteTag);
 
+
+router.post('/add', addTagHandler);
 router.post('/edit/:id', updateTagHandler);
 router.post('/delete/:id', deleteTagHandler);
 

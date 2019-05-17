@@ -161,7 +161,31 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset }) {
     }
 }
 
+async function deleteByMainCatId(id){
+    try{
+        return db.Posts.destroy({
+            where:{
+                MainCategoryId: id
+            }
+        })
 
+    }catch(err){
+        throw err;
+    }
+}
+
+async function deleteBySubCatId(id){
+    try{
+        return db.Posts.destroy({
+            where:{
+                SubCategoryId:id
+            }
+        })
+
+    }catch(err){
+        throw err;
+    }
+}
 
 
 module.exports = {
@@ -170,5 +194,7 @@ module.exports = {
     edit,
     getAllPostByUserId,
     _delete,
-    getAllPostManagedByEditor
+    getAllPostManagedByEditor,
+    deleteByMainCatId,
+    deleteBySubCatId
 };

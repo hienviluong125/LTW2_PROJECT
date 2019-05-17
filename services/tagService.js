@@ -54,6 +54,7 @@ function findOne(id){
 }
 
 function update(tag){
+    tag.slug = str_to_slug(tag.name);
     return db.Tags.update(tag, {
         where:{id: tag.id}
     });
@@ -82,6 +83,14 @@ async function deleteTag(id){
     }
 }
 
+function createOne(name){
+    return db.Tags.create({
+        name,
+        slug: str_to_slug(name)
+    });
+}
+
+
 module.exports = {
     creatTags,
     addTagsToPost,
@@ -89,5 +98,6 @@ module.exports = {
     getAll,
     findOne,
     update,
-    deleteTag
+    deleteTag,
+    createOne
 }
