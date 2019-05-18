@@ -1,0 +1,78 @@
+<!-- Begin Content -->
+<div class="content-inner profile">
+        <div class="container-fluid">
+            <!-- Begin Page Header-->
+            <div class="row">
+                <div class="page-header">
+                    <div class="d-flex align-items-center">
+                        <h2 class="page-header-title">Add user</h2>
+                        <div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/"><i class="ti ti-home"></i></a></li>
+                                
+                                <li class="breadcrumb-item"><a href="/admin"><i class="ti ti-folder"></i></a></li>
+    
+                                <li class="breadcrumb-item "> <a href="/admin/users"></a> <i class="ti ti-users"></i></a></li>
+
+                                <li class="breadcrumb-item active">Add</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Page Header -->
+            <div class="row flex-row">
+                <!-- Begin Widget -->
+                <%- include('./../common/dashboard-widget.ejs') %>
+                <!-- End Widget -->
+    
+                <!-- put your stuffs here -->        
+                <div class="col-xl-9">
+                    <div class="widget-body">
+                        <form class="form-horizontal" action="" method="POST">
+                                
+                                <div class="form-group row d-flex align-items-center mb-5">
+                                        <label class="col-lg-3 form-control-label">Full name</label>
+                                        <div class="col-lg-9">
+                                            <input required type="text" name="username" class="form-control">
+                                        </div>
+                                </div>
+
+                                <div class="form-group row d-flex align-items-center mb-5">
+                                        <label class="col-lg-3 form-control-label">Email</label>
+                                        <div class="col-lg-9">
+                                            <input required type="email" name="email" class="form-control">
+                                        </div>
+                                </div>
+
+                                <div class="form-group row d-flex align-items-center mb-5">
+                                        <label class="col-lg-3 form-control-label">Password</label>
+                                        <div class="col-lg-9">
+                                            <input required type="password" name="password" class="form-control">
+                                        </div>
+                                </div>
+                                <div class="form-group row mb-5">
+                                        <label class="col-lg-3 form-control-label">Select Role</label>
+                                        <div class="col-lg-9 select mb-3">
+                                            <select name="role" class="custom-select form-control">
+                                                <option value="sub">Subscriber</option>
+                                                <option value="writer">Writer</option>
+                                                <option value="editor">Editor</option>
+                                                <option value="admin">Admin</option>
+                                            </select>
+                                        </div> 
+                                    </div>
+                                <div class="em-separator separator-dashed"></div>
+                                
+                                <div class="text-center">
+                                    <button class="btn btn-gradient-04" type="submit">Add!</button>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- end your stuffs here -->
+            </div>
+            <!-- End Row -->
+        </div>
+    </div>
+    

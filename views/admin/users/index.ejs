@@ -1,0 +1,103 @@
+<!-- Begin Content -->
+<div class="content-inner profile">
+    <div class="container-fluid">
+        <!-- Begin Page Header-->
+        <div class="row">
+            <div class="page-header">
+                <div class="d-flex align-items-center">
+                    <h2 class="page-header-title">Dashboard</h2>
+                    <div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/"><i class="ti ti-home"></i></a></li>
+                            
+                            <li class="breadcrumb-item"><a href="/admin"><i class="ti ti-folder"></i></a></li>
+
+                            <li class="breadcrumb-item active">Users</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Page Header -->
+        <div class="row flex-row">
+            <!-- Begin Widget -->
+            <%- include('./../common/dashboard-widget.ejs') %>
+            <!-- End Widget -->
+
+            <!-- put your stuffs here -->        
+            <div class="col-xl-9">
+                    <!-- Begin Widget 07 -->
+                    <div class="widget widget-07 has-shadow">
+                        <!-- Begin Widget Header -->
+                        <% if(typeof flash !== 'undefined' && flash.length > 0){ %>
+
+                            <%- include('./../../layouts/blocks/flash-message.ejs', {className: flash[0].className, msg: flash[0].message}) %>
+                        <% } %>
+                        <div class="widget-header bordered d-flex align-items-center">
+                            <h2>Users Overview</h2>
+                            <div class="widget-options">
+                                <div class="btn-group" role="group">
+
+                                    <a href="/admin/users/add">
+                                        <button type="button" class="btn btn-gradient-04 mr-1 mb-2">
+                                            <i class="la la-user-plus la-2x"></i>
+                                        </button>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Widget Header -->
+                        <!-- Begin Widget Body -->
+                        <div class="widget-body">
+                                <div class="table-responsive">
+                                    <table id="sorting-table" class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Full name</th>
+                                                <th>Date of birth</th>
+                                                <th>Email</th>
+                                                <th class="text-right">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% users.forEach(user => { %>
+                                                <tr>
+                                                    <td><span class='text-primary'> <%= user.id %> </span></td>
+                                                    <td><span class="text-primary"> <%= user.username %> </span></td>
+                                                    <% if(user.DoB == null){ %>
+                                                        <td><span class="text-primary"> Not set </span></td>
+                                                    <% }else { %>
+                                                        <td><span class="text-primary"> <%= user.DoB.toDateString() %> </span></td>
+                                                    <% } %>
+                                                    <td><span class="text-primary"> <%= user.email %> </span></td>
+                                                    <td class="td-actions text-right">
+                                                        <a href="/admin/users/edit/<%= user.id %>"><i class="la la-edit edit"></i></a>
+                                                        <a href="/admin/users/delete/<%= user.id %>"><i class="la la-close delete"></i></a>
+                                                    </td>
+                                                </tr>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        
+                        <!-- End Widget Body -->
+
+                        <!-- Begin Widget Footer -->
+                        <div class="widget-footer d-flex align-items-center">
+                            <div class="mr-auto p-2">
+                                <!-- <span class="display-items">Showing 69 Results</span> -->
+                            </div>
+                            
+                        </div>
+                        <!-- End Widget Footer -->
+                    </div>
+                    <!-- End Widget 07 -->
+            </div>
+            <!-- end your stuffs here -->
+        </div>
+        <!-- End Row -->
+    </div>
+</div>
