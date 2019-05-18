@@ -2107,6 +2107,10 @@ span.badge-pulse-orange {
   background:#fe195e; 
 }
 
+.badge-text.warning{
+  background:#f0ad4e;
+}
+
 .badge-rounded {
   background: #5d5386;
   color: #fff;
@@ -2909,7 +2913,7 @@ ul.social-network li {
 /*
  * PAGES NAV
  */
-.page-item:first-child .page-link {
+/* .page-item:first-child .page-link {
   margin-left: 0;
   border-radius: 50%;
   font-size: 1rem;
@@ -2920,7 +2924,7 @@ ul.social-network li {
   border-radius: 50%;
   font-size: 1rem;
   margin-left: 5px;
-}
+} */
 
 .page-item.active .page-link {
   z-index: 2;

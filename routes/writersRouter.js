@@ -2,21 +2,28 @@ const router = require('express').Router();
 const upload = require('./../helpers/uploader');
 const postsService = require('./../services/postsService');
 const categoriesSerivce = require('./../services/categoriesService');
-const middleware = require('./../middlewares/index');
+const middleware = require('./../middlewares/users/local-auth');
+const { getPostStatusColor, createPagesArr } = require('./../helpers/utils');
 
 const renderPostListPage = (req, res, next) => {
+    let status = req.params.status;
     let page = req.params.page;
     let limit = 8;
     let offset = limit * (page - 1);
 
-    let id = req.user.id;
+    let id = res.locals.user.id;
     postsService
-        .getAllPostByUserId({ id, limit, offset })
-        .then(posts => {
-            res.render('writers/posts', { posts, page });
+        .getAllPostByUserId({ id, limit, offset, status })
+        .then(result => {
+            let { data } = result;
+            let { posts, count } = data;
+            let pagination = createPagesArr(page, count, limit);
+
+            res.render('writers/posts', { posts, page, getPostStatusColor, status, pagination });
         })
         .catch(err => {
-            res.json({ err });
+            console.log(err);
+            res.render('commons/error404');
         })
 
 }
@@ -26,6 +33,9 @@ const renderAddPostPage = (req, res, next) => {
         .getAllCategories()
         .then(allCategories => {
             res.render('writers/posts/add', { allCategories });
+        })
+        .catch(err => {
+            res.render('commons/error404');
         })
 }
 
@@ -41,70 +51,78 @@ const renderEditPostPage = (req, res, next) => {
         if (post && allCategories) {
             res.render('writers/posts/edit', { post, allCategories });
         } else {
-            return next();
+            res.render('commons/error404');
         }
-
+    }).catch(err => {
+        res.render('commons/error404');
     })
 
 }
 
 const addPost = (req, res, next) => {
     //sẽ thay thế là authorization middleware sau
-    if (!req.user) {
-        res.status(500).json({ err: "please login" });
-    } else {
+    let param = JSON.parse(req.body.data);
+    param.WriterId = res.locals.user.id;
+    postsService
+        .add(param)
+        .then(result => {
+            if (result.status) {
+                res.status(200).json({ data: result.data });
+            } else {
+                res.status(500).json({ err: result.err });
+            }
 
-        let param = JSON.parse(req.body.data);
-        console.log(param);
-        param.WriterId = req.user.id;
-        postsService
-            .add(param)
-            .then(result => {
-                res.status(200).json({ result });
-            })
-            .catch(err => {
-                res.status(500).json({ err });
-            })
-    }
+        })
+        .catch(err => {
+            res.status(500).json({ err });
+        })
+
+}
+
+const requestRejectedPost = (req, res, next) => {
+    let slug = req.params.slug;
+    let WriterId = res.locals.user.id;
+    // res.redirect('/writers/posts/rejected/1');
+    postsService
+        .requestRejectedPost({ slug,WriterId })
+        .then(() => res.redirect('/writers/posts/rejected/1'))
+        .catch(err => next(err));
 }
 
 const editPost = (req, res, next) => {
-    if (!req.user) {
-        res.status(500).json({ err: "please login" });
-    } else {
-        let param = JSON.parse(req.body.data);
-        param.WriterId = req.user.id;
-        postsService
-            .edit(param)
-            .then(result => {
-                res.status(200).json({ result });
-            })
-            .catch(err => {
-                res.status(500).json({ err });
-            })
-    }
+    let param = JSON.parse(req.body.data);
+    param.WriterId = res.locals.user.id;
+    postsService
+        .edit(param)
+        .then(result => {
+            if (result.status) {
+                res.status(200).json({ data: result.data });
+            } else {
+                res.status(500).json({ err: result.err });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ err: err });
+        })
 }
 
 const deletePost = (req, res, next) => {
-    if (!req.user) {
-        res.status(500).json({ err: "please login" });
-    } else {
-        let slug = req.params.slug;
-        let WriterId = req.user.id;
-        postsService
-            ._delete({ slug, WriterId })
-            .then(() => {
-                res.redirect('/writers/posts');
-            })
-            .catch(err => {
-                res.status(500).json({ err });
-            })
-    }
+
+    let slug = req.params.slug;
+    let WriterId = res.locals.user.id;
+    postsService
+        ._delete({ slug, WriterId })
+        .then(() => {
+            res.redirect('/writers/posts');
+        })
+        .catch(err => {
+            res.render('commons/error404');
+        })
+
 }
 
 router.all(
     '*',
-    middleware.Authentication,
     middleware.Authorization(['writer'])
 );
 
@@ -112,8 +130,11 @@ router.get('/posts/add', renderAddPostPage);
 router.get('/posts/edit/:slug', renderEditPostPage);
 router.get('/posts/delete/:slug', deletePost);
 
-router.get('/posts', (req, res, next) => res.redirect('/writers/posts/1'));
-router.get('/posts/:page', renderPostListPage);
+
+router.get('/posts/request/:slug', requestRejectedPost);
+router.get('/posts', (req, res, next) => res.redirect('/writers/posts/all/1'));
+router.get('/posts/:status/:page', renderPostListPage);
+
 
 router.post('/posts/add', upload.array('images'), addPost);
 router.post('/posts/edit', upload.array('images'), editPost);

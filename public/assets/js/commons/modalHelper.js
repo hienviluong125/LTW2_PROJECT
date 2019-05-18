@@ -77,7 +77,8 @@ function initSuccessModal(id, linkTo) {
     $('body').append(modalDom);
 }
 
-function initFailureModal(id) {
+function initFailureModal(id,error) {
+    error = typeof error !== 'undefined' ? error : 'System error';
     var modalDom =
         `
         <div id=${id} class="modal fade">
@@ -88,7 +89,11 @@ function initFailureModal(id) {
                         <div class="section-title mt-5 mb-2">
                             <h2 class="text-gradient-02">Thông báo</h2>
                         </div>
-                        <p class="mb-5 text-dark">Yêu cầu của bạn thực hiện thất bại</p>
+                        <p class="mb-5 text-dark">
+                            Yêu cầu của bạn thực hiện thất bại
+                            <br>
+                            ${error}
+                        </p>
                         <div class="c-icon"><i class="ion-close-round big-c-icon text-danger"></i></div>
                         
                         <button type="button" class="btn btn-shadow mb-3" data-dismiss="modal">Tôi hiểu rồi</button>

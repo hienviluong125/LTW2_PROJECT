@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       foreignKey: 'PostId'
     });
+    Posts.hasOne(models.Notes);
   };
   return Posts;
 };

@@ -1,5 +1,5 @@
 const Authentication = (req, res, next) => {
-    if (req.user && typeof req.user !== 'undefined') {
+    if (res.locals.user && typeof res.locals.user !== 'undefined') {
         next();
     } else {
         res.redirect('/users/login');
@@ -7,16 +7,18 @@ const Authentication = (req, res, next) => {
 }
 
 
-const Authorization = (roles) => {
+function Authorization(roles) {
     return (req, res, next) => {
-        if(req.user && typeof req.user !== 'undefined'){
-            if(roles.includes(req.user.role)){
+        // return next();
+        if (res.locals.user && typeof res.locals.user !== 'undefined') {
+            if (roles.includes(res.locals.user.role)) {
                 return next();
-            }else{
-                return res.json({"msg":"Chuyển trang error"});
+            } else {
+                return res.render('commons/error404', { error: 'Bạn không đủ quyền để truy cập trang này !!!' });
             }
         }
-        return res.json({"msg":"Chuyển trang error 22"});
+        req.flash('errors', { message: 'Please log in.' });
+        res.redirect('/users/login');
     }
 }
 

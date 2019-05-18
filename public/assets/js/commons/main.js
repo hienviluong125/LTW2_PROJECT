@@ -5,7 +5,12 @@ $(document).ready(function () {
     initAddPostPageEvent();
     initPostListPageEvent();
     initEditPostPageEvent();
-
+    initVerifyPostPageEvent();
+    $('.prevent-btn').on('click',function(e){
+        e.preventDefault();
+        let id = $(this).data('id');
+        showModal({id: 'modal-centered-' + id});
+    })
 
 
 
@@ -14,6 +19,14 @@ $(document).ready(function () {
 
 function initEventWithRouter(param){
 
+}
+
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
 }
 
 function initCarousel() {
