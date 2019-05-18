@@ -6,59 +6,40 @@ const { createPagesArr } = require('./../helpers/utils');
 
 const renderAllPosts = (req, res, next) => {
     const { topPosts, hotTags } = mockPost;
-    let page = req.params.page;
+    let { tag, maincate, subcate, page } = req.params;
     let limit = 8;
     let offset = limit * (page - 1);
 
     postsService
-        .getAllPosts({ offset, limit })
+        .getAllPosts({ offset, limit, tag, maincate, subcate })
         .then(result => {
             let { data } = result;
             let { posts, count } = data;
             let pagination = createPagesArr(page, count, limit);
-            res.render('posts/index', { posts, pagination, page, topPosts, hotTags });
+            res.render('posts/index', { posts, page, pagination, topPosts, hotTags });
         })
         .catch(err => next(err));
 }
 
-const renderPostsOfMaincate = (req,res,next) => {
-
+const renderDetailPost = (req, res, next) => {
+    let slug = req.params.slug;
+    const { topPosts, hotTags } = mockPost;
+    postsService
+        .get({ slug })
+        .then(post => {
+            res.render('posts/detail', { post, topPosts, hotTags });
+        })
+        .catch(err => next(err));
 }
 
-const renderPostsOfSubcate = (req,res,next) => {
 
-}
-
-const renderPostsOfTag = (req,res,next) => {
-
-}
+router.get('/detail/:slug', renderDetailPost)
+router.get('/tags/:tag/:page', renderAllPosts)
+router.get('/:maincate/:page', renderAllPosts)
+router.get('/:maincate/:subcate/:page', renderAllPosts)
 
 
-
-const renderPostsWith = (type) => {
-    return (req, res, next) => {
-        if (type === 'all') {
-            return renderAllPosts(req, res, next)
-        }
-        else if (type === 'maincate') {
-            //maincate
-            return renderAllPosts(req, res, next)
-        } else if (type === 'subcate') {
-            //maincate subcate
-            return renderAllPosts(req, res, next)
-
-        } else {
-            //tag
-            return renderAllPosts(req, res, next)
-        }
-    }
-
-}
-
-// router.get('/tags/:slug/:page',)
-// router.get('/:maincate')
-// router.get('/:maincate/:subcate/:page')
-router.get('/all/:page', renderPostsWith('all'));
+router.get('/', (req, res, next) => res.redirect('/posts/all/1'))
 
 
 module.exports = router;

@@ -1,141 +1,157 @@
 <div class="content-inner boxed mt-4 w-100">
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
-                <h2 class="page-header-title ml-2 mt-3">Tất cả bài viết</h2>
-                <a class="btn btn-gradient-01 float-right mr-3" href="#">Viết bài</a>
-            </div>
-            <div class="col-md-4">
+            <div class="col-xl-12 col-md-12 col-sm-12">
                 <div class="row">
-                    <div class="col-md-12 ml-2 form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon addon-primary">
-                                <i class="ti ti-search mt-2"></i>
-                            </span>
-                            <input type="text" placeholder="Search..." class="form-control">
+                    <div class="col-md-8 col-xl-8">
+                        <h1 class="page-header-title ml-2">Tất cả bài viết</h1>
+                        <a class="btn btn-gradient-01 float-right mr-3" href="#">Viết bài</a>
+                    </div>
+                    <div class="col-md-4 col-xl-4">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-12 ml-2 form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon addon-primary">
+                                        <i class="ti ti-search mt-2"></i>
+                                    </span>
+                                    <input type="text" placeholder="Search..." class="form-control">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row flex-row ">
-                <div class="col-md-8">
-                    <div class="row">
-                        <% posts.forEach(p => { %>
-                        <div class="col-xl-12 col-md-12">
-                            <div class="widget-04 widget-body p-0 widget-mb-0">
-                                <div class="post-container">
-                                    <div class="media">
-                                        <div class="media-left mt-3 user">
-                                            <a href="pages-profile.html"><img src="/assets/img/avatar/avatar-07.jpg"
-                                                    class="rounded-circle" alt="..."></a>
-                                        </div>
-                                        <div class="media-body align-self-center ml-3">
-                                            <h2 class="font-weight-bold float-left mr-2">
-                                                <a href="#"><%= p.title %></a>
-                                            </h2>
-                                            <% p.Tags.forEach(t => { %>
-                                            <button type="button"
-                                                class="btn btn-sm btn-square mr-1 mb-2 btn-tag-style"><%= t.name %></button>
-                                            <% }); %>
-                                            <h5 class="pr-5 mt-3"><%= p.shortContent %></h5>
-                                            <div class="mt-1">
-                                                posted by <a href="#"><span
-                                                        class="username"><%= p.User.username %></span></a>
+            <div class="col-xl-12 col-md-12 col-sm-12">
+                <div class="row">
+                    <div class="col-xl-8 col-md-8 ">
+                        <div class="row">
+                            <% if(posts.length <= 0){%>
+                            <h3 class="text-dark col-xl-12 col-md-12">Không có dữ liệu</h3>
+                            <% }else{%>
+
+                            <% posts.forEach(p => { %>
+
+                            <div class="col-xl-12 col-md-12">
+                                <div class="widget-04 widget-body p-0 widget-mb-0">
+                                    <div class="post-container">
+                                        <div class="media">
+                                            <div class="media-left mt-3 user">
+                                                <a href="pages-profile.html"><img src="/assets/img/avatar/avatar-07.jpg"
+                                                        class="rounded-circle" alt="..."></a>
                                             </div>
-                                            <div class="time">42 min ago</div>
+                                            <div class="media-body align-self-center ml-3">
+                                                <h2 class="font-weight-bold float-left mr-2">
+                                                    <a href="/posts/detail/<%= p.slug %>"><%= p.title %></a>
+                                                </h2>
+                                                <% p.Tags.forEach(t => { %>
+                                                <button type="button"
+                                                    class="btn btn-sm btn-square mr-1 mb-2 btn-tag-style"><%= t.name %></button>
+                                                <% }); %>
+                                                <h5 class="pr-5 mt-3"><%= p.shortContent %></h5>
+                                                <div class="mt-1">
+                                                    posted by <a href="#"><span
+                                                            class="username"><%= p.User.username %></span></a>
+                                                </div>
+                                                <div class="time">42 min ago</div>
+                                            </div>
+                                            <div class="media-right align-self-center">
+                                                <img src="/assets/img/posts/<%= p.thumbnail %>"
+                                                    class="post-list-thumbnail" alt="...">
+                                            </div>
                                         </div>
-                                        <div class="media-right align-self-center">
-                                            <img src="/assets/img/posts/<%= p.thumbnail %>" class="post-list-thumbnail"
-                                                alt="...">
-                                        </div>
-                                    </div>
-                                    <!-- <img src="/assets/img/background/01.jpg" alt="..." class="img-fluid"> -->
-                                    <div class="col no-padding d-flex justify-content-start mt-2">
-                                        <div class="meta ml-5 pl-2">
-                                            <ul>
-                                                <li><i class="la la-eye"></i><span class="numb"><%= p.views %></span>
-                                                </li>
-                                                <li><i class="la la-comment"></i><span class="numb">38</span></li>
-                                            </ul>
+                                        <!-- <img src="/assets/img/background/01.jpg" alt="..." class="img-fluid"> -->
+                                        <div class="col no-padding d-flex justify-content-start mt-2">
+                                            <div class="meta ml-5 pl-2">
+                                                <ul>
+                                                    <li><i class="la la-eye"></i><span
+                                                            class="numb"><%= p.views %></span>
+                                                    </li>
+                                                    <li><i class="la la-comment"></i><span class="numb">38</span></li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <% }); %>
-                    </div>
-                    <% if(posts.length > 0){ %>
-                    <nav aria-label="">
-                        <ul class="pagination justify-content-center">
-
-                            <li class="page-item <%= parseInt(page) <= 1 ? 'custom-page-disabled' : ''  %>">
-                                <a class="page-link">First</a>
-                            </li>
-
-                            <li class="page-item <%= parseInt(page) <= 1 ? 'custom-page-disabled' : ''  %> ">
-                                <a class="page-link ">Prev</a>
-                            </li>
-
-                            <% if(pagination.align === 'right' || pagination.align === "middle"){ %>
-                            <li class="page-item custom-page-disabled">
-                                <a class="page-link font-weight-bold">. . .</a>
-                            </li>
-                            <% } %>
-
-                            <% pagination.pages.forEach(_p => { %>
-                            <li class="page-item <%= page.toString() === _p.toString() ? 'page-active' : '' %>">
-                                <a
-                                    class="page-link <%= page.toString() === _p.toString() ? 'text-white' : '' %>"><%= _p %></a>
-                            </li>
                             <% }); %>
-                            <% if(pagination.align === 'left' || pagination.align === "middle"){ %>
-                            <li class="page-item custom-page-disabled">
-                                <a class="page-link font-weight-bold">. . .</a>
-                            </li>
-                            <% } %>
-                            <li
-                                class="page-item <%= parseInt(page) >= pagination.lastPage  ? 'custom-page-disabled' : ''  %>">
-                                <a class="page-link ">Next</a>
-                            </li>
-                            <li
-                                class="page-item <%= parseInt(page) >= pagination.lastPage  ? 'custom-page-disabled' : ''  %>">
-                                <a class="page-link">Last</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <% } %>
-                </div>
-                <div class="col-md-4">
-                    <div id="accordion-right" class="accordion">
-                        <div class="widget has-shadow">
-                            <div class="widget-header bordered no-actions d-flex align-items-center">
-                                <h2 class="font-weight-bold">Top posts</h2>
 
-                            </div>
-                            <% topPosts.forEach((p,index) => { %>
-                            <a class="card-header collapsed d-flex align-items-center" data-toggle="collapse"
-                                href="#RightcollapseTwo">
-                                <div class="card-title w-100"><%= index+1 %>. <%= p.title %>?</div>
-                            </a>
-                            <% }); %>
+                            <% }%>
                         </div>
-                    </div>
-                    <div id="accordion-right" class="accordion">
-                        <div class="widget has-shadow">
-                            <div class="widget-header bordered no-actions d-flex align-items-center">
-                                <h2 class="font-weight-bold">Hot tags</h2>
 
-                            </div>
-                            <div class="pl-4 pb-1">
-                                <% hotTags.forEach(t => { %>
-                                <button type="button"
-                                    class="btn btn-sm btn-square mr-1 mb-2 btn-tag-style"><%= t %></button>
+                        <% if(posts.length > 0){ %>
+                        <nav aria-label="">
+                            <ul class="pagination justify-content-center">
+
+                                <li class="page-item <%= parseInt(page) <= 1 ? 'custom-page-disabled' : ''  %>">
+                                    <a class="page-link">First</a>
+                                </li>
+
+                                <li class="page-item <%= parseInt(page) <= 1 ? 'custom-page-disabled' : ''  %> ">
+                                    <a class="page-link ">Prev</a>
+                                </li>
+
+                                <% if(pagination.align === 'right' || pagination.align === "middle"){ %>
+                                <li class="page-item custom-page-disabled">
+                                    <a class="page-link font-weight-bold">. . .</a>
+                                </li>
+                                <% } %>
+
+                                <% pagination.pages.forEach(_p => { %>
+                                <li class="page-item <%= page.toString() === _p.toString() ? 'page-active' : '' %>">
+                                    <a
+                                        class="page-link <%= page.toString() === _p.toString() ? 'text-white' : '' %>"><%= _p %></a>
+                                </li>
                                 <% }); %>
+                                <% if(pagination.align === 'left' || pagination.align === "middle"){ %>
+                                <li class="page-item custom-page-disabled">
+                                    <a class="page-link font-weight-bold">. . .</a>
+                                </li>
+                                <% } %>
+                                <li
+                                    class="page-item <%= parseInt(page) >= pagination.lastPage  ? 'custom-page-disabled' : ''  %>">
+                                    <a class="page-link ">Next</a>
+                                </li>
+                                <li
+                                    class="page-item <%= parseInt(page) >= pagination.lastPage  ? 'custom-page-disabled' : ''  %>">
+                                    <a class="page-link">Last</a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <% } %>
+                    </div>
+                    <div class="col-xl-4 col-md-4 ml-auto">
+                        <div id="accordion-right" class="accordion">
+                            <div class="widget has-shadow">
+                                <div class="widget-header bordered no-actions d-flex align-items-center">
+                                    <h2 class="font-weight-bold">Top posts</h2>
+
+                                </div>
+                                <% topPosts.forEach((p,index) => { %>
+                                <a class="card-header collapsed d-flex align-items-center" data-toggle="collapse"
+                                    href="#RightcollapseTwo">
+                                    <div class="card-title w-100"><%= index+1 %>. <%= p.title %>?</div>
+                                </a>
+                                <% }); %>
+                            </div>
+                        </div>
+                        <div id="accordion-right" class="accordion">
+                            <div class="widget has-shadow">
+                                <div class="widget-header bordered no-actions d-flex align-items-center">
+                                    <h2 class="font-weight-bold">Hot tags</h2>
+
+                                </div>
+                                <div class="pl-4 pb-1">
+                                    <% hotTags.forEach(t => { %>
+                                    <button type="button"
+                                        class="btn btn-sm btn-square mr-1 mb-2 btn-tag-style"><%= t %></button>
+                                    <% }); %>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

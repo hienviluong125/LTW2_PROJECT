@@ -17,10 +17,10 @@ app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout', 'layouts/main');
 app.use(session({
-     secret: 'hmmm', cookie: { maxAge: 3600000 },
-     resave:true,
-     saveUninitialized:true
-    }
+    secret: 'hmmm', cookie: { maxAge: 3600000 },
+    resave: true,
+    saveUninitialized: true
+}
 ));
 app.use(flash());
 app.use(passport.initialize());
@@ -31,14 +31,17 @@ app.use(require('./middlewares/users/local-auth').registerStatus);
 
 
 //FOR DEV
-// app.use((req,res,next) => {
-//     res.locals.user = {
-//         id: 8,
-//         role: 'editor'
+app.use((req,res,next) => {
+    res.locals.user = {
+        id: 2,
+        role: 'writer'
 
-//     };
-//     next();
-// })
+        // id:8,
+        // role: 'editor'
+
+    };
+    next();
+})
 //END 
 
 const indexRouter = require('./routes/indexRouter');
@@ -57,14 +60,28 @@ const adminRouter = require('./routes/adminRouter');
 
 
 
-
+app.use((req, res, next) => {
+    if (res.locals.allCategories) {
+        return next();
+    }
+    const categoriesService = require('./services/categoriesService');
+    categoriesService
+        .getAllCategories()
+        .then(allCategories => {
+            res.locals.allCategories = allCategories;
+            return next();
+        })
+        .catch(err => {
+            res.redirect('/error')
+        })
+})
 //================== Routes =================
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/posts',postsRouter);
-app.use('/writers',writersRouter);
-app.use('/editors',editorsRouter);
+app.use('/posts', postsRouter);
+app.use('/writers', writersRouter);
+app.use('/editors', editorsRouter);
 app.use('/subscribers', subscriberRouter);
 app.use('/admin', adminRouter);
 //================ End Routes =================
@@ -72,8 +89,8 @@ app.use('/admin', adminRouter);
 
 //================ Error pages =================
 
-app.use((req,res)=>{
-    res.render('commons/error404');
+app.use((req, res) => {
+    res.redirect('/error');
 })
 
 //============== End Error pages =============
