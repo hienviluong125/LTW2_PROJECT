@@ -13,7 +13,8 @@ const failRedirect = (req, res, message) => {
 
 const renderAddCatPage = (req, res, next) => {
     res.render('admin/categories/add',{
-        isSubCat: false
+        isSubCat: false,
+        layout: 'admin/common/main'
     });
 }
 
@@ -22,7 +23,8 @@ const renderAddSubCatPage = (req, res, next) => {
     .then(mainCats => {
         res.render('admin/categories/add',{
             isSubCat:true,
-            mainCats
+            mainCats,
+            layout: 'admin/common/main'
         })
     })
     .catch(err => {
@@ -33,15 +35,10 @@ const renderAddSubCatPage = (req, res, next) => {
 const renderIndexCategoriesPage = (req, res, next) => {
     catService.getAllCategories()
     .then(data => {
-        data.forEach(mainCat => {
-            console.log(mainCat.dataValues); 
-            mainCat.SubCategories.forEach(subCat => {
-                console.log(subCat.dataValues);
-            })
-        })
         res.render('admin/categories/index',{
             data,
-            flash: req.flash('categories-flash')
+            flash: req.flash('categories-flash'),
+            layout: 'admin/common/main'
         })
     })
     .catch(err => {
@@ -53,7 +50,8 @@ const renderEditCatPage = (req, res, next) => {
     catService.findOne(req.params.id, 'main')
     .then(cat => {
         res.render('admin/categories/edit',{
-            cat
+            cat,
+            layout: 'admin/common/main'
         })
     })
     .catch(err => {
@@ -65,7 +63,8 @@ const renderDeleteCatPage = (req, res, next) => {
     catService.findOne(req.params.id, 'main')
     .then(cat => {
         res.render('admin/categories/delete',{
-            cat
+            cat,
+            layout: 'admin/common/main'
         })
     })
     .catch(err => {
@@ -82,7 +81,8 @@ const renderEditSubCatPage = (req, res, next) => {
         res.render('admin/categories/edit',{
             cat: data[0],
             isSubCat: true,
-            mainCats: data[1]
+            mainCats: data[1],
+            layout: 'admin/common/main'
         })
     })
     .catch(err => {
@@ -97,7 +97,8 @@ const renderDeleteSubCatPage = (req, res, next) => {
         .then(mainCat => {
             res.render('admin/categories/delete',{
                 cat,
-                mainCat
+                mainCat,
+                layout: 'admin/common/main'
             })
         })     
     })
