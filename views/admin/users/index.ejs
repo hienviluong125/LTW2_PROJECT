@@ -12,7 +12,7 @@
                             
                             <li class="breadcrumb-item"><a href="/admin"><i class="ti ti-folder"></i></a></li>
 
-                            <li class="breadcrumb-item active">Tags</li>
+                            <li class="breadcrumb-item active">Users</li>
                         </ul>
                     </div>
                 </div>
@@ -34,14 +34,13 @@
                             <%- include('./../../layouts/blocks/flash-message.ejs', {className: flash[0].className, msg: flash[0].message}) %>
                         <% } %>
                         <div class="widget-header bordered d-flex align-items-center">
-                            <h2>Tags Overview</h2>
+                            <h2>Users Overview</h2>
                             <div class="widget-options">
                                 <div class="btn-group" role="group">
 
-                                    <a href="/admin/tags/add">
+                                    <a href="/admin/users/add">
                                         <button type="button" class="btn btn-gradient-04 mr-1 mb-2">
-                                            <i class="ti ti-tag"></i>
-                                            <i class="ti ti-plus"></i>
+                                            <i class="la la-user-plus la-2x"></i>
                                         </button>
                                     </a>
 
@@ -56,20 +55,26 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Name</th>
-                                                <th>Slug</th>
+                                                <th>Full name</th>
+                                                <th>Date of birth</th>
+                                                <th>Email</th>
                                                 <th class="text-right">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <% tags.forEach(tag => { %>
+                                            <% users.forEach(user => { %>
                                                 <tr>
-                                                    <td><span class='text-primary'> <%= tag.id %> </span></td>
-                                                    <td><span class="text-primary"> <%= tag.name %> </span></td>
-                                                    <td><span class="text-primary"> <%= tag.slug %> </span></td>
+                                                    <td><span class='text-primary'> <%= user.id %> </span></td>
+                                                    <td><span class="text-primary"> <%= user.username %> </span></td>
+                                                    <% if(user.DoB == null){ %>
+                                                        <td><span class="text-primary"> Not set </span></td>
+                                                    <% }else { %>
+                                                        <td><span class="text-primary"> <%= user.DoB.toDateString() %> </span></td>
+                                                    <% } %>
+                                                    <td><span class="text-primary"> <%= user.email %> </span></td>
                                                     <td class="td-actions text-right">
-                                                        <a href="/admin/tags/edit/<%= tag.id %>"><i class="la la-edit edit"></i></a>
-                                                        <a href="/admin/tags/delete/<%= tag.id %>"><i class="la la-close delete"></i></a>
+                                                        <a href="/admin/users/edit/<%= user.id %>"><i class="la la-edit edit"></i></a>
+                                                        <a href="/admin/users/delete/<%= user.id %>"><i class="la la-close delete"></i></a>
                                                     </td>
                                                 </tr>
                                             <% }) %>

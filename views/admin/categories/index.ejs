@@ -12,7 +12,7 @@
                             
                             <li class="breadcrumb-item"><a href="/admin"><i class="ti ti-folder"></i></a></li>
 
-                            <li class="breadcrumb-item active">Tags</li>
+                            <li class="breadcrumb-item active">Categories</li>
                         </ul>
                     </div>
                 </div>
@@ -34,17 +34,24 @@
                             <%- include('./../../layouts/blocks/flash-message.ejs', {className: flash[0].className, msg: flash[0].message}) %>
                         <% } %>
                         <div class="widget-header bordered d-flex align-items-center">
-                            <h2>Tags Overview</h2>
+                            <h2>Categories Overview</h2>
                             <div class="widget-options">
                                 <div class="btn-group" role="group">
 
-                                    <a href="/admin/tags/add">
+                                    <a href="/admin/categories/add">
                                         <button type="button" class="btn btn-gradient-04 mr-1 mb-2">
-                                            <i class="ti ti-tag"></i>
+                                            <i class="ti ti-clipboard"></i>
                                             <i class="ti ti-plus"></i>
+                                            Main
                                         </button>
                                     </a>
-
+                                    <a href="/admin/categories/sub/add">
+                                        <button type="button" class="btn btn-gradient-03 mr-1 mb-2">
+                                            <i class="ti ti-clipboard"></i>
+                                            <i class="ti ti-plus"></i>
+                                            Sub
+                                        </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -58,28 +65,48 @@
                                                 <th>#</th>
                                                 <th>Name</th>
                                                 <th>Slug</th>
+                                                <th><span style="width:120px">Type</span></th>
                                                 <th class="text-right">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <% tags.forEach(tag => { %>
+                                            <% data.forEach(mainCat => { %>
                                                 <tr>
-                                                    <td><span class='text-primary'> <%= tag.id %> </span></td>
-                                                    <td><span class="text-primary"> <%= tag.name %> </span></td>
-                                                    <td><span class="text-primary"> <%= tag.slug %> </span></td>
+                                                    <td><span class='text-primary'> <%= mainCat.dataValues.id %> </span></td>
+                                                    <td><span class="text-primary"> <%= mainCat.dataValues.name %> </span></td>
+                                                    <td><span class="text-primary"> <%= mainCat.dataValues.slug %> </span></td>
+                                                    <td>
+                                                        <span style="width:120px">
+                                                            <span class="badge-text badge-text-small success">Main</span>
+                                                        </span>
+                                                    </td>
                                                     <td class="td-actions text-right">
-                                                        <a href="/admin/tags/edit/<%= tag.id %>"><i class="la la-edit edit"></i></a>
-                                                        <a href="/admin/tags/delete/<%= tag.id %>"><i class="la la-close delete"></i></a>
+                                                        <a href="/admin/categories/edit/<%= mainCat.dataValues.id %>"><i class="la la-edit edit"></i></a>
+                                                        <a href="/admin/categories/delete/<%= mainCat.dataValues.id %>"><i class="la la-close delete"></i></a>
                                                     </td>
                                                 </tr>
+                                                <% mainCat.SubCategories.forEach(subCat =>{ %>
+                                                    <tr>
+                                                        <td><span class='text-primary'> <%= subCat.dataValues.id %> </span></td>
+                                                        <td><span class="text-primary"> <%= subCat.dataValues.name %> </span></td>
+                                                        <td><span class="text-primary"> <%= subCat.dataValues.slug %> </span></td>
+                                                        <td>
+                                                            <span style="width:120px">
+                                                                <span class="badge-text badge-text-small info">Sub</span>
+                                                            </span>
+                                                        </td>
+                                                        <td class="td-actions text-right">
+                                                            <a href="/admin/categories/sub/edit/<%= subCat.dataValues.id %>"><i class="la la-edit edit"></i></a>
+                                                            <a href="/admin/categories/sub/delete/<%= subCat.dataValues.id %>"><i class="la la-close delete"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                <% }) %>
                                             <% }) %>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        
                         <!-- End Widget Body -->
-
                         <!-- Begin Widget Footer -->
                         <div class="widget-footer d-flex align-items-center">
                             <div class="mr-auto p-2">

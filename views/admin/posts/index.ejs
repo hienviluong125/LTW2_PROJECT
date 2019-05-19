@@ -12,7 +12,7 @@
                             
                             <li class="breadcrumb-item"><a href="/admin"><i class="ti ti-folder"></i></a></li>
 
-                            <li class="breadcrumb-item active">Tags</li>
+                            <li class="breadcrumb-item active">Posts</li>
                         </ul>
                     </div>
                 </div>
@@ -34,14 +34,14 @@
                             <%- include('./../../layouts/blocks/flash-message.ejs', {className: flash[0].className, msg: flash[0].message}) %>
                         <% } %>
                         <div class="widget-header bordered d-flex align-items-center">
-                            <h2>Tags Overview</h2>
+                            <h2>Posts Overview</h2>
                             <div class="widget-options">
                                 <div class="btn-group" role="group">
 
-                                    <a href="/admin/tags/add">
+                                    <a href="/admin/posts/add">
                                         <button type="button" class="btn btn-gradient-04 mr-1 mb-2">
-                                            <i class="ti ti-tag"></i>
-                                            <i class="ti ti-plus"></i>
+                                            <i class="la la-newspaper-o la-2x"></i>
+                                            <i class="la la-plus la-2x"></i>
                                         </button>
                                     </a>
 
@@ -56,20 +56,30 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Name</th>
-                                                <th>Slug</th>
+                                                <th>Title</th>
+                                                <th>Type</th>
+                                                <th>Release Date</th>
                                                 <th class="text-right">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <% tags.forEach(tag => { %>
+                                            <% posts.forEach(post => { %>
                                                 <tr>
-                                                    <td><span class='text-primary'> <%= tag.id %> </span></td>
-                                                    <td><span class="text-primary"> <%= tag.name %> </span></td>
-                                                    <td><span class="text-primary"> <%= tag.slug %> </span></td>
+                                                    <td><span class='text-primary'> <%= post.id %> </span></td>
+                                                    <td><span class="text-primary"> <%= post.title %> </span></td>
+                                                    <% if(post.isPremium == false){ %>
+                                                        <td><span class="text-primary"> normal </span></td>
+                                                    <% }else { %>
+                                                        <td><span class="text-primary"> premium </span></td>
+                                                    <% } %>
+                                                    <% if(post.releaseDate == null){ %>
+                                                        <td><span class="text-primary"> not set </span></td>
+                                                    <% }else { %>
+                                                        <td><span class="text-primary"> <%= post.releaseDate.toDateString() %> </span></td>
+                                                    <% } %>
                                                     <td class="td-actions text-right">
-                                                        <a href="/admin/tags/edit/<%= tag.id %>"><i class="la la-edit edit"></i></a>
-                                                        <a href="/admin/tags/delete/<%= tag.id %>"><i class="la la-close delete"></i></a>
+                                                        <a href="/admin/posts/edit/<%= user.id %>"><i class="la la-edit edit"></i></a>
+                                                        <a href="/admin/posts/delete/<%= user.id %>"><i class="la la-close delete"></i></a>
                                                     </td>
                                                 </tr>
                                             <% }) %>

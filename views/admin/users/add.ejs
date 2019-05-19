@@ -5,14 +5,16 @@
             <div class="row">
                 <div class="page-header">
                     <div class="d-flex align-items-center">
-                        <h2 class="page-header-title">Delete tag</h2>
+                        <h2 class="page-header-title">Add user</h2>
                         <div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/"><i class="ti ti-home"></i></a></li>
                                 
                                 <li class="breadcrumb-item"><a href="/admin"><i class="ti ti-folder"></i></a></li>
     
-                                <li class="breadcrumb-item active">Tags</li>
+                                <li class="breadcrumb-item "> <a href="/admin/users"></a> <i class="ti ti-users"></i></a></li>
+
+                                <li class="breadcrumb-item active">Add</li>
                             </ul>
                         </div>
                     </div>
@@ -28,29 +30,42 @@
                 <div class="col-xl-9">
                     <div class="widget-body">
                         <form class="form-horizontal" action="" method="POST">
+                                
                                 <div class="form-group row d-flex align-items-center mb-5">
-                                        <label class="col-lg-3 form-control-label">#</label>
+                                        <label class="col-lg-3 form-control-label">Full name</label>
                                         <div class="col-lg-9">
-                                            <input type="text" disabled value="<%= tag.id %>" class="form-control">
-                                            <input type="hidden" name="id" value="<%= tag.id %>">
+                                            <input required type="text" name="username" class="form-control">
                                         </div>
                                 </div>
+
                                 <div class="form-group row d-flex align-items-center mb-5">
-                                        <label class="col-lg-3 form-control-label">Name</label>
+                                        <label class="col-lg-3 form-control-label">Email</label>
                                         <div class="col-lg-9">
-                                            <input disabled type="text" name="name" value="<%= tag.name %>" placeholder="<%= tag.name %>" class="form-control">
+                                            <input required type="email" name="email" class="form-control">
                                         </div>
                                 </div>
+
                                 <div class="form-group row d-flex align-items-center mb-5">
-                                        <label class="col-lg-3 form-control-label">Slug</label>
+                                        <label class="col-lg-3 form-control-label">Password</label>
                                         <div class="col-lg-9">
-                                            <input disabled type="text" name="slug"value="<%= tag.slug %>" placeholder="<%= tag.slug %>" class="form-control">
+                                            <input required type="password" name="password" class="form-control">
                                         </div>
                                 </div>
+                                <div class="form-group row mb-5">
+                                        <label class="col-lg-3 form-control-label">Select Role</label>
+                                        <div class="col-lg-9 select mb-3">
+                                            <select name="role" class="custom-select form-control">
+                                                <option value="sub">Subscriber</option>
+                                                <option value="writer">Writer</option>
+                                                <option value="editor">Editor</option>
+                                                <option value="admin">Admin</option>
+                                            </select>
+                                        </div> 
+                                    </div>
                                 <div class="em-separator separator-dashed"></div>
                                 
                                 <div class="text-center">
-                                    <button class="btn btn-gradient-05" type="submit">Delete</button>
+                                    <button class="btn btn-gradient-04" type="submit">Add!</button>
                                 </div>
                         </form>
                     </div>

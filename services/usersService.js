@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 const crypto = require('../config/crypto');
 const validator = require('validator');
 const jwt = require('jwt-simple');
+const db = require('./../models/index');
+
 
 async function getAllUsers(){
     return User.findAll({raw: true});
@@ -40,9 +42,36 @@ async function validateRegisterData(email, password, repassword){
 }
 
 async function create(user){
-    let hash = await bcrypt.hash(password, crypto.iteration)
+    let hash = await bcrypt.hash(user.password, crypto.iteration)
     user.password = hash;
     return User.create(user);
+}
+
+async function createWithRole(user){
+    try{
+        let createdUser = await create(user);
+        if(user.role == 'admin'){
+            return db.Admins.create({
+                UserId: createdUser.id
+            })
+        }else if(user.role == 'sub'){
+            return db.Subscribers.create({
+                UserId: createdUser.id
+            })
+        }else if(user.role == 'writer'){
+            return db.Writers.create({
+                UserId: createdUser.id,
+                PenName: createdUser.username
+            })
+        }else if(user.role == 'editor'){
+            return db.Editors.create({
+                UserId: createdUser.id
+            })
+        }
+    }catch(err){
+        throw err;
+    }
+    return new Error('Can not create user role in DB..');
 }
 
 async function findOneByEmail(email){
@@ -118,11 +147,15 @@ function validateNewPasswords(password, repassword){
 }
 
 function deleteUser(id){
-    return User.destroy({
-        where:{
-            id
-        }
-    })
+    try {
+        return User.destroy({
+            where: {
+                id
+            }
+        })
+    }catch(err){
+        throw err;
+    }
 }  
 
 module.exports = {
@@ -137,5 +170,6 @@ module.exports = {
     changePassword,
     updateInfo,
     validateNewPasswords,
-    deleteUser
+    deleteUser,
+    createWithRole
 }
