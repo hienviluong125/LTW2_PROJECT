@@ -347,6 +347,20 @@ async function requestRejectedPost({ slug, WriterId }) {
     );
 }
 
+function getAll(){
+    return db.Posts.findAll({
+        raw: true
+    })
+}
+
+function getAllVertifiedPosts(){
+    return db.Posts.findAll({
+        raw: true,
+        where:{
+            status: 'vertified'
+        }
+    })
+}
 
 module.exports = {
     add,
@@ -359,5 +373,6 @@ module.exports = {
     verifyPost,
     updateReleasedPost,
     requestRejectedPost,
-    getAllPosts
+    getAllPosts,
+    getAll
 };

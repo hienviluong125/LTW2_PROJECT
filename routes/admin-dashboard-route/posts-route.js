@@ -7,7 +7,15 @@ function redirect(req, res, flash) {
 }
 
 const renderpostIndexPage = (req, res, next) => {
-    
+    postService.getAll()
+    .then(posts => {
+        res.render('admin/posts/index',{
+            posts
+        })
+    })
+    .catch(err =>{
+        next(err);
+    })
 }
 
 const renderAddPostPage = (req, res, next) => {
