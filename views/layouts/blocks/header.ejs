@@ -33,59 +33,25 @@
                             <li><a href="maps-leaflet.html">About</a></li>
                             <li class="dropdown">
                                 <a class="dropdown-toggle" href="#" id="components" role="button" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">Components</a>
+                                    aria-haspopup="true" aria-expanded="false">Chuyên mục</a>
                                 <ul class="dropdown-menu" aria-labelledby="components">
+                                    <% allCategories.forEach(cate => { %>
                                     <li class="dropdown">
-                                        <a class="dropdown-toggle" href="#" id="elements" role="button"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                                                class="la la-share-alt"></i>UI Elements</a>
+                                        <a class="dropdown-toggle" id="elements" href="/posts/<%= cate.slug + '/1' %>" role="button"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            <%= cate.name %>
+                                        </a>
                                         <ul class="dropdown-menu" aria-labelledby="elements">
-                                            <li><a href="components-buttons.html">Buttons</a></li>
-                                            <li><a href="components-alerts.html">Alerts</a></li>
-                                            <li><a href="components-modal.html">Modal</a></li>
-                                            <li><a href="components-notifications.html">Noty</a></li>
-                                            <li><a href="components-timeline.html">Timeline</a></li>
-                                            <li><a href="components-progress.html">Progress</a></li>
-                                            <li><a href="components-tabs.html">Tabs</a></li>
-                                            <li><a href="charts-chartjs.html">Chart Js</a></li>
-                                            <li><a href="components-accordion.html">Accordion</a></li>
-                                            <li><a href="components-popover.html">Popover</a></li>
-                                            <li><a href="components-tooltip.html">Tooltip</a></li>
-                                            <li><a href="components-scrollable.html">Scrollable</a></li>
+                                            <% cate.SubCategories.forEach(subcate => { %>
+                                            <li>
+                                                <a href="/posts/<%= cate.slug + '/' + subcate.slug + '/1' %>">
+                                                    <%= subcate.name %>
+                                                </a>
+                                            </li>
+                                            <% }) %>
                                         </ul>
                                     </li>
-                                    <li class="dropdown">
-                                        <a class="dropdown-toggle" href="#" id="icons" role="button"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                                                class="la la-font"></i>Icons</a>
-                                        <ul class="dropdown-menu" aria-labelledby="icons">
-                                            <li><a href="icons-lineawesome.html">Line Awesome</a></li>
-                                            <li><a href="icons-themify.html">Themify</a></li>
-                                            <li><a href="icons-ionicons.html">Ionicons</a></li>
-                                            <li><a href="icons-meteocons.html">Meteocons</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropdown">
-                                        <a class="dropdown-toggle" href="#" id="forms" role="button"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                                                class="la la-list-alt"></i>Forms</a>
-                                        <ul class="dropdown-menu" aria-labelledby="forms">
-                                            <li><a href="forms-basic.html">Form Basic</a></li>
-                                            <li><a href="forms-validation.html">Form Validation</a></li>
-                                            <li><a href="forms-wizard.html">Form Wizard</a></li>
-                                            <li><a href="forms-select.html">Bootstrap Select</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropdown">
-                                        <a class="dropdown-toggle" id="tables" role="button" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false"><i
-                                                class="la la-th-large"></i><span>Tables</span></a>
-                                        <ul class="dropdown-menu" aria-labelledby="tables">
-                                            <li><a href="tables-basic.html">Basic</a></li>
-                                            <li><a href="tables-datatables.html">Datatables</a></li>
-                                            <li><a href="tables-tabledit.html">Tabledit</a></li>
-                                        </ul>
-                                    </li>
+                                    <% }) %>
                                 </ul>
                             </li>
                             <li><a href="maps-leaflet.html">Contact</a></li>
@@ -96,10 +62,10 @@
                             <li><a href="/users/login">Login</a></li>
                         </ul>
                         <% }else{ %>
-                            <ul class="navbar-nav ml-auto">
-                                <li><a href="/users/profile/<%= _locals.user.id %>"> Profile </a></li> 
-                                <li><a href="/users/logout"> Log out </a></li> 
-                            </ul>
+                        <ul class="navbar-nav ml-auto">
+                            <li><a href="/users/profile/<%= _locals.user.id %>"> Profile </a></li>
+                            <li><a href="/users/logout"> Log out </a></li>
+                        </ul>
                         <% } %>
                     </div>
                 </nav>

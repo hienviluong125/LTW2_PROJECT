@@ -17,9 +17,14 @@ const redirectToIndexPage = (req, res, next) => {
     res.redirect('/index');
 }
 
+const renderErrorPage = (req,res,next) => {
+    res.render('commons/error404');
+}
+
 router.get('/', redirectToIndexPage);
 router.get('/index', renderIndexPage);
 router.get('/about', renderAboutPage);
+router.get('/error',renderErrorPage);
 
 
 module.exports = router;

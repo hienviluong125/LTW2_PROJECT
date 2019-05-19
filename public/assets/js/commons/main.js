@@ -6,24 +6,55 @@ $(document).ready(function () {
     initPostListPageEvent();
     initEditPostPageEvent();
     initVerifyPostPageEvent();
-    $('.prevent-btn').on('click',function(e){
+    $('.prevent-btn').on('click', function (e) {
         e.preventDefault();
         let id = $(this).data('id');
-        showModal({id: 'modal-centered-' + id});
+        showModal({ id: 'modal-centered-' + id });
     })
 
-
+    let delta = $('#post-detail').html();
+    
+    let inputDelta = JSON.parse(delta);
+    let contentHtml = quillGetHTML(inputDelta);
+    
+    $('#post-detail').html(contentHtml).css('display','block');
 
 
 });
 
-function initEventWithRouter(param){
+function quillGetHTML(inputDelta) {
+    var tempQuill = new Quill(document.createElement("div"));
+    // tempQuill = new Quill('#post-quill-detail', {
+    //     theme: 'snow',
+    //     placeholder: 'Viết bài tại đây...',
+    //     modules: {
+    //         imageResize: {
+    //             modules: ['Resize', 'DisplaySize']
+    //         },
+    //         toolbar: [
+    //             [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    //             ['bold', 'italic', 'underline', 'strike'],
+    //             [{ 'color': [] }, { 'background': [] }],
+    //             [{ align: '' }],
+    //             [{ align: 'right' }],
+    //             [{ align: 'center' }],
+    //             [{ align: 'justify' }],
+    //             ['link', 'image', 'video'],
+    //             ['clean']
+    //         ]
+    //     }
+    // });
+    tempQuill.setContents(inputDelta);
+    return tempQuill.root.innerHTML;
+}
+
+function initEventWithRouter(param) {
 
 }
 
 function isEmpty(obj) {
-    for(var key in obj) {
-        if(obj.hasOwnProperty(key))
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key))
             return false;
     }
     return true;

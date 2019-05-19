@@ -2,32 +2,68 @@ const db = require('./../models/index');
 const tagService = require('./tagService');
 const { Op } = require('sequelize')
 
-async function getAllPosts({offset,limit}) {
+async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
     try {
+        let queryOps = {};
+        let countOps = {};
+        if (maincate) {
+            if (maincate === 'all') {
+                queryOps = {
+                    where: { status: 'published' },
+                    limit,
+                    offset,
+                    include: [db.MainCategories, db.SubCategories, db.Users, db.Tags, db.Notes]
+                }
+                countOps = { where: { status: 'published' } }
+            } else if (subcate) {
+                queryOps = {
+                    where: { status: 'published' },
+                    limit,
+                    offset,
+                    include: [
+                        { model: db.MainCategories, where: { slug: maincate } },
+                        { model: db.SubCategories, where: { slug: subcate } },
+                        db.Users,
+                        db.Tags,
+                        db.Notes
+                    ]
+                }
+                countOps = {
+                    where: { status: 'published' },
+                    include: [
+                        { model: db.MainCategories, where: { slug: maincate } },
+                        { model: db.SubCategories, where: { slug: subcate } }
+                    ]
+                }
+            } else {
+                queryOps = {
+                    where: { status: 'published' },
+                    limit,
+                    offset,
+                    include: [{ model: db.MainCategories, where: { slug: maincate } }, db.SubCategories, db.Users, db.Tags, db.Notes]
+                }
+                countOps = { where: { status: 'published' }, include: [{ model: db.MainCategories, where: { slug: maincate } }] }
+            }
+        }
+        else if (tag) {
+            let allPostsId = await db.Posts.findAll({raw: true,where: { status: 'published' },limit,offset,include: [{ model: db.Tags, where: { slug: tag } }]})
+            allPostsId = allPostsId.map(p => p.id)
+            queryOps = {
+                where: { status: 'published', id: allPostsId },
+                limit,
+                offset,
+                include:  [db.MainCategories, db.SubCategories, db.Users, db.Tags, db.Notes]
+            }
+            countOps = { where: { status: 'published' }, include: [{ model: db.Tags, where: { slug: tag } }] }
+
+        }
+
+
+
         await updateReleasedPost();
-        let posts = await db.Posts.findAll({
-            where: {
-                status: 'published',
-            },
-            include: [
-                db.MainCategories,
-                db.SubCategories,
-                db.Users,
-                db.Tags,
-                db.Notes
-            ]
-        });
-
-        let count = await db.Posts.count({
-            where: {
-                status: 'published',
-            },
-        })
-
-        // let count = await db.Posts.count({
-        //     where: queryOps,
-        // })
-        return { status: true, data: { posts,count } }
+        let posts = await db.Posts.findAll(queryOps);
+        let count = await db.Posts.count(countOps)
+        return { status: true, data: { posts, count } }
     } catch (err) {
         console.log(err);
         return { status: false, err };
@@ -74,17 +110,22 @@ async function add({ WriterId, title, shortContent, slug, MainCategoryId, SubCat
 }
 
 async function get({ slug }) {
-    return db.Posts.findOne({
-        where: {
-            slug
-        },
-        include: [
-            db.MainCategories,
-            db.SubCategories,
-            db.Users,
-            db.Tags
-        ]
-    });;
+    try{
+        return db.Posts.findOne({
+            where: {
+                slug
+            },
+            include: [
+                db.MainCategories,
+                db.SubCategories,
+                db.Users,
+                db.Tags
+            ]
+        });;
+    }catch(err){
+        console.log(err);
+    }
+   
 }
 
 async function edit({ id, WriterId, title, shortContent, slug, MainCategoryId, SubCategoryId, content, tags, thumbnail }) {
@@ -361,6 +402,8 @@ function getAllVertifiedPosts(){
         }
     })
 }
+
+
 
 module.exports = {
     add,
