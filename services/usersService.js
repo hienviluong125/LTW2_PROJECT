@@ -158,6 +158,14 @@ function deleteUser(id){
     }
 }  
 
+function getAllPendingSubscriptions(){
+    return db.Subscribers.findAll({
+        where: {
+            status: pending
+        }
+    });
+}
+
 module.exports = {
     getAllUsers,
     validateRegisterData,
@@ -171,5 +179,6 @@ module.exports = {
     updateInfo,
     validateNewPasswords,
     deleteUser,
-    createWithRole
+    createWithRole,
+    getAllPendingSubscriptions
 }

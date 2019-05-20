@@ -1,0 +1,70 @@
+<!-- Begin Content -->
+<div class="content-inner profile">
+    <div class="container-fluid">
+        <!-- Begin Page Header-->
+        <div class="row">
+            <div class="page-header">
+                <div class="d-flex align-items-center">
+                    <h2 class="page-header-title">Dashboard</h2>
+                    <div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/"><i class="ti ti-home"></i></a></li>
+                            
+                            <li class="breadcrumb-item"><a href="/admin"><i class="ti ti-folder"></i></a></li>
+
+                            <li class="breadcrumb-item active">Users</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Page Header -->
+        <div class="row flex-row">
+            <!-- Begin Widget -->
+            <%- include('./../common/dashboard-widget.ejs') %>
+            <!-- End Widget -->
+
+            <!-- put your stuffs here -->        
+            <div class="col-xl-9 mx-auto">
+                <div class="widget has-shadow">
+                    <div class="widget-header bordered no-actions d-flex align-items-center">
+                        <h4>Extend subscriber's subscriptions</h4>
+                    </div>
+                    <div class="widget-body">
+                        <% if(sub.status =='pending'){ %>
+                            <% console.log(sub) %>
+                            <form class="form-horizontal" action="" method="POST">
+                                <input type="hidden" name="UserId" value="<%= _locals.user.id %>">             
+                                <div class="col-10 ml-auto">
+                                    <div class="section-title mt-3 mb-3 text-center">
+                                        <div class="mt-4">
+                                            <button class="btn btn-gradient-01" type="submit">Click this button to extend!</button>
+                                        </div>                                       
+                                    </div>
+                                </div>                                
+                                
+                            </form>  
+                            
+                        <% }else { %>
+                            <% if(isPremium){ %>
+                            <div class="col-10 ml-auto">
+                                <div class="section-title mt-3 mb-3 text-center">
+                                    <h4>Subscriber's subscription is still valid, no need to extend it..</h4>
+                                </div>
+                            </div>
+                            <% }else{ %>
+                                <div class="col-10 ml-auto">
+                                    <div class="section-title mt-3 mb-3 text-center">
+                                        <h4>Subscriber's subscription is expired, but no request for extending yet..</h4>
+                                    </div>
+                                </div>
+                            <% } %>
+                        <% } %>    
+                    </div>
+                </div>
+            </div>
+            <!-- end your stuffs here -->
+        </div>
+        <!-- End Row -->
+    </div>
+</div>

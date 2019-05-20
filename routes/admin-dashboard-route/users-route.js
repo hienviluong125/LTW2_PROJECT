@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const userService = require('./../../services/usersService');
+const subService = require('./../../services/subscriberService');
 
 function redirect(req, res, flash){
     req.flash('flash-categories', {message: flash.message, className: flash.className});
@@ -54,7 +55,18 @@ const renderDeleteUserPage = (req, res, next) => {
 
 const renderExtendSubscriptionPage = (req, res, next) => {
     //TODOS: set up the layouts
-    
+    Promise.all([subService.isPremium(+req.params.id),
+        subService.getLatestSubscription(+req.params.id)
+    ])
+    .then(data => {
+        res.render('admin/users/extend', {
+            sub: data[1],
+            isPremium: data[0]
+        })
+    })
+    .catch(err => {
+        next(err);
+    })
 }
 
 const addUserHandler = (req, res, next) => {
@@ -108,15 +120,32 @@ const deleteUserHandler = async(req, res, next) => {
         })
 }
 
+const extendSubscriptionHandler = (req, res, next) => {
+    subService.renewSubscription(+req.params.id)
+    .then(result => {
+        redirect(req, res, {
+            message: "Subscriber's subscriptions is extended!",
+            className: "success"
+        })
+    })
+    .catch(err => {
+        redirect(req, res, {
+            message: "Something went wrong, please try again..",
+            className: "warning"
+        })
+    })
+}
+
 router.get('/', renderUserIndexPage);
 router.get('/add', renderAddUserPage);
 router.get('/edit/:id', renderEditUserPage);
 router.get('/delete/:id', renderDeleteUserPage);
-router.get('/extend', renderExtendSubscriptionPage);
+router.get('/extend/:id', renderExtendSubscriptionPage);
 
 
 router.post('/add', addUserHandler);
 router.post('/edit/:id', editUserHandler);
 router.post('/delete/:id', deleteUserHandler);
+router.post('/extend/:id', extendSubscriptionHandler);
 
 module.exports = router;
