@@ -1,71 +1,150 @@
-<div class="content-inner boxed mt-4 w-100">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-12 col-md-12 col-sm-12">
-                <div class="row">
-                    <div class="col-md-8 col-xl-8">
-                        <h1 class="page-header-title text-pink"><%= post.title %></h1>
-                        
-                        <% var releaseDate = post.releaseDate.getDate() + '/'  + parseInt( post.releaseDate.getMonth()+1)  + '/' +  post.releaseDate.getFullYear() %>
-                        <div class="mt-2">Ngày đăng: <span class="text-dark"><%= releaseDate %></span> </div>
-                        <div class="mt-1">Phóng viên: <a href="#"><span class="text-pink">bbb@gmail.com</span></a></div>
-                        <h4 class="mt-3 font-weight-bold  mb-2"><%= post.shortContent %></h4>
-                    </div>
-                    <div class="col-md-4 col-xl-4">
-                        <div class="row">
-                            <div class="col-md-12 col-xl-12 ml-2 form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon addon-primary">
-                                        <i class="ti ti-search mt-2"></i>
-                                    </span>
-                                    <input type="text" placeholder="Search..." class="form-control">
-                                </div>
-                            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-xl-12 col-md-12 col-sm-12">
+            <div class="row">
+                <div class="col-md-8 col-xl-8">
+                    <div class="row">
+                        <h3 class="mt-3">
+                            <a href="/posts/<%= post.MainCategory.slug %>/1">
+                                <%= post.MainCategory.name %>
+                            </a>
+                            <span class="text-primary">/</span>
+                            <a href="/posts/<%= post.MainCategory.slug %>/<%= post.SubCategory.slug%>/1">
+                                <%= post.SubCategory.name  %>
+                            </a>
+                            <!-- <%= post.MainCategory.name + ' / ' + post.SubCategory.name %> -->
+                        </h3>
+                        <h1 class="page-header-title text-pink mb-2"><%= post.title %></h1>
+
+                        <div class="col-xl-12 col-md-12 p-0 m-0 ">
+                            <% post.Tags.forEach(t => { %>
+                            <a href="/posts/tags/<%= t.slug %>/1"
+                                class="btn btn-sm btn-square mr-1 mb-2 btn-tag-style"><%= t.name %></a>
+                            <% }); %>
                         </div>
+
+                        <div class="col-xl-6 col-md-6 p-0">
+                            <% var releaseDate = post.releaseDate.getDate() + '/'  + parseInt( post.releaseDate.getMonth()+1)  + '/' +  post.releaseDate.getFullYear() %>
+
+                            <button type="button" data-toggle="modal" data-target="#modal-large"
+                                class="float-left post-detail-thumbnail-btn">
+                                <img class="post-detail-thumbnail" src="/assets/img/posts/<%= post.thumbnail %>" />
+                            </button>
+                            <div class="mt-2">Ngày đăng: <span class="text-dark"><%= releaseDate %></span> </div>
+                            <!-- <div class="mt-1">Phóng viên:
+                                <a href="#">
+                                    <span class="text-pink">bbb@gmail.com</span>
+                                </a>
+                            </div> -->
+                            <div class="">Lượt xem: <span class="text-dark"><%= post.views %></span> </div>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+
+                        </div>
+
+                        <h4 class="mt-3 font-weight-bold mb-2"><%= post.shortContent %></h4>
+                        <div class="col-xl-12 text-dark p-0 m-0" id="post-detail" style="display:none;">
+                            <%= post.content %>
+                        </div>
+                        <div class="ml-auto font-italic">Đăng bởi <span class="text-pink">bbb@gmail.com</span></div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xl-12 col-md-12 col-sm-12">
-                <div class="row">
-                    <div class="col-xl-8 col-md-8 ">
-                        <div class="row">
-                            <div class="col-xl-12 text-dark" id="post-detail" style="display:none;"><%= post.content %></div>
-                            <!-- <div id="post-quill-detail"></div> -->
+                <div class="col-md-4 col-xl-4">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-12 ml-2 form-group">
+                            <!-- <div class="input-group">
+                                <span class="input-group-addon addon-primary">
+                                    <i class="ti ti-search mt-2"></i>
+                                </span>
+                                <input type="text" placeholder="Search..." class="form-control">
+                            </div> -->
                         </div>
-                    </div>
-                    <div class="col-xl-4 col-md-4 ml-auto">
-                        <div id="accordion-right" class="accordion">
-                            <div class="widget has-shadow">
-                                <div class="widget-header bordered no-actions d-flex align-items-center">
-                                    <h2 class="font-weight-bold">Top posts</h2>
+                        <div class="col-md-12 col-xl-12">
+                            <div id="accordion-right" class="accordion">
+                                <div class="widget has-shadow">
+                                    <div class="widget-header bordered no-actions d-flex align-items-center">
+                                        <h2 class="font-weight-bold">Tin tức nổi bật</h2>
 
-                                </div>
-                                <% topPosts.forEach((p,index) => { %>
-                                <a class="card-header collapsed d-flex align-items-center" data-toggle="collapse"
-                                    href="#RightcollapseTwo">
-                                    <div class="card-title w-100"><%= index+1 %>. <%= p.title %>?</div>
-                                </a>
-                                <% }); %>
-                            </div>
-                        </div>
-                        <div id="accordion-right" class="accordion">
-                            <div class="widget has-shadow">
-                                <div class="widget-header bordered no-actions d-flex align-items-center">
-                                    <h2 class="font-weight-bold">Hot tags</h2>
-
-                                </div>
-                                <div class="pl-4 pb-1">
-                                    <% hotTags.forEach(t => { %>
-                                    <button type="button"
-                                        class="btn btn-sm btn-square mr-1 mb-2 btn-tag-style"><%= t %></button>
+                                    </div>
+                                    <% topPosts.forEach((p,index) => { %>
+                                    <a class="card-header collapsed d-flex align-items-center" data-toggle="collapse"
+                                        href="#RightcollapseTwo">
+                                        <div class="card-title w-100"><%= index+1 %>. <%= p.title %>?</div>
+                                    </a>
                                     <% }); %>
                                 </div>
                             </div>
+                            <div id="accordion-right" class="accordion">
+                                <div class="widget has-shadow">
+                                    <div class="widget-header bordered no-actions d-flex align-items-center">
+                                        <h2 class="font-weight-bold">Nhãn nổi bật</h2>
+
+                                    </div>
+                                    <div class="pl-4 pb-1">
+                                        <% hotTags.forEach(t => { %>
+                                        <button type="button"
+                                            class="btn btn-sm btn-square mr-1 mb-2 btn-tag-style"><%= t %></button>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
+    </div>
+    <hr>
+</div>
+
+<div class="container mb-5">
+    <div class="row ">
+        <div class=" m-0 p-0 col-md-8 form-group">
+            <h3 class="font-weight-bold text-secondary" for="">Viết bình luận</h3>
+            <textarea id="comment-box" type="text" class="form-control custom-border" placeholder="Viết bình luận"></textarea>
+            <button class="mt-2 btn btn-gradient-01">Gửi bình luận </button>
+     
+        </div>
+        <div class="m-0 p-0 col-md-8 ">
+            <h2 class="text-center mt-3 text-gray">Chưa có bình luận</h2>
+        </div>
+    </div>
+    <hr>
+
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-xl-12 col-md-12 m-0 p-0">
+            <h1 class="font-weight-light text-dark">Tin tức liên quan</h1>
+            <div class="owl-carousel  post-detai-recommend">
+                <% for(var i=0;i<5;i++){ %>
+                <div class="item">
+                    <img src="/assets/img/background/casau.jpg" alt="..." class="float-right owl-thumbnail">
+                </div>
+                <% }%>
+            </div>
+        </div>
+        <div class="col-xl-12 col-md-12 m-0 p-0 mt-5 ">
+            <h1 class="font-weight-light text-dark">Các tin khác</h1>
+            <div class="owl-carousel  post-detai-recommend">
+                <% for(var i=0;i<5;i++){ %>
+                <div class="item">
+                    <img src="/assets/img/background/casau.jpg" alt="..." class="float-right owl-thumbnail">
+                </div>
+                <% }%>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="background:black" class="mt-5 p-10 footer">
+    a
+</div>
+
+
+
+<div id="modal-large" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <img src="/assets/img/posts/<%= post.thumbnail %>" />
     </div>
 </div>

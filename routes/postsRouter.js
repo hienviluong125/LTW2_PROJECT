@@ -16,7 +16,7 @@ const renderAllPosts = (req, res, next) => {
             let { data } = result;
             let { posts, count } = data;
             let pagination = createPagesArr(page, count, limit);
-            res.render('posts/index', { posts, page, pagination, topPosts, hotTags });
+            res.render('posts/index', { posts, page, pagination, topPosts, hotTags, tag, maincate, subcate });
         })
         .catch(err => next(err));
 }
@@ -25,11 +25,16 @@ const renderDetailPost = (req, res, next) => {
     let slug = req.params.slug;
     const { topPosts, hotTags } = mockPost;
     postsService
-        .get({ slug })
-        .then(post => {
-            res.render('posts/detail', { post, topPosts, hotTags });
+        .incViewsOfPost({ slug })
+        .then(() => {
+            postsService.get({ slug })
+                .then(post => {
+                    res.render('posts/detail', { post, topPosts, hotTags });
+                })
+                .catch(err => next(err));
         })
         .catch(err => next(err));
+
 }
 
 

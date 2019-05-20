@@ -13,37 +13,32 @@ $(document).ready(function () {
     })
 
     let delta = $('#post-detail').html();
-    
-    let inputDelta = JSON.parse(delta);
-    let contentHtml = quillGetHTML(inputDelta);
-    
-    $('#post-detail').html(contentHtml).css('display','block');
+    if (typeof delta !== 'undefined') {
+        let inputDelta = JSON.parse(delta);
+        let contentHtml = quillGetHTML(inputDelta);
+
+        $('#post-detail').html(contentHtml).css('display', 'block');
+    }
+
+    $('#comment-box').on('change keydown keyup paste cut', autosize);
+
+
 
 
 });
 
+function autosize() {
+    var el = this;
+
+    // el.style.cssText = 'height:auto; padding:0';
+    // for box-sizing other than "content-box" use:
+    // el.style.cssText = '-moz-box-sizing:content-box';
+    el.style.cssText = 'height:' + el.scrollHeight + 'px';
+
+}
+
 function quillGetHTML(inputDelta) {
     var tempQuill = new Quill(document.createElement("div"));
-    // tempQuill = new Quill('#post-quill-detail', {
-    //     theme: 'snow',
-    //     placeholder: 'Viết bài tại đây...',
-    //     modules: {
-    //         imageResize: {
-    //             modules: ['Resize', 'DisplaySize']
-    //         },
-    //         toolbar: [
-    //             [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-    //             ['bold', 'italic', 'underline', 'strike'],
-    //             [{ 'color': [] }, { 'background': [] }],
-    //             [{ align: '' }],
-    //             [{ align: 'right' }],
-    //             [{ align: 'center' }],
-    //             [{ align: 'justify' }],
-    //             ['link', 'image', 'video'],
-    //             ['clean']
-    //         ]
-    //     }
-    // });
     tempQuill.setContents(inputDelta);
     return tempQuill.root.innerHTML;
 }
@@ -64,6 +59,24 @@ function initCarousel() {
     $('.owl-carousel').owlCarousel({
         loop: false,
         margin: 10,
+        responsive: {
+            0: {
+                items: 1
+            },
+            600: {
+                items: 3
+            },
+            1000: {
+                items: 5
+            }
+        }
+    });
+
+    $('.post-detai-recommend').owlCarousel({
+        loop: false,
+        margin: 10,
+        mouseDrag: false,
+        touchDrag: false,
         responsive: {
             0: {
                 items: 1

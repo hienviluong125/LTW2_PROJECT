@@ -46,13 +46,13 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
             }
         }
         else if (tag) {
-            let allPostsId = await db.Posts.findAll({raw: true,where: { status: 'published' },limit,offset,include: [{ model: db.Tags, where: { slug: tag } }]})
+            let allPostsId = await db.Posts.findAll({ raw: true, where: { status: 'published' }, limit, offset, include: [{ model: db.Tags, where: { slug: tag } }] })
             allPostsId = allPostsId.map(p => p.id)
             queryOps = {
                 where: { status: 'published', id: allPostsId },
                 limit,
                 offset,
-                include:  [db.MainCategories, db.SubCategories, db.Users, db.Tags, db.Notes]
+                include: [db.MainCategories, db.SubCategories, db.Users, db.Tags, db.Notes]
             }
             countOps = { where: { status: 'published' }, include: [{ model: db.Tags, where: { slug: tag } }] }
 
@@ -109,8 +109,12 @@ async function add({ WriterId, title, shortContent, slug, MainCategoryId, SubCat
 
 }
 
+async function incViewsOfPost({ slug }) {
+    db.Posts.increment('views', {where: { slug }});
+}
+
 async function get({ slug }) {
-    try{
+    try {
         return db.Posts.findOne({
             where: {
                 slug
@@ -122,10 +126,10 @@ async function get({ slug }) {
                 db.Tags
             ]
         });;
-    }catch(err){
+    } catch (err) {
         console.log(err);
     }
-   
+
 }
 
 async function edit({ id, WriterId, title, shortContent, slug, MainCategoryId, SubCategoryId, content, tags, thumbnail }) {
@@ -402,5 +406,6 @@ module.exports = {
     verifyPost,
     updateReleasedPost,
     requestRejectedPost,
-    getAllPosts
+    getAllPosts,
+    incViewsOfPost
 };

@@ -31,17 +31,17 @@ app.use(require('./middlewares/users/local-auth').registerStatus);
 
 
 //FOR DEV
-app.use((req,res,next) => {
-    res.locals.user = {
-        id: 2,
-        role: 'writer'
+// app.use((req,res,next) => {
+//     res.locals.user = {
+//         id: 2,
+//         role: 'writer'
 
-        // id:8,
-        // role: 'editor'
+//         // id:8,
+//         // role: 'editor'
 
-    };
-    next();
-})
+//     };
+//     next();
+// })
 //END 
 
 const indexRouter = require('./routes/indexRouter');
