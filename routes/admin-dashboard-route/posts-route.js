@@ -10,7 +10,8 @@ const renderpostIndexPage = (req, res, next) => {
     postService.getAll()
     .then(posts => {
         res.render('admin/posts/index',{
-            posts
+            posts,
+            layout: 'admin/common/main'
         })
     })
     .catch(err =>{

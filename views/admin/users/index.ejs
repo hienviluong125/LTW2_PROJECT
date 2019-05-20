@@ -58,7 +58,7 @@
                                                 <th>Full name</th>
                                                 <th>Date of birth</th>
                                                 <th>Email</th>
-                                                <th class="text-right">Actions</th>
+                                                <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -73,6 +73,12 @@
                                                     <% } %>
                                                     <td><span class="text-primary"> <%= user.email %> </span></td>
                                                     <td class="td-actions text-right">
+                                                        <% if(user.role == 'sub'){ %>
+                                                            <a href="/admin/users/extend/<%= user.id %>"><i class="la la-credit-card edit"></i></a>
+                                                        <% } %>
+                                                        <% if(user.role == 'editor'){ %>
+                                                            <a href="/admin/users/delegate/<%= user.id %>"><i class="la la-tags edit"></i></a>
+                                                        <% } %>
                                                         <a href="/admin/users/edit/<%= user.id %>"><i class="la la-edit edit"></i></a>
                                                         <a href="/admin/users/delete/<%= user.id %>"><i class="la la-close delete"></i></a>
                                                     </td>
