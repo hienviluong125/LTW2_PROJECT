@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const userService = require('./../../services/usersService');
 const subService = require('./../../services/subscriberService');
-
+const catService = require('./../../services/categoriesService.js');
 function redirect(req, res, flash){
     req.flash('flash-categories', {message: flash.message, className: flash.className});
     res.redirect('/admin/users');
@@ -62,6 +62,25 @@ const renderExtendSubscriptionPage = (req, res, next) => {
         res.render('admin/users/extend', {
             sub: data[1],
             isPremium: data[0]
+        })
+    })
+    .catch(err => {
+        next(err);
+    })
+}
+
+const renderDelegateCategoriesPage = (req, res, next) => {
+    Promise.all([
+        catService.getAllSubCats(),
+        catService.getAllSubCategoriesOfEditor({EditorId: +req.params.id})
+    ])
+    .then(data => {
+        data[1].forEach(cat => {
+            console.log(cat.dataValues)
+        })
+        res.render('admin/users/delegate',{
+            subCats: data[0],
+            editorCats: data[1]
         })
     })
     .catch(err => {
@@ -136,16 +155,29 @@ const extendSubscriptionHandler = (req, res, next) => {
     })
 }
 
+const delegateCategoriesPage = (req, res, next) => {
+    console.log(req.body.SubCategoryId);
+    catService.delegateSubCatsToEditor(+req.params.id, req.body.SubCategoryId)
+    .then(() => {
+        redirect(req, res, {className: 'success', message:'Success!'})
+    })
+    .catch(err => {
+        redirect(req, res, {className: 'danger', message:'Something went wrong..'})
+    })
+   
+}
+
 router.get('/', renderUserIndexPage);
 router.get('/add', renderAddUserPage);
 router.get('/edit/:id', renderEditUserPage);
 router.get('/delete/:id', renderDeleteUserPage);
 router.get('/extend/:id', renderExtendSubscriptionPage);
+router.get('/delegate/:id', renderDelegateCategoriesPage);
 
 
 router.post('/add', addUserHandler);
 router.post('/edit/:id', editUserHandler);
 router.post('/delete/:id', deleteUserHandler);
 router.post('/extend/:id', extendSubscriptionHandler);
-
+router.post('/delegate/:id', delegateCategoriesPage);
 module.exports = router;

@@ -1,0 +1,66 @@
+<!-- Begin Content -->
+<div class="content-inner profile">
+    <div class="container-fluid">
+        <!-- Begin Page Header-->
+        <div class="row">
+            <div class="page-header">
+                <div class="d-flex align-items-center">
+                    <h2 class="page-header-title">Dashboard</h2>
+                    <div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/"><i class="ti ti-home"></i></a></li>
+                            
+                            <li class="breadcrumb-item"><a href="/admin"><i class="ti ti-folder"></i></a></li>
+
+                            <li class="breadcrumb-item active">Users</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Page Header -->
+        <div class="row flex-row">
+            <!-- Begin Widget -->
+            <%- include('./../common/dashboard-widget.ejs') %>
+            <!-- End Widget -->
+
+            <!-- put your stuffs here -->        
+            <div class="col-xl-9 mx-auto">
+                <div class="widget has-shadow">
+                    <div class="widget-header bordered no-actions d-flex align-items-center">
+                        <h4 class="mb-4">Delegate Editor Categories</h4>
+                    </div>
+                    <div class="widget-body">
+                            <div class="col-10 ml-auto">
+                                <div class="section-title mt-3 mb-3 text-center">
+                                    <h4 class="mb-4">Editor's current categories: </h4>
+                                    <% editorCats.forEach(ec => { %>
+                                        <h5><%= ec.name %></h5>
+                                    <% }) %>
+                                </div>
+                            </div>
+                            <div class="col-10 ml-auto">
+                                    <div class="section-title mt-3 mb-3 text-center">
+                                        <h4>Select 1 or more categories: </h4>
+                                    </div>
+                            </div>
+                            <form action="" method="POST" class="form-horizontal mt-3 mb-3">
+                                    <div class="col-lg-6 offset-lg-4 select">
+                                        <select size="8" multiple name="SubCategoryId" class="custom-select form-control">
+                                                <% subCats.forEach(sc => { %>
+                                                        <option value="<%= sc.id %>"><%= sc.name %></option>
+                                                <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="text-center offset-lg-2 mt-3 mb-3">
+                                        <button class="btn btn-gradient-01 " type="submit">Saves</button>  
+                                    </div>
+                            </form>                  
+                    </div>
+                </div>
+            </div>
+            <!-- end your stuffs here -->
+        </div>
+        <!-- End Row -->
+    </div>
+</div>

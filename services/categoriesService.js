@@ -112,6 +112,34 @@ async function deleteCat(id, type){
     }
 }
 
+function getAllSubCats(){
+    return db.SubCategories.findAll({
+        raw: true
+    });
+}
+
+function deleteAllSubCatsByUserId(UserId){
+    return db.EditorCategories.destroy({
+        where:{
+            UserId
+        }
+    })
+}
+
+async function delegateSubCatsToEditor(UserId, subCats){
+    try{
+        let deletedRows = await deleteAllSubCatsByUserId(UserId);
+        console.log(`deleted ${deletedRows} sub cats`);
+        let arr = subCats.map(subCat => {
+            return {UserId, SubCategoryId: subCat}
+        });
+        return db.EditorCategories.bulkCreate(arr);
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+
 module.exports ={
     getAllCategories,
     getAllSubCategoriesOfEditor,
@@ -119,5 +147,7 @@ module.exports ={
     getAllMainCats,
     findOne,
     update,
-    deleteCat
+    deleteCat,
+    getAllSubCats,
+    delegateSubCatsToEditor
 };
