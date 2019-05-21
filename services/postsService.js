@@ -60,7 +60,6 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
 
 
 
-        await updateReleasedPost();
         let posts = await db.Posts.findAll(queryOps);
         let count = await db.Posts.count(countOps)
         return { status: true, data: { posts, count } }
@@ -110,7 +109,7 @@ async function add({ WriterId, title, shortContent, slug, MainCategoryId, SubCat
 }
 
 async function incViewsOfPost({ slug }) {
-    db.Posts.increment('views', {where: { slug }});
+    db.Posts.increment('views', { where: { slug } });
 }
 
 async function get({ slug }) {
@@ -196,7 +195,7 @@ async function _delete({ slug, WriterId }) {
 // pending - verified - published - rejected
 async function getAllPostByUserId({ id, limit, offset, status }) {
     try {
-        await updateReleasedPost();
+
         let queryOps = {};
         if (status === 'all') {
             queryOps = { WriterId: id }
@@ -392,6 +391,62 @@ async function requestRejectedPost({ slug, WriterId }) {
     );
 }
 
+async function addCommentToPost({ PostId, commentContent, UserId }) {
+    return db.Comments.create({
+        PostId,
+        commentContent,
+        UserId,
+        commentDate: new Date()
+    })
+}
+
+async function getDetailPost({ slug }) {
+    try {
+        await incViewsOfPost({ slug });
+        return db.Posts.findOne({
+            where: {
+                slug
+            },
+            include: [
+                db.MainCategories,
+                db.SubCategories,
+                db.Users,
+                db.Tags,
+                {
+                    model: db.Comments,
+                    attributes: ['commentContent', 'commentDate', 'PostId', 'UserId'],
+                    limit: 5,
+                    order: [['commentDate', 'DESC']],
+                    include: [
+                        {
+                            attributes: ['username', 'email'],
+                            model: db.Users,
+                        }
+                    ]
+                }
+            ]
+        });;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function loadMoreComment({ PostId, offset, limit }) {
+    return db.Comments.findAll({
+        where: {
+            PostId,
+        },
+        limit,
+        offset,
+        order: [['commentDate', 'DESC']],
+        include: [
+            {
+                attributes: ['username', 'email'],
+                model: db.Users,
+            }
+        ]
+    })
+}
 
 
 
@@ -407,5 +462,8 @@ module.exports = {
     updateReleasedPost,
     requestRejectedPost,
     getAllPosts,
-    incViewsOfPost
+    incViewsOfPost,
+    addCommentToPost,
+    getDetailPost,
+    loadMoreComment
 };

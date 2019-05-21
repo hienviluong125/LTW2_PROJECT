@@ -28,14 +28,28 @@ app.use(passport.session());
 
 app.use(require('./middlewares/users/local-auth').registerStatus);
 
-
+app.use((req, res, next) => {
+    if (res.locals.allCategories) {
+        return next();
+    }
+    const categoriesService = require('./services/categoriesService');
+    categoriesService
+        .getAllCategories()
+        .then(allCategories => {
+            res.locals.allCategories = allCategories;
+            return next();
+        })
+        .catch(err => {
+            res.redirect('/error')
+        })
+})
 
 //FOR DEV
 // app.use((req,res,next) => {
 //     res.locals.user = {
 //         id: 2,
-//         role: 'writer'
-
+//         role: 'writer',
+//         username: 'bbb@gmail.com'
 //         // id:8,
 //         // role: 'editor'
 
@@ -60,21 +74,7 @@ const adminRouter = require('./routes/adminRouter');
 
 
 
-app.use((req, res, next) => {
-    if (res.locals.allCategories) {
-        return next();
-    }
-    const categoriesService = require('./services/categoriesService');
-    categoriesService
-        .getAllCategories()
-        .then(allCategories => {
-            res.locals.allCategories = allCategories;
-            return next();
-        })
-        .catch(err => {
-            res.redirect('/error')
-        })
-})
+
 //================== Routes =================
 
 app.use('/', indexRouter);

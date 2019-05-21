@@ -6,9 +6,17 @@
     
 }
 
+.post-detail{
+    min-height:400px;
+}
+
 .post-detail-thumbnail-btn{
     background: #ffffff00;
     border:none;
+}
+
+.comment-content{
+    word-break: break-all;
 }
 
 .custom-border{
@@ -18,7 +26,9 @@
     display:block;
     resize: none;
 }
-
+.custom-btn{
+    border-radius: 4px !important;
+}
 .text-gray{
     color:rgb(151, 151, 151);
 }

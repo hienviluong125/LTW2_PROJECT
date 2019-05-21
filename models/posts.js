@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     Posts.belongsTo(models.SubCategories);
     Posts.belongsTo(models.MainCategories);
     Posts.belongsTo(models.Users, { foreignKey: 'WriterId' });
+    Posts.hasMany(models.Comments);
     Posts.belongsToMany(models.Tags, {
       through: {
         model: models.PostTags
@@ -27,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     Posts.hasOne(models.Notes);
   };
+  
   return Posts;
 };
 // pending - verified - published - rejected

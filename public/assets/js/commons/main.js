@@ -6,42 +6,17 @@ $(document).ready(function () {
     initPostListPageEvent();
     initEditPostPageEvent();
     initVerifyPostPageEvent();
-    $('.prevent-btn').on('click', function (e) {
-        e.preventDefault();
-        let id = $(this).data('id');
-        showModal({ id: 'modal-centered-' + id });
-    })
+    
+    initPostDetailPage()
 
-    let delta = $('#post-detail').html();
-    if (typeof delta !== 'undefined') {
-        let inputDelta = JSON.parse(delta);
-        let contentHtml = quillGetHTML(inputDelta);
-
-        $('#post-detail').html(contentHtml).css('display', 'block');
-    }
-
-    $('#comment-box').on('change keydown keyup paste cut', autosize);
+   
 
 
 
 
 });
 
-function autosize() {
-    var el = this;
 
-    // el.style.cssText = 'height:auto; padding:0';
-    // for box-sizing other than "content-box" use:
-    // el.style.cssText = '-moz-box-sizing:content-box';
-    el.style.cssText = 'height:' + el.scrollHeight + 'px';
-
-}
-
-function quillGetHTML(inputDelta) {
-    var tempQuill = new Quill(document.createElement("div"));
-    tempQuill.setContents(inputDelta);
-    return tempQuill.root.innerHTML;
-}
 
 function initEventWithRouter(param) {
 
