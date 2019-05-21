@@ -11,7 +11,8 @@ const renderUserIndexPage = (req, res, next) => {
     .then(users => {
         res.render('admin/users/index', {
             users,
-            flash: req.flash('flash-categories')
+            flash: req.flash('flash-categories'),
+            layout: 'admin/common/main'
         })
     })
     .catch(err => {
@@ -20,14 +21,17 @@ const renderUserIndexPage = (req, res, next) => {
 }
 
 const renderAddUserPage = (req, res, next) => {
-    res.render('admin/users/add');
+    res.render('admin/users/add',{
+        layout: 'admin/common/main'
+    });
 }
 
 const renderEditUserPage = (req, res, next) => {
     userService.findOne(req.params.id)
     .then(user => {
         res.render('admin/users/edit',{
-            user
+            user,
+            layout: 'admin/common/main'
         })
     })
     .catch(err => {
@@ -39,7 +43,8 @@ const renderDeleteUserPage = (req, res, next) => {
     userService.findOne(req.params.id)
     .then(user => {
         res.render('admin/users/delete',{
-            user
+            user,
+            layout: 'admin/common/main'
         })
     })
     .catch(err => {

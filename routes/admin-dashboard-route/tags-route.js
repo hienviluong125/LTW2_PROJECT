@@ -11,7 +11,8 @@ const renderTagsDashboard = (req, res, next) =>{
     .then(tags => {
         res.render('admin/tags/index',{
             tags,
-            flash: req.flash('tags-flash')
+            flash: req.flash('tags-flash'),
+            layout: 'admin/common/main'
         });
     })
     
@@ -21,7 +22,8 @@ const renderEditTag = (req, res, next) => {
     tagService.findOne(+req.params.id)
     .then(tag => {
         res.render('admin/tags/edit', {
-            tag
+            tag,
+            layout: 'admin/common/main'
         })
     })
     .catch(err =>{
@@ -33,7 +35,8 @@ const renderDeleteTag = (req, res, next) => {
     tagService.findOne(+req.params.id)
     .then(tag => {
         res.render('admin/tags/delete', {
-            tag
+            tag,
+            layout: 'admin/common/main'
         })
     })
     .catch(err =>{
@@ -42,7 +45,9 @@ const renderDeleteTag = (req, res, next) => {
 }
 
 const renderAddTag = (req,res, next) => {
-    res.render('admin/tags/add');
+    res.render('admin/tags/add',{   
+        layout: 'admin/common/main'
+    });
 }
 
 const updateTagHandler = (req, res, next) => {

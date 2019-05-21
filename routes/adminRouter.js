@@ -11,7 +11,9 @@ router.all('*',
 )
 
 const renderDashboardPage = (req, res, next) => {
-    res.render('admin/dashboard');
+    res.render('admin/dashboard',{
+        layout: 'admin/common/main'
+    });
 }
 
 router.get('/', renderDashboardPage);

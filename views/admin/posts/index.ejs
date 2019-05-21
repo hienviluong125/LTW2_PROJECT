@@ -58,6 +58,7 @@
                                                 <th>#</th>
                                                 <th>Title</th>
                                                 <th>Type</th>
+                                                <th>Status</th>
                                                 <th>Release Date</th>
                                                 <th class="text-right">Actions</th>
                                             </tr>
@@ -72,6 +73,9 @@
                                                     <% }else { %>
                                                         <td><span class="text-primary"> premium </span></td>
                                                     <% } %>
+                                                    
+                                                    <td><span class='text-primary'> <%= post.status %> </span></td>
+
                                                     <% if(post.releaseDate == null){ %>
                                                         <td><span class="text-primary"> not set </span></td>
                                                     <% }else { %>
