@@ -114,3 +114,9 @@ function showModal({ id, backdrop = 'dynamic', keyboard = true }) {
 function hideModal({id}) {
     $('#' + id).modal('hide');
 }
+
+$('.prevent-btn').on('click', function (e) {
+    e.preventDefault();
+    let id = $(this).data('id');
+    showModal({ id: 'modal-centered-' + id });
+})

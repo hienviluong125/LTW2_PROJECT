@@ -46,13 +46,13 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
             }
         }
         else if (tag) {
-            let allPostsId = await db.Posts.findAll({raw: true,where: { status: 'published' },limit,offset,include: [{ model: db.Tags, where: { slug: tag } }]})
+            let allPostsId = await db.Posts.findAll({ raw: true, where: { status: 'published' }, limit, offset, include: [{ model: db.Tags, where: { slug: tag } }] })
             allPostsId = allPostsId.map(p => p.id)
             queryOps = {
                 where: { status: 'published', id: allPostsId },
                 limit,
                 offset,
-                include:  [db.MainCategories, db.SubCategories, db.Users, db.Tags, db.Notes]
+                include: [db.MainCategories, db.SubCategories, db.Users, db.Tags, db.Notes]
             }
             countOps = { where: { status: 'published' }, include: [{ model: db.Tags, where: { slug: tag } }] }
 
@@ -60,7 +60,6 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
 
 
 
-        await updateReleasedPost();
         let posts = await db.Posts.findAll(queryOps);
         let count = await db.Posts.count(countOps)
         return { status: true, data: { posts, count } }
@@ -109,8 +108,12 @@ async function add({ WriterId, title, shortContent, slug, MainCategoryId, SubCat
 
 }
 
+async function incViewsOfPost({ slug }) {
+    db.Posts.increment('views', { where: { slug } });
+}
+
 async function get({ slug }) {
-    try{
+    try {
         return db.Posts.findOne({
             where: {
                 slug
@@ -122,10 +125,10 @@ async function get({ slug }) {
                 db.Tags
             ]
         });;
-    }catch(err){
+    } catch (err) {
         console.log(err);
     }
-   
+
 }
 
 async function edit({ id, WriterId, title, shortContent, slug, MainCategoryId, SubCategoryId, content, tags, thumbnail }) {
@@ -192,7 +195,7 @@ async function _delete({ slug, WriterId }) {
 // pending - verified - published - rejected
 async function getAllPostByUserId({ id, limit, offset, status }) {
     try {
-        await updateReleasedPost();
+
         let queryOps = {};
         if (status === 'all') {
             queryOps = { WriterId: id }
@@ -388,18 +391,60 @@ async function requestRejectedPost({ slug, WriterId }) {
     );
 }
 
-function getAll(){
-    return db.Posts.findAll({
-        raw: true
+async function addCommentToPost({ PostId, commentContent, UserId }) {
+    return db.Comments.create({
+        PostId,
+        commentContent,
+        UserId,
+        commentDate: new Date()
     })
 }
 
-function getAllVertifiedPosts(){
-    return db.Posts.findAll({
-        raw: true,
-        where:{
-            status: 'vertified'
-        }
+async function getDetailPost({ slug }) {
+    try {
+        await incViewsOfPost({ slug });
+        return db.Posts.findOne({
+            where: {
+                slug
+            },
+            include: [
+                db.MainCategories,
+                db.SubCategories,
+                db.Users,
+                db.Tags,
+                {
+                    model: db.Comments,
+                    attributes: ['commentContent', 'commentDate', 'PostId', 'UserId'],
+                    limit: 5,
+                    order: [['commentDate', 'DESC']],
+                    include: [
+                        {
+                            attributes: ['username', 'email'],
+                            model: db.Users,
+                        }
+                    ]
+                }
+            ]
+        });;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function loadMoreComment({ PostId, offset, limit }) {
+    return db.Comments.findAll({
+        where: {
+            PostId,
+        },
+        limit,
+        offset,
+        order: [['commentDate', 'DESC']],
+        include: [
+            {
+                attributes: ['username', 'email'],
+                model: db.Users,
+            }
+        ]
     })
 }
 
@@ -417,5 +462,8 @@ module.exports = {
     updateReleasedPost,
     requestRejectedPost,
     getAllPosts,
-    getAll
+    incViewsOfPost,
+    addCommentToPost,
+    getDetailPost,
+    loadMoreComment
 };

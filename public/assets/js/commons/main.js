@@ -6,47 +6,17 @@ $(document).ready(function () {
     initPostListPageEvent();
     initEditPostPageEvent();
     initVerifyPostPageEvent();
-    $('.prevent-btn').on('click', function (e) {
-        e.preventDefault();
-        let id = $(this).data('id');
-        showModal({ id: 'modal-centered-' + id });
-    })
+    
+    initPostDetailPage()
 
-    let delta = $('#post-detail').html();
-    
-    let inputDelta = JSON.parse(delta);
-    let contentHtml = quillGetHTML(inputDelta);
-    
-    $('#post-detail').html(contentHtml).css('display','block');
+   
+
+
 
 
 });
 
-function quillGetHTML(inputDelta) {
-    var tempQuill = new Quill(document.createElement("div"));
-    // tempQuill = new Quill('#post-quill-detail', {
-    //     theme: 'snow',
-    //     placeholder: 'Viết bài tại đây...',
-    //     modules: {
-    //         imageResize: {
-    //             modules: ['Resize', 'DisplaySize']
-    //         },
-    //         toolbar: [
-    //             [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-    //             ['bold', 'italic', 'underline', 'strike'],
-    //             [{ 'color': [] }, { 'background': [] }],
-    //             [{ align: '' }],
-    //             [{ align: 'right' }],
-    //             [{ align: 'center' }],
-    //             [{ align: 'justify' }],
-    //             ['link', 'image', 'video'],
-    //             ['clean']
-    //         ]
-    //     }
-    // });
-    tempQuill.setContents(inputDelta);
-    return tempQuill.root.innerHTML;
-}
+
 
 function initEventWithRouter(param) {
 
@@ -64,6 +34,24 @@ function initCarousel() {
     $('.owl-carousel').owlCarousel({
         loop: false,
         margin: 10,
+        responsive: {
+            0: {
+                items: 1
+            },
+            600: {
+                items: 3
+            },
+            1000: {
+                items: 5
+            }
+        }
+    });
+
+    $('.post-detai-recommend').owlCarousel({
+        loop: false,
+        margin: 10,
+        mouseDrag: false,
+        touchDrag: false,
         responsive: {
             0: {
                 items: 1

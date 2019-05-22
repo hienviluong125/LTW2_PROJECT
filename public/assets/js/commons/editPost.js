@@ -107,7 +107,7 @@ function submitEditPost(formData) {
                 console.log(responseJSON.err);
                 setTimeout(function () {
                     hideModal({ id: 'edit-post-loading-modal' });
-                    initFailureModal("edit-post-failure-modal",responseJSON.err);
+                    initFailureModal("edit-post-failure-modal", responseJSON.err);
                     showModal({ id: 'edit-post-failure-modal', backdrop: 'static', keyboard: false });
                 }, 500)
             }
@@ -193,12 +193,12 @@ function initEditPostPageEvent() {
     let title = "Thông báo";
     let content = `Bạn có chắc chắn muốn chỉnh sửa bài viết này hay không ?
     Nếu chỉnh sửa sẽ cần phải chờ một khoảng thời gian kiểm duyệt từ quản trị viên`;
-  
+
 
     initConfirmModal("edit-post-confirm-modal", title, content);
     initLoadingModal("edit-post-loading-modal");
-   
-   
+
+
     submitEditButtonClicked();
     let deltaContent = $('#delta-content').html();
     if (deltaContent && typeof deltaContent !== 'undefined') {
@@ -211,3 +211,4 @@ function initEditPostPageEvent() {
 
 
 }
+

@@ -1,10 +1,69 @@
+<%  var title = '';
+    var mainName = '';
+    var mainSlug = '';
+    var subName = '';
+    var subSlug = '';
+    var tagName = '';
+    var tagSlug = '';
+    var isShowMain = false;
+    var isShowSub = false;
+    var isShowTag = false;
+    if(maincate){
+        isShowMain = true;
+        if(maincate === 'all'){
+           
+            title = 'Tất cả bài viết'
+            mainName = 'Tất cả bài viết'
+            mainSlug = 'all'
+        }else{
+            title = posts[0].MainCategory.name;
+            mainName = posts[0].MainCategory.name;
+            mainSlug = posts[0].MainCategory.slug;
+            if(subcate){
+                isShowSub = true;
+                subName = posts[0].SubCategory.name;
+                subSlug = posts[0].SubCategory.slug;
+            }
+        }
+    }else if(tag){
+        isShowTag = true;
+        tagName =  posts[0].Tags.find(t => t.slug === tag).name;
+        tagSlug = posts[0].Tags.find(t => t.slug === tag).slug;
+    }
+     
+%>
+
+
 <div class="content-inner boxed mt-4 w-100">
     <div class="container">
         <div class="row">
             <div class="col-xl-12 col-md-12 col-sm-12">
                 <div class="row">
                     <div class="col-md-8 col-xl-8">
-                        <h1 class="page-header-title ml-2">Tất cả bài viết</h1>
+                        <% if(isShowMain){ %>
+                        <h1 class="float-left font-weight-light ml-2">
+                            <a href="/posts/<%= mainSlug %>/1">
+                                <%= mainName %>
+                            </a>
+                            <% if(isShowSub){ %>
+                            <%- subName.length > 0 ? '<span class="text-primary">/</span>' : '' %>
+                            <a href="/posts/<%= subSlug %>/1">
+                                <%= subName %>
+                            </a>
+                            <% } %>
+                            <% }else if(isShowTag){ %>
+                            <h1 class=" float-left font-weight-light ml-2">
+                                Tags:
+                                <a href="/posts/<%= tagSlug %>/1">
+                                    <%= tagName %>
+                                </a>
+                            </h1>
+                            <% } %>
+
+
+                        </h1>
+
+
                         <a class="btn btn-gradient-01 float-right mr-3" href="#">Viết bài</a>
                     </div>
                     <div class="col-md-4 col-xl-4">
@@ -31,21 +90,21 @@
 
                             <% posts.forEach(p => { %>
 
-                            <div class="col-xl-12 col-md-12">
+                            <div class="m-0 p-0 col-xl-12 col-md-12"> 
                                 <div class="widget-04 widget-body p-0 widget-mb-0">
                                     <div class="post-container">
                                         <div class="media">
-                                            <div class="media-left mt-3 user">
+                                            <!-- <div class="media-left mt-3 user">
                                                 <a href="pages-profile.html"><img src="/assets/img/avatar/avatar-07.jpg"
                                                         class="rounded-circle" alt="..."></a>
-                                            </div>
+                                            </div> -->
                                             <div class="media-body align-self-center ml-3">
                                                 <h2 class="font-weight-bold float-left mr-2">
                                                     <a href="/posts/detail/<%= p.slug %>"><%= p.title %></a>
                                                 </h2>
                                                 <% p.Tags.forEach(t => { %>
-                                                <button type="button"
-                                                    class="btn btn-sm btn-square mr-1 mb-2 btn-tag-style"><%= t.name %></button>
+                                                <a href="/posts/tags/<%= t.slug %>/1"
+                                                    class="btn btn-sm btn-square mr-1 mb-2 btn-tag-style"><%= t.name %></a>
                                                 <% }); %>
                                                 <h5 class="pr-5 mt-3"><%= p.shortContent %></h5>
                                                 <div class="mt-1">
@@ -61,7 +120,7 @@
                                         </div>
                                         <!-- <img src="/assets/img/background/01.jpg" alt="..." class="img-fluid"> -->
                                         <div class="col no-padding d-flex justify-content-start mt-2">
-                                            <div class="meta ml-5 pl-2">
+                                            <div class="meta  pl-2">
                                                 <ul>
                                                     <li><i class="la la-eye"></i><span
                                                             class="numb"><%= p.views %></span>

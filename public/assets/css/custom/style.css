@@ -1,9 +1,42 @@
 .btn-tag-style{
     background:#E8E8E8;
-    color: rgba(53, 53, 53, 0.65);
+    color: rgba(53, 53, 53, 0.65) !important;
     font-size: 11px;
     padding-top:4px;
     
+}
+
+.post-detail{
+    min-height:400px;
+}
+
+.post-detail-thumbnail-btn{
+    background: #ffffff00;
+    border:none;
+}
+
+.comment-content{
+    word-break: break-all;
+}
+
+.custom-border{
+    border: 1px solid rgb(196, 196, 196);
+    min-height:60px;
+    overflow:hidden; 
+    display:block;
+    resize: none;
+}
+.custom-btn{
+    border-radius: 4px !important;
+}
+.text-gray{
+    color:rgb(151, 151, 151);
+}
+
+.post-detail-thumbnail{
+    object-fit: cover;
+    width:auto;
+    height:80px;
 }
 
 .post-list-thumbnail{
@@ -129,6 +162,9 @@
     color:#2c304d;
 }
 
+.text-primary{
+    color:#5d5386
+}
 .custom-page-disabled > a{
     pointer-events: none;
     color:#868bac;
