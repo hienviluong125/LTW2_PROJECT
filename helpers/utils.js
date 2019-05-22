@@ -1,3 +1,5 @@
+const Entities = require('html-entities').Html5Entities;
+
 function str_to_slug(slug) {
 
     slug = slug.toLowerCase();
@@ -88,9 +90,28 @@ function parse(date) {
     return `${year}-${month}-${day}`;
 }
 
+function decodeHtmlEntitiesFromDelta(delta, isExport = false){
+    const entities = new Entities();
+    delta["ops"].forEach(obj => {
+        if(typeof obj["insert"] !== 'undefined'){
+            if(typeof obj["insert"]["image"] == 'undefined'){
+                obj["insert"] = entities.decode(obj["insert"]);	
+            }else if(isExport){
+                obj["attributes"] = {
+                    width: 600,
+                    height: 400,
+                    align: 'center'
+                }
+            }	
+        }
+    })
+    return delta;
+}
+
 module.exports = {
     parse,
     str_to_slug,
     createPagesArr,
-    getPostStatusColor
+    getPostStatusColor,
+    decodeHtmlEntitiesFromDelta
 }

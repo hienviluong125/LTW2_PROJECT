@@ -1,4 +1,7 @@
 const subscriberModel = require('./../models/index').Subscribers;
+const deltaToHtml = require('../helpers/delta-to-html');
+const pdf = require('html-pdf');
+const fs = require('fs');
 
 function getRenewalDate(){
     let date = new Date();
@@ -52,9 +55,24 @@ async function isPremium(UserId){
     }
 }
 
+function exportPdf(res, delta, filename){
+    let html = deltaToHtml.convert(delta, filename);
+    pdf.create(html, deltaToHtml.pdfConfig).toFile(`${deltaToHtml.getAssetsPath()}assets/pdf/${filename}.pdf` ,function(err, resPdf){
+        if(err){
+            throw err;
+        }else {
+            fs.readFile(resPdf.filename, function (err,data){
+                res.contentType("application/pdf");
+                res.send(data);
+            })
+        }
+    });
+}
+
 module.exports = {
     create,
     getLatestSubscription,
     renewSubscription,
-    isPremium
+    isPremium,
+    exportPdf
 }

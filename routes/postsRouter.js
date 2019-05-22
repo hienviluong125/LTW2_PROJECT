@@ -2,7 +2,7 @@ const router = require('express').Router();
 const mockPost = require('./../mocks/post.index');
 const postsService = require('./../services/postsService');
 const { createPagesArr } = require('./../helpers/utils');
-
+const subService = require('./../services/subscriberService');
 
 const renderAllPosts = (req, res, next) => {
     const { topPosts, hotTags } = mockPost;
@@ -24,13 +24,15 @@ const renderAllPosts = (req, res, next) => {
 const renderDetailPost = (req, res, next) => {
     let slug = req.params.slug;
     const { topPosts, hotTags } = mockPost;
-    postsService
-        .getDetailPost({ slug })
-        .then(post => {
-            // res.json(post);
-            res.render('posts/detail', { post, topPosts, hotTags });
-        })
-        .catch(err => next(err));
+    Promise.all([
+        postsService.getDetailPost({ slug }),
+        subService.isPremium(+req.user.id)
+    ])
+    .then(data => {
+        // res.json(post);
+        res.render('posts/detail', { post: data[0], topPosts, hotTags, isPremium: data[1] });
+    })
+    .catch(err => next(err));
 
 }
 
@@ -56,11 +58,20 @@ const loadMoreComment = (req, res, next) => {
 }
 
 
+const exportPostAsPdf = async (req, res, next) => {
+    try{
+        let post = await postsService.get({slug: req.params.slug});
+        //console.log("DATA: ", JSON.parse(post.dataValues.content));
+        subService.exportPdf(res, JSON.parse(post.dataValues.content), post.dataValues.slug)
+    }catch(err){
+        next(err);
+    } 
+}
+router.get('/exports/:slug', exportPostAsPdf)
 router.get('/detail/:slug', renderDetailPost)
 router.get('/tags/:tag/:page', renderAllPosts)
 router.get('/:maincate/:page', renderAllPosts)
 router.get('/:maincate/:subcate/:page', renderAllPosts)
-
 
 router.get('/', (req, res, next) => res.redirect('/posts/all/1'))
 
