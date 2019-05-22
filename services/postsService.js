@@ -448,6 +448,33 @@ async function loadMoreComment({ PostId, offset, limit }) {
     })
 }
 
+async function search({searchStr, offset, limit}){
+    try{
+        searchStr = `%${searchStr}%`;
+        let query = {  
+            [Op.or]: [
+                {content: {
+                    [Op.iLike]: searchStr
+                }},
+                {shortContent: {
+                    [Op.iLike]: searchStr
+                }},
+                {title: {
+                    [Op.iLike]: searchStr
+                }}
+            ]
+        };
+        let posts = await db.Posts.findAll({
+            where: query,
+            limit,
+            offset,
+        });
+        let postsCount = posts.length;
+        return {posts, count: postsCount};
+    }catch(err){
+        throw err;
+    }
+}
 
 
 module.exports = {
@@ -465,5 +492,6 @@ module.exports = {
     incViewsOfPost,
     addCommentToPost,
     getDetailPost,
-    loadMoreComment
+    loadMoreComment,
+    search
 };

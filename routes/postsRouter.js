@@ -26,7 +26,7 @@ const renderDetailPost = (req, res, next) => {
     const { topPosts, hotTags } = mockPost;
     Promise.all([
         postsService.getDetailPost({ slug }),
-        subService.isPremium(+req.user.id)
+        subService.isPremium(+req.user.id),
     ])
     .then(data => {
         // res.json(post);
