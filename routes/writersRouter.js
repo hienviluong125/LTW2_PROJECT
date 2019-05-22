@@ -135,8 +135,9 @@ router.get('/posts/request/:slug', requestRejectedPost);
 router.get('/posts', (req, res, next) => res.redirect('/writers/posts/all/1'));
 router.get('/posts/:status/:page', renderPostListPage);
 
-
+// Ajax
 router.post('/posts/add', upload.array('images'), addPost);
 router.post('/posts/edit', upload.array('images'), editPost);
+// Ajax
 
 module.exports = router;

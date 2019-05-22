@@ -92,7 +92,9 @@ router.all(
 
 router.post('/posts/reject', rejectPost)
 router.get('/posts/verify/:slug', renderVerifyPost)
+// Ajax
 router.post('/posts/verify', verifyPost)
+//
 router.get('/posts/:cate/:page', renderPosts);
 
 

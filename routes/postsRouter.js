@@ -75,8 +75,9 @@ router.get('/:maincate/:subcate/:page', renderAllPosts)
 
 router.get('/', (req, res, next) => res.redirect('/posts/all/1'))
 
+// Ajax
 router.post('/comment', addComment)
 router.post('/comment/loadmore', loadMoreComment)
-
+// Ajax
 
 module.exports = router;

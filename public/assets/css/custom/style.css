@@ -298,3 +298,39 @@ outline: 0; */
 .post-list-container{
     min-height:1000px;
 }
+
+
+.search-form{
+    margin-top:5px;
+    /* float:right; */
+    /* margin-left:10px; */
+    /* width:80%; */
+}
+.search-form > span > i:hover{
+    cursor: pointer;
+}
+.search-form > span{
+    color:#aea9c3 !important;
+    
+}
+
+.bg-none{
+    background: none !important;
+}
+
+.search-form > span > i {
+    transition: color 0.3s;
+}
+
+.search-form > span > i:hover{
+    color:#e76c90;
+}
+.search-input{
+    /* width:0px !important; */
+    display:none;
+}
+
+.search-input:focus{
+    border:1px solid #eee !important;
+
+}
