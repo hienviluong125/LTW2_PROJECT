@@ -72,7 +72,7 @@ const randomImgs = ['01.jpg', '02.jpg', '03.jpg', '04.jpg', '05.jpg'];
     await db.SubCategories.destroy({ where: {} });
     await db.MainCategories.destroy({ where: {} });
 
-
+    await db.Admins.destroy({ where: {} });
     await db.Users.destroy({ where: {} });
 
     //tạo category
@@ -101,6 +101,7 @@ const randomImgs = ['01.jpg', '02.jpg', '03.jpg', '04.jpg', '05.jpg'];
 
     await seedEditorCategory('zzz@gmail.com', 'Âm nhạc');
     await seedEditorCategory('zzz@gmail.com', 'Điện ảnh');
+
 
     // await seedUsers
 
@@ -235,6 +236,18 @@ async function seedUsers() {
         let id = userResult.dataValues.id
         return await db.Subscribers.create({ UserId: id });
     }))
+
+    let hashAdmin = await bcrypt.hash('admin123456', crypto.iteration)
+    let adminResult = await db.Users.create({
+        id:169,
+        username: 'admin@gmail.com',
+        email: 'admin@gmail.com',
+        password: hashAdmin,
+        role: 'admin'
+    })
+
+    await db.Admins.create({ UserId: 169 });
+
 }
 
 
