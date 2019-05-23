@@ -31,15 +31,16 @@
                         <ul class="navbar-nav mr-auto">
                             <li><a href="/index">Trang chủ</a></li>
                             <li><a href="/about">Giới thiệu</a></li>
-                            
+
                             <li class="dropdown">
                                 <a class="dropdown-toggle" href="#" id="components" role="button" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">Chuyên mục</a>
                                 <ul class="dropdown-menu" aria-labelledby="components">
                                     <% allCategories.forEach(cate => { %>
                                     <li class="dropdown">
-                                        <a class="dropdown-toggle" id="elements" href="/posts/<%= cate.slug + '/1' %>" role="button"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <a class="dropdown-toggle" id="elements" href="/posts/<%= cate.slug + '/1' %>"
+                                            role="button" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="true">
                                             <%= cate.name %>
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="elements">
@@ -57,15 +58,32 @@
                             </li>
                             <li><a href="maps-leaflet.html">Contact</a></li>
                         </ul>
+
                         <% if(!_locals.isLoggedIn){ %>
                         <ul class="navbar-nav ml-auto">
-                            <li><a href="/users/register"> Sign up </a></li>
-                            <li><a href="/users/login">Login</a></li>
+                            <li>
+                                <form class="input-group search-form">
+                                    <input type="text" placeholder="Tìm kiếm..." class="form-control search-input">
+                                    <span class="input-group-addon addon-primary bg-none">
+                                        <i class="ti ti-search mt-1" data-toggle="false"></i>
+                                    </span>
+                                </form>
+                            </li>
+                            <li><a href="/users/register">Đăng ký</a></li>
+                            <li><a href="/users/login">Đăng nhập</a></li>
                         </ul>
                         <% }else{ %>
                         <ul class="navbar-nav ml-auto">
-                            <li><a href="/users/profile/<%= _locals.user.id %>"> Profile </a></li>
-                            <li><a href="/users/logout"> Log out </a></li>
+                            <li>
+                                <form class="input-group search-form">
+                                    <input type="text" placeholder="Tìm kiếm..." class="form-control search-input">
+                                    <span class="input-group-addon addon-primary bg-none">
+                                        <i class="ti ti-search mt-1" data-toggle="false"></i>
+                                    </span>
+                                </form>
+                            </li>
+                            <li><a href="/users/profile/<%= _locals.user.id %>">Hồ sơ</a></li>
+                            <li><a href="/users/logout">Đăng xuất</a></li>
                         </ul>
                         <% } %>
                     </div>

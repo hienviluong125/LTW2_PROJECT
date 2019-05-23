@@ -405,7 +405,8 @@ async function getDetailPost({ slug }) {
         await incViewsOfPost({ slug });
         return db.Posts.findOne({
             where: {
-                slug
+                slug,
+                status: 'published'
             },
             include: [
                 db.MainCategories,
