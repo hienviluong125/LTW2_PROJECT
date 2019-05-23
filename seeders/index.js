@@ -75,9 +75,6 @@ const randomImgs = ['01.jpg', '02.jpg', '03.jpg', '04.jpg', '05.jpg'];
 
     await db.Users.destroy({ where: {} });
 
-
-
-
     //tạo category
     await seedCategory();
     //tạo user
@@ -86,9 +83,9 @@ const randomImgs = ['01.jpg', '02.jpg', '03.jpg', '04.jpg', '05.jpg'];
     await seedUsers();
 
     //tạo posts cho 3 user aaa,bbb,ccc
-    await seedPosts('aaa@gmail.com','Tài chính');
-    await seedPosts('bbb@gmail.com','Âm nhạc');
-    await seedPosts('ccc@gmail.com','Nhân vật');
+    // await seedPosts('aaa@gmail.com','Tài chính');
+    // await seedPosts('bbb@gmail.com','Âm nhạc');
+    // await seedPosts('ccc@gmail.com','Nhân vật');
 
 
     //tạo editor
@@ -97,8 +94,13 @@ const randomImgs = ['01.jpg', '02.jpg', '03.jpg', '04.jpg', '05.jpg'];
 
     // tạo editor sub category - editor quản lý chuyên mục
     await seedEditorCategory('xxx@gmail.com', 'Trải nghiệm')
-    await seedEditorCategory('yyy@gmail.com', 'Âm nhạc');
-    await seedEditorCategory('zzz@gmail.com', 'Nhân vật');
+    await seedEditorCategory('xxx@gmail.com', 'Thị trường')
+
+    await seedEditorCategory('yyy@gmail.com', 'Tài chính');
+    await seedEditorCategory('yyy@gmail.com', 'Doanh nghiệp');
+
+    await seedEditorCategory('zzz@gmail.com', 'Âm nhạc');
+    await seedEditorCategory('zzz@gmail.com', 'Điện ảnh');
 
     // await seedUsers
 
@@ -136,65 +138,32 @@ async function seedPosts(username, subcatename) {
 async function seedCategory() {
     var _mainCates = [
         {
+            id:46,
             name: "Công nghệ",
-            _subCates: [{ name: "Trải nghiệm", }, { name: "Thị trường", }, { name: "Thủ thuật", }
+            _subCates: [{ id: 163, name: "Trải nghiệm", }, { id: 164, name: "Thị trường", }
             ]
         },
         {
+            id:47,
             name: "Kinh doanh",
             _subCates: [
-                { name: "Tài chính", }, { name: "Doanh nghiệp", }, { name: "Mua sắm", }, { name: "Đầu tư", }
+                {id:173, name: "Tài chính", }, { id:174,name: "Doanh nghiệp" }
             ]
         },
         {
+            id:48,
             name: "Giải trí",
             _subCates: [
                 {
+                    id:183,
                     name: "Âm nhạc",
                 },
                 {
+                    id:184,
                     name: "Điện ảnh",
-                },
-                {
-                    name: "TV Show",
-                },
-                {
-                    name: "Thời trang",
-                },
-                {
-                    name: "Hậu trường",
                 }
             ]
-        },
-        {
-            name: "Văn hóa",
-            _subCates: [
-                {
-                    name: "Nhân vật",
-                },
-                {
-                    name: "Sàn diễn",
-                },
-                {
-                    name: "Sách",
-                },
-                {
-                    name: "Đời sống"
-                }
-            ]
-        },
-        {
-            name: "Khoa học",
-            _subCates: [
-                {
-                    name: "Thường thức",
-                },
-                {
-                    name: "Phát minh",
-                }
-
-            ]
-        },
+        }
 
     ]
 
@@ -204,6 +173,7 @@ async function seedCategory() {
 
     for (let maincate of _mainCates) {
         MainCategories.create({
+            id:maincate.id,
             name: maincate.name,
             slug: str_to_slug(maincate.name)
         }).then(result => {
@@ -211,6 +181,7 @@ async function seedCategory() {
             let id = result.dataValues.id;
             for (let subCate of maincate._subCates) {
                 SubCategories.create({
+                    id:subCate.id,
                     name: subCate.name,
                     slug: str_to_slug(subCate.name),
                     MainCategoryId: id
@@ -220,7 +191,7 @@ async function seedCategory() {
     }
 }
 
-async function seedUserWithId(id,email){
+async function seedUserWithId(id, email) {
     const emails1 = [email];
     await Promise.all(emails1.map(async e => {
         let hash = await bcrypt.hash(e + e, crypto.iteration)
