@@ -24,16 +24,27 @@ const renderAllPosts = (req, res, next) => {
 const renderDetailPost = (req, res, next) => {
     let slug = req.params.slug;
     const { topPosts, hotTags } = mockPost;
-    Promise.all([
-        postsService.getDetailPost({ slug }),
-        subService.isPremium(+req.user.id),
-    ])
-    .then(data => {
-        // res.json(post);
-        res.render('posts/detail', { post: data[0], topPosts, hotTags, isPremium: data[1] });
-    })
-    .catch(err => next(err));
-
+    if(req.user){
+        Promise.all([
+            postsService.getDetailPost({ slug }),
+            subService.isPremium(+req.user.id),
+        ])
+        .then(data => {
+            // res.json(post);
+            res.render('posts/detail', { post: data[0], topPosts, hotTags, isPremium: data[1] });
+        })
+        .catch(err => next(err));
+    }else {
+        Promise.all([
+            postsService.getDetailPost({ slug }),
+            //subService.isPremium(+req.user.id),
+        ])
+        .then(data => {
+            // res.json(post);
+            res.render('posts/detail', { post: data[0], topPosts, hotTags, isPremium: false });
+        })
+        .catch(err => next(err));
+    }
 }
 
 const addComment = (req, res, next) => {
