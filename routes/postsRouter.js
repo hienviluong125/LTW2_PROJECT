@@ -41,6 +41,7 @@ const renderDetailPost = (req, res, next) => {
         ])
         .then(data => {
             // res.json(post);
+            //console.log(data[1])
             res.render('posts/detail', { post: data[0], topPosts, hotTags, isPremium: false });
         })
         .catch(err => next(err));

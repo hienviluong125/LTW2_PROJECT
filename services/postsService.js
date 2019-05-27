@@ -1,6 +1,6 @@
 const db = require('./../models/index');
 const tagService = require('./tagService');
-const { Op } = require('sequelize')
+const { Op, QueryTypes } = require('sequelize')
 
 async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
     try {
@@ -477,6 +477,99 @@ async function search({searchStr, offset, limit}){
     }
 }
 
+function getNextWeekDate(){
+    let now = new Date();
+    return new Date(now.getTime() + 7 * 24 * 3600 * 1000);
+}
+
+function noticeablePosts(){
+    let nextWeek = getNextWeekDate();
+    return db.Posts.findAll({
+        where: {
+            [Op.and]: [
+                {
+                    releaseDate: {
+                        [Op.lte]: nextWeek,
+                        [Op.gte]: new Date()
+                    },
+                    status: 'published'
+                }
+            ],   
+        },
+        order: [
+            ['views', 'DESC']
+        ],
+        limit: 4
+    });
+}
+
+function mostViewsPosts(){
+    return db.Posts.findAll({
+        order: [
+            ['views', 'DESC']
+        ],
+        limit: 10
+    });
+}
+
+function latestPosts(){
+    return db.Posts.findAll({
+        order: [
+            ['releaseDate', 'DESC']
+        ],
+        limit: 10
+    });
+}
+
+async function newPostByHotCats(){
+    try{
+        // let subCats = await db.SubCategories.findAll({
+        //     attributes: ['name', 'id', [sequelize.fn('SUM', sequelize.col('Posts.views')), 'totalViews']],
+        //     group: ['SubCategories.id'],
+        //     include: [
+        //         {
+        //             attributes: [],
+        //             model: db.Posts, 
+        //         }
+        //     ],
+        //     //limit: 10,
+        //     //order: sequelize.literal('totalViews DESC'),
+        //     raw: true,
+            
+
+        //     // attributes: [
+        //     //     'name', 'id'
+        //     // ],
+        //     // limit: 10,
+        //     // order:[
+        //     //     ['createdAt', 'ASC']
+        //     // ],
+        //     // raw: true, 
+    
+        // })
+        let query =     `SELECT "SubCategories"."name", "SubCategories"."id", coalesce(SUM("Posts"."views"), 0) AS "totalViews" 
+        FROM "SubCategories" AS "SubCategories" LEFT OUTER JOIN "Posts" AS "Posts" ON "SubCategories"."id" = "Posts"."SubCategoryId" 
+        GROUP BY "SubCategories"."id"
+        ORDER BY "totalViews" desc
+        LIMIT 10`;
+        let subCats = await db.sequelize.query(query, {type: QueryTypes.SELECT})
+        let promises = [];
+        subCats.forEach(cat => {
+            promises.push(db.Posts.findOne({
+                where:{
+                    SubCategoryId: cat.id,
+                    status: 'published'
+                },
+                order: [
+                    ['releaseDate', 'DESC']
+                ],
+            }))
+        })
+        return Promise.all(promises); 
+    }catch(err){
+        throw err;
+    }
+}
 
 module.exports = {
     add,
@@ -494,5 +587,9 @@ module.exports = {
     addCommentToPost,
     getDetailPost,
     loadMoreComment,
-    search
+    search,
+    noticeablePosts,
+    mostViewsPosts,
+    latestPosts,
+    newPostByHotCats
 };
