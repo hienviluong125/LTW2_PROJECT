@@ -70,6 +70,10 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
 
 }
 
+async function getAll() {
+    return await db.Posts.findAll();
+}
+
 async function add({ WriterId, title, shortContent, slug, MainCategoryId, SubCategoryId, content, tags, thumbnail }) {
     try {
         let isExistSameSlug = await db.Posts.findOne({ where: { slug } }, { raw: true });
@@ -230,80 +234,87 @@ async function getAllPostByUserId({ id, limit, offset, status }) {
 // pending - verified - published - rejected
 async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset }) {
     try {
-        //POSTS
-        let data = await db.Users
-            .findOne({
-                // include:[db.Users],
-                attributes: ['id'],
-                where: {
-                    id: EditorId
-                },
-                include: [{
-                    model: db.SubCategories,
-                    where: SubCate === 'all' ? {} : {
-                        slug: SubCate
-                    },
-                    include: [{
-                        model: db.Posts,
-                        where: {
-                            'status': 'pending',
-                        },
-                        limit: limit,
-                        offset: offset,
-                        include: [
-                            db.MainCategories,
-                            db.SubCategories,
-                            db.Users,
-                            db.Tags,
-                        ]
-                    }]
-                }]
-            });
-        //END POSTS
-
-        if (!data) {
-            return { status: false, data: 'no exists data' };
-        }
-
-        //COUNT
-        let count = -1;
         if (SubCate === 'all') {
             let allSubCateIds = await db.EditorCategories.findAll({ raw: true, attributes: ['SubCategoryId'], where: { UserId: EditorId } });
             allSubCateIds = allSubCateIds.map(aS => aS.SubCategoryId);
-            count = await db.Posts.count({
+            let posts = await db.Posts.findAll({
                 where: {
+                    status: 'pending',
+                },
+                limit: limit,
+                offset: offset,
+                include: [
+                    db.MainCategories,
+                    db.SubCategories,
+                    db.Users,
+                    db.Tags,
+                ]
+            })
+            let count = await db.Posts.count({
+                where: {
+                    status: 'pending',
                     SubCategoryId: allSubCateIds
                 }
             });
-        } else {
-            count = await db.Posts.count({
-                include: [
-                    {
-                        model: db.SubCategories,
-                        where: {
-                            slug: SubCate
-                        }
-                    }
-                ],
-            });
-        }
-        //END COUNT
 
-        let allPostWithSubcategory = data.dataValues.SubCategories;
-        let mergedPosts = [];
-        for (let eachsub of allPostWithSubcategory) {
-            mergedPosts = [...mergedPosts, ...eachsub.Posts]
-        }
-        return {
-            SubCategory: 'all',
-            posts: mergedPosts,
-            count: count
+            return {
+                posts, count
+            }
+        } else {
+            let allSubCateIds = await db.SubCategories.findAll({
+                // raw: true,
+                attributes: ['id'],
+                where: { slug: SubCate },
+                include: [{
+                    attributes: ['id'],
+                    model: db.Users,
+                    where: {
+                        id: EditorId
+                    }
+                }]
+            });
+            let subCateId = allSubCateIds[0].id;
+            let posts = await db.Posts.findAll({
+                where: {
+                    status: 'pending',
+                    SubCategoryId: subCateId
+                },
+                limit: limit,
+                offset: offset,
+                include: [
+                    db.MainCategories,
+                    db.SubCategories,
+                    db.Users,
+                    db.Tags,
+                ]
+            })
+            let count = await db.Posts.count({
+                where: {
+                    status: 'pending',
+                    SubCategoryId: subCateId
+                }
+            });
+            return {
+                posts, count
+            }
         }
     } catch (err) {
         console.log({ err });
-        return { status: false, data: err };
     }
+}
 
+async function publishPost({ id }) {
+    return db.Posts.update(
+        {
+            status: 'published'
+        },
+        {
+            where: {
+                id: id,
+                status: 'verified'
+            }
+        }
+    );
 }
 
 async function rejectPost({ WriterId, EditorId, PostId, NoteContent }) {
@@ -449,30 +460,45 @@ async function loadMoreComment({ PostId, offset, limit }) {
     })
 }
 
-async function search({searchStr, offset, limit}){
-    try{
+async function search({ searchStr, offset, limit }) {
+    console.log("==========================")
+    console.log("seachStr =>_"+searchStr);
+    console.log("==========================")
+    try {
         searchStr = `%${searchStr}%`;
-        let query = {  
+        let query = {
             [Op.or]: [
-                {content: {
-                    [Op.iLike]: searchStr
-                }},
-                {shortContent: {
-                    [Op.iLike]: searchStr
-                }},
-                {title: {
-                    [Op.iLike]: searchStr
-                }}
+                {
+                    content: {
+                        [Op.iLike]: searchStr
+                    }
+                },
+                {
+                    shortContent: {
+                        [Op.iLike]: searchStr
+                    }
+                },
+                {
+                    title: {
+                        [Op.iLike]: searchStr
+                    }
+                }
             ]
         };
         let posts = await db.Posts.findAll({
             where: query,
             limit,
             offset,
+            include: [
+                db.MainCategories,
+                db.SubCategories,
+                db.Users,
+                db.Tags,
+            ]
         });
         let postsCount = posts.length;
-        return {posts, count: postsCount};
-    }catch(err){
+        return { posts, count: postsCount };
+    } catch (err) {
         throw err;
     }
 }
@@ -494,5 +520,7 @@ module.exports = {
     addCommentToPost,
     getDetailPost,
     loadMoreComment,
-    search
+    search,
+    getAll,
+    publishPost
 };

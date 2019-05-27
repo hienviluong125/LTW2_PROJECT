@@ -33,11 +33,7 @@ module.exports = {
       shortContent: {
         type: Sequelize.STRING
       },
-      isPremium: {
-        type: Sequelize.BOOLEAN,
-        allowNull:false,
-        defaultValue:false
-      },
+
       content: {
         type: Sequelize.TEXT
       },
@@ -67,7 +63,12 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
+      isPremium: {
+        type: Sequelize.BOOLEAN,
+        allowNull:false,
+        defaultValue:false
+      },
     });
   },
   down: (queryInterface, Sequelize) => {

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const mockPost = require('./../mocks/post.index');
 const postsService = require('./../services/postsService');
-const { createPagesArr } = require('./../helpers/utils');
+const { createPagesArr,highlightSearchText } = require('./../helpers/utils');
 const subService = require('./../services/subscriberService');
 
 const renderAllPosts = (req, res, next) => {
@@ -24,26 +24,26 @@ const renderAllPosts = (req, res, next) => {
 const renderDetailPost = (req, res, next) => {
     let slug = req.params.slug;
     const { topPosts, hotTags } = mockPost;
-    if(req.user){
+    if (req.user) {
         Promise.all([
             postsService.getDetailPost({ slug }),
             subService.isPremium(+req.user.id),
         ])
-        .then(data => {
-            // res.json(post);
-            res.render('posts/detail', { post: data[0], topPosts, hotTags, isPremium: data[1] });
-        })
-        .catch(err => next(err));
-    }else {
+            .then(data => {
+                // res.json(post);
+                res.render('posts/detail', { post: data[0], topPosts, hotTags, isPremium: data[1] });
+            })
+            .catch(err => next(err));
+    } else {
         Promise.all([
             postsService.getDetailPost({ slug }),
             //subService.isPremium(+req.user.id),
         ])
-        .then(data => {
-            // res.json(post);
-            res.render('posts/detail', { post: data[0], topPosts, hotTags, isPremium: false });
-        })
-        .catch(err => next(err));
+            .then(data => {
+                // res.json(post);
+                res.render('posts/detail', { post: data[0], topPosts, hotTags, isPremium: false });
+            })
+            .catch(err => next(err));
     }
 }
 
@@ -64,27 +64,45 @@ const loadMoreComment = (req, res, next) => {
     let { PostId, offset } = req.body;
     limit = 5;
     postsService
-        .loadMoreComment({ PostId, offset,limit })
+        .loadMoreComment({ PostId, offset, limit })
         .then(result => res.json(result))
 }
 
-
 const exportPostAsPdf = async (req, res, next) => {
-    try{
-        let post = await postsService.get({slug: req.params.slug});
+    try {
+        let post = await postsService.get({ slug: req.params.slug });
         //console.log("DATA: ", JSON.parse(post.dataValues.content));
         subService.exportPdf(res, JSON.parse(post.dataValues.content), post.dataValues.slug)
-    }catch(err){
+    } catch (err) {
         next(err);
-    } 
+    }
 }
+
+const search = (req, res, next) => {
+    let page = req.query.page;
+    let searchStr = req.query.text;
+    let limit = 8;
+    let offset = (page-1) * limit;
+    postsService
+        .search({ searchStr, offset, limit })
+        .then(result => {
+            let { posts, count } = result;
+            let pagination = createPagesArr(page, count, limit);
+            res.render('posts/search', { posts, count, text: searchStr,page,pagination,highlightSearchText });
+        })
+        .catch(err => next(err));
+}
+
 router.get('/exports/:slug', exportPostAsPdf)
 router.get('/detail/:slug', renderDetailPost)
 router.get('/tags/:tag/:page', renderAllPosts)
 router.get('/:maincate/:page', renderAllPosts)
 router.get('/:maincate/:subcate/:page', renderAllPosts)
 
+router.get('/search', search);
 router.get('/', (req, res, next) => res.redirect('/posts/all/1'))
+
+
 
 // Ajax
 router.post('/comment', addComment)

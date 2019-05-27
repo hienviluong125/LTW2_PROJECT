@@ -108,10 +108,20 @@ function decodeHtmlEntitiesFromDelta(delta, isExport = false){
     return delta;
 }
 
+function highlightSearchText(content,searchText){
+    return content.replace(searchText,`<span class="text-danger">${searchText}</span>`)
+}
+
+function hightLightDeltaContent(deltaContent,searchText){
+
+}
+
 module.exports = {
     parse,
     str_to_slug,
     createPagesArr,
     getPostStatusColor,
-    decodeHtmlEntitiesFromDelta
+    decodeHtmlEntitiesFromDelta,
+    highlightSearchText,
+    hightLightDeltaContent
 }

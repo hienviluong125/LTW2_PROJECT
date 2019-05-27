@@ -40,6 +40,7 @@ app.use((req, res, next) => {
             return next();
         })
         .catch(err => {
+            console.log("err",err);
             res.redirect('/error')
         })
 })
@@ -47,9 +48,10 @@ app.use((req, res, next) => {
 //FOR DEV
 // app.use((req,res,next) => {
 //     res.locals.user = {
-//         id: 2,
-//         role: 'writer',
-//         username: 'bbb@gmail.com'
+//         // id: 169,
+//         // role: 'admin',
+//         // username: 'admin@gmail.com',
+//         // email: 'admin@gmail.com'
 //         // id:8,
 //         // role: 'editor'
 

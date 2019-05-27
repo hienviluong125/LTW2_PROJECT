@@ -62,8 +62,9 @@
                         <% if(!_locals.isLoggedIn){ %>
                         <ul class="navbar-nav ml-auto">
                             <li>
-                                <form class="input-group search-form">
-                                    <input type="text" placeholder="Tìm kiếm..." class="form-control search-input">
+                                <form method="GET" action="/posts/search" class="input-group search-form">
+                                    <input name="text" type="text" placeholder="Tìm kiếm..." class="form-control search-input">
+                                    <input name="page" value="1" type="hidden" />
                                     <span class="input-group-addon addon-primary bg-none">
                                         <i class="ti ti-search mt-1" data-toggle="false"></i>
                                     </span>
@@ -75,8 +76,9 @@
                         <% }else{ %>
                         <ul class="navbar-nav ml-auto">
                             <li>
-                                <form class="input-group search-form">
-                                    <input type="text" placeholder="Tìm kiếm..." class="form-control search-input">
+                                <form method="GET" action="/posts/search" class="input-group search-form">
+                                    <input name="text" type="text" placeholder="Tìm kiếm..." class="form-control search-input">
+                                    <input name="page" value="1" type="hidden" />
                                     <span class="input-group-addon addon-primary bg-none">
                                         <i class="ti ti-search mt-1" data-toggle="false"></i>
                                     </span>

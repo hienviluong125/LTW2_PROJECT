@@ -7,30 +7,26 @@ $(document).ready(function () {
     initEditPostPageEvent();
     initVerifyPostPageEvent();
 
-    initPostDetailPage()
+    initPostDetailPage();
 
     $("body").click(function (e) {
         if (e.target.nodeName !== 'INPUT' && e.target.className.indexOf("ti-search") === -1) {
-            if($('.ti-search').data('toggle')){
-                $('.ti-search').parent().addClass('bg-none').data('toggle',false);
-                $('.search-input').css({"display":"none"});
+            if ($('.ti-search').data('toggle')) {
+                $('.ti-search').parent().addClass('bg-none').data('toggle', false);
+                $('.search-input').css({ "display": "none" });
             }
-           
+
         }
     });
 
-    $('.ti-search').click(function () { 
-        $(this).data('toggle',true);
+    $('.ti-search').click(function () {
+        $(this).data('toggle', true);
         $(this).parent().removeClass('bg-none');
         $('.search-input').css({
             "display": "block",
         })
         // $('.search-input').animate({left: '+='+500}, 500);
     })
-
-
-
-
 
 });
 

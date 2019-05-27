@@ -1,3 +1,14 @@
+<% if(posts.length <= 0){ %>
+<div class="content-inner boxed mt-4 w-100" style="min-height:800px;">
+    <div class="container">
+        <h1 class="mt-2 text-center">Không có dữ liệu</h1>
+    </div>
+</div>
+
+<% }else{ %>
+
+
+
 <%  var title = '';
     var mainName = '';
     var mainSlug = '';
@@ -90,7 +101,7 @@
 
                             <% posts.forEach(p => { %>
 
-                            <div class="m-0 p-0 col-xl-12 col-md-12"> 
+                            <div class="m-0 p-0 col-xl-12 col-md-12">
                                 <div class="widget-04 widget-body p-0 widget-mb-0">
                                     <div class="post-container">
                                         <div class="media">
@@ -214,3 +225,6 @@
         </div>
     </div>
 </div>
+
+
+<% } %>

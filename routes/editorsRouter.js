@@ -2,7 +2,7 @@ const router = require('express').Router();
 const postsService = require('./../services/postsService');
 const categoriesService = require('./../services/categoriesService');
 const middleware = require('./../middlewares/users/local-auth');
-const { getPostStatusColor,createPagesArr } = require('./../helpers/utils');
+const { getPostStatusColor, createPagesArr } = require('./../helpers/utils');
 
 const renderPosts = (req, res, next) => {
     let subCateSlug = req.params.cate;
@@ -10,6 +10,7 @@ const renderPosts = (req, res, next) => {
     let limit = 8;
     let offset = limit * (page - 1);
     let EditorId = res.locals.user.id;
+
     Promise.all(
         [
             categoriesService.getAllSubCategoriesOfEditor({ EditorId }),
@@ -17,13 +18,14 @@ const renderPosts = (req, res, next) => {
         ]
     ).then(rs => {
         let SubCategories = rs[0];
-        let { posts, SubCategory,count } = rs[1];
+        let { posts, count } = rs[1];
         let pagination = createPagesArr(page, count, limit);
         let currentSubCate = SubCategories.find(sub => sub.slug === subCateSlug);
         currentSubCate = typeof currentSubCate === 'undefined' ? 'all' : currentSubCate.name;
-        res.render('editors/posts/index', { currentSubCate, SubCategories, posts, subCateSlug,SubCategory, getPostStatusColor,pagination,page });
+        res.render('editors/posts/index', { currentSubCate, SubCategories, posts, subCateSlug, getPostStatusColor,pagination,page });
     }).catch(err => {
-        return next();
+        console.log(err);
+        // return next();
     })
 
     // }
@@ -90,12 +92,18 @@ router.all(
     middleware.Authorization(['editor'])
 );
 
+
+
+
 router.post('/posts/reject', rejectPost)
 router.get('/posts/verify/:slug', renderVerifyPost)
+
 // Ajax
 router.post('/posts/verify', verifyPost)
 //
+
 router.get('/posts/:cate/:page', renderPosts);
+
 
 
 
