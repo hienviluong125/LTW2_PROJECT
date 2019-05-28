@@ -1,6 +1,6 @@
 const db = require('./../models/index');
 const tagService = require('./tagService');
-const { Op } = require('sequelize')
+const { Op, QueryTypes } = require('sequelize')
 
 async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
     try {
@@ -462,7 +462,7 @@ async function loadMoreComment({ PostId, offset, limit }) {
 
 async function search({ searchStr, offset, limit }) {
     console.log("==========================")
-    console.log("seachStr =>_"+searchStr);
+    console.log("seachStr =>_" + searchStr);
     console.log("==========================")
     try {
         searchStr = `%${searchStr}%`;
@@ -503,6 +503,129 @@ async function search({ searchStr, offset, limit }) {
     }
 }
 
+function getNextWeekDate() {
+    let now = new Date();
+    return new Date(now.getTime() + 7 * 24 * 3600 * 1000);
+}
+
+function noticeablePosts() {
+    let nextWeek = getNextWeekDate();
+    console.log("==============DATA=============");
+    console.log(nextWeek);
+    console.log("=============DATA================");
+    return db.Posts.findAll({
+        where: {
+            [Op.and]: [
+                {
+                    releaseDate: {
+                        [Op.lte]: nextWeek,
+                        // [Op.gte]: new Date()
+                    },
+                    status: 'published'
+                }
+            ],
+        },
+        order: [
+            ['views', 'DESC']
+        ],
+        include: [
+            db.MainCategories,
+            db.SubCategories,
+            db.Users,
+            db.Tags,
+        ],
+        limit: 4
+    });
+}
+
+function mostViewsPosts() {
+    return db.Posts.findAll({
+        order: [
+            ['views', 'DESC']
+        ],
+        limit: 10,
+        include: [
+            db.MainCategories,
+            db.SubCategories,
+            db.Users,
+            db.Tags,
+        ],
+    });
+}
+
+function latestPosts() {
+    return db.Posts.findAll({
+        order: [
+            ['releaseDate', 'DESC']
+        ],
+        limit: 10,
+        include: [
+            db.MainCategories,
+            db.SubCategories,
+            db.Users,
+            db.Tags,
+        ],
+    });
+}
+
+async function newPostByHotCats() {
+    try {
+        // let subCats = await db.SubCategories.findAll({
+        //     attributes: ['name', 'id', [sequelize.fn('SUM', sequelize.col('Posts.views')), 'totalViews']],
+        //     group: ['SubCategories.id'],
+        //     include: [
+        //         {
+        //             attributes: [],
+        //             model: db.Posts, 
+        //         }
+        //     ],
+        //     //limit: 10,
+        //     //order: sequelize.literal('totalViews DESC'),
+        //     raw: true,
+
+
+        //     // attributes: [
+        //     //     'name', 'id'
+        //     // ],
+        //     // limit: 10,
+        //     // order:[
+        //     //     ['createdAt', 'ASC']
+        //     // ],
+        //     // raw: true, 
+
+        // })
+        let query = `SELECT "SubCategories"."name", "SubCategories"."id", coalesce(SUM("Posts"."views"), 0) AS "totalViews" 
+        FROM "SubCategories" AS "SubCategories" LEFT OUTER JOIN "Posts" AS "Posts" ON "SubCategories"."id" = "Posts"."SubCategoryId" 
+        GROUP BY "SubCategories"."id"
+        ORDER BY "totalViews" desc
+        LIMIT 10`;
+        let subCats = await db.sequelize.query(query, { type: QueryTypes.SELECT })
+        let ids = subCats.map(s => s.id);
+        return db.Posts.findAll({
+            // where:{
+            //     id: ids,
+            // },
+            order: [
+                ['releaseDate', 'DESC']
+            ],
+            limit: 10,
+            include: [
+                db.MainCategories,
+                {
+                    model : db.SubCategories,
+                    where: {
+                        id: ids
+                    }
+                },
+                db.Users,
+                db.Tags,
+            ],
+        });
+
+    } catch (err) {
+        throw err;
+    }
+}
 
 module.exports = {
     add,
@@ -522,5 +645,9 @@ module.exports = {
     loadMoreComment,
     search,
     getAll,
-    publishPost
+    publishPost,
+    noticeablePosts,
+    mostViewsPosts,
+    latestPosts,
+    newPostByHotCats
 };

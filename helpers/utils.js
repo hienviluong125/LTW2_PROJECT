@@ -90,6 +90,17 @@ function parse(date) {
     return `${year}-${month}-${day}`;
 }
 
+function parseVIDate(date){
+    let day = date.getDate(), month = date.getMonth() + 1, year = date.getFullYear();
+    if (day < 10) {
+        day = '0' + day;
+    }
+    if (month < 10) {
+        month = '0' + month;
+    }
+    return `${day}/${month}/${year}`;
+}
+
 function decodeHtmlEntitiesFromDelta(delta, isExport = false){
     const entities = new Entities();
     delta["ops"].forEach(obj => {
@@ -123,5 +134,6 @@ module.exports = {
     getPostStatusColor,
     decodeHtmlEntitiesFromDelta,
     highlightSearchText,
-    hightLightDeltaContent
+    hightLightDeltaContent,
+    parseVIDate
 }
