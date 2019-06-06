@@ -39,11 +39,16 @@ function getPostStatusColor(status) {
     }
 }
 
+// today = ` ${today.getDay()}`
+
 function createPagesArr(currentPage, count, limit) {
 
-    let lastPage = parseInt(count / limit) + 1;
+    let lastPage = parseInt(count / limit);
+    let Remainder = count%limit;
+    if(Remainder > 0){
+        lastPage+=1;
+    }
     currentPage = parseInt(currentPage);
-
     if (lastPage <= 3) {
         let noneTypePage = [];
         for (let i = 1; i <= lastPage; i++) {
@@ -91,6 +96,9 @@ function parse(date) {
 }
 
 function parseVIDate(date){
+    if(!date || typeof date === 'undefined'){
+        return '';
+    }
     let day = date.getDate(), month = date.getMonth() + 1, year = date.getFullYear();
     if (day < 10) {
         day = '0' + day;

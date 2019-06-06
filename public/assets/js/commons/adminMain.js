@@ -1,10 +1,26 @@
 $(document).ready(function () {
     $('.verify').on('click',function(e){
-        alert("cc");
-        e.preventDefault();
-        let id = $(this).attr('id');
-        initConfirmModal(id,'Verify','Publish this post ? ');
-        $('#' + id).modal('show');
-        // showModal({id});
+        
     })
+
+    $('.posts-datatable').on('click','i.admin-delete-post',function(e){
+        e.preventDefault();
+        var r = confirm("Delete this post ? ");
+        if(r){
+            var deleteHref = $(this).parent().attr('href');
+            window.location.href = deleteHref;
+        }
+    })
+
+    $('.posts-datatable').on('click','i.admin-verify-post',function(e){
+        e.preventDefault();
+        var r = confirm("Publish this post ? ");
+        if(r){
+            var publishHref = $(this).parent().attr('href');
+            window.location.href = publishHref;
+        }
+    })
+
+
+    
 });

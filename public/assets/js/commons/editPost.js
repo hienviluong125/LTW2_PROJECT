@@ -95,7 +95,7 @@ function submitEditPost(formData) {
             success: function (data) {
                 setTimeout(function () {
                     hideModal({ id: 'edit-post-loading-modal' });
-                    let linkTo = "writers/posts";
+                    var linkTo = window.location.href.indexOf('admin') !== -1  ? 'admin/posts': 'writers/posts';
                     initSuccessModal("edit-post-success-modal", linkTo);
                     showModal({ id: 'edit-post-success-modal', backdrop: 'static', keyboard: false });
                 }, 500)

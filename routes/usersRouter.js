@@ -9,7 +9,7 @@ const middleware = require('./../middlewares/index');
 
 const logout = (req, res, next) => {
     req.logout();
-    res.redirect('/');
+    res.redirect('/users/login');
 }
 
 const renderLoginPage = (req, res, next) => {
@@ -263,7 +263,7 @@ router.get('/logout', logout);
 router.get('/forgot', renderForgotPage);
 router.get('/reset/:id/:token', renderRecoveryPasswordPage);
 router.get('/profile/changepassword', middleware.Authentication, renderChangePasswordPage);
-router.get('/profile/:id', renderProfilePage);
+router.get('/profile/:id',middleware.Authentication, renderProfilePage);
 
 
 router.post('/register', registerAccount);

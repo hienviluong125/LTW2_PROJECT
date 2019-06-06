@@ -1,18 +1,17 @@
-<!-- Begin Content -->
-<div class="content-inner profile">
+<div class="content-inner active profile">
     <div class="container-fluid">
         <!-- Begin Page Header-->
         <div class="row">
             <div class="page-header">
                 <div class="d-flex align-items-center">
-                    <h2 class="page-header-title">Edit user</h2>
+                    <h2 class="page-header-title">Dashboard</h2>
                     <div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/"><i class="ti ti-home"></i></a></li>
-                            
+
                             <li class="breadcrumb-item"><a href="/admin"><i class="ti ti-folder"></i></a></li>
 
-                            <li class="breadcrumb-item active">Users</li>
+                            <li class="breadcrumb-item active">Add post</li>
                         </ul>
                     </div>
                 </div>
@@ -20,59 +19,142 @@
         </div>
         <!-- End Page Header -->
         <div class="row flex-row">
-            <!-- Begin Widget -->
             <%- include('./../common/dashboard-widget.ejs') %>
-            <!-- End Widget -->
-
-            <!-- put your stuffs here -->        
             <div class="col-xl-9">
-                <div class="widget-body">
-                    <form class="form-horizontal" action="" method="POST">
-                            <div class="form-group row d-flex align-items-center mb-5">
-                                    <label class="col-lg-3 form-control-label">#</label>
-                                    <div class="col-lg-9">
-                                        <input type="text" disabled value="<%= user.id %>" class="form-control">
-                                        <input type="hidden" name="id" value="<%= user.id %>">
+                <div id="main-categories" style="display: none"><%= JSON.stringify(allCategories)%></div>
+                <div class="widget has-shadow">
+                    <div class="widget-header bordered no-actions d-flex align-items-center">
+                        <h3>Sửa bài viết</h3>
+                    </div>
+                    <div class="widget-body">
+                        <form class="needs-validation" id="edit-post-form" enctype="multipart/form-data" novalidate>
+                            <input type="hidden" name="id" class="hidden_id" value="<%= post.id %>">
+                            <div class="form-group row d-flex align-items-center mb-2">
+                                <label class="col-lg-2 form-control-label d-flex">Tiêu đề</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="title" placeholder="Nhập tiêu đề..."
+                                        value="<%= post.title %>" required>
+                                    <div id="title-invalid" class="invalid-feedback">
+                                        Tiêu đề tối thiểu phải gồm 10 ký tự
                                     </div>
-                            </div>
-                            <div class="form-group row d-flex align-items-center mb-5">
-                                    <label class="col-lg-3 form-control-label">Username</label>
-                                    <div class="col-lg-9">
-                                        <input required type="text" name="username" value="<%= user.username %>" placeholder="<%= user.username %>" class="form-control">
-                                    </div>
-                            </div>
-                            <div class="form-group row d-flex align-items-center mb-5">
-                                    <label class="col-lg-3 form-control-label">email</label>
-                                    <div class="col-lg-9">
-                                        <input disabled type="text" value="<%= user.email %>" placeholder="<%= user.email %>" class="form-control">
-                                    </div>
-                            </div>
-                            <div class="form-group row d-flex align-items-center mb-5">
-                                <label class="col-lg-3 form-control-label">Role</label>
-                                <div class="col-lg-9">
-                                    <input disabled type="text" value="<%= user.role %>" placeholder="<%= user.role %>" class="form-control">
                                 </div>
                             </div>
-                            <div class="form-group row d-flex align-items-center mb-5">
-                                <label class="col-lg-3 form-control-label">Date of birth</label>
-                                <div class="col-lg-9">
-                                    <% if(user.DoB == null){ %>
-                                        <input disabled type="text" value="<%= user.DoB %>" placeholder="Not set" class="form-control">
-                                    <% }else { %>
-                                        <input disabled type="text" value="<%= user.DoB %>" placeholder="<%= user.DoB.toDateString() %>" class="form-control">    
-                                    <% } %>
+                            <div class="form-group row d-flex align-items-center mb-2">
+                                <label class="col-lg-2 form-control-label d-flex">Chuyên mục cha</label>
+                                <div class="col-lg-5">
+                                    <div class="select">
+                                        <select name="account" id="main-cate" class="custom-select form-control" required>
+                                            <option value="" disabled>Chọn chuyên mục</option>
+                                            <% allCategories.forEach(eachCate => { %>
+                                                <% if(post.MainCategory.id === eachCate.id){ %>
+                                                    <option value="<%= eachCate.id %>" selected><%= eachCate.name %></option>
+                                                <% } else{ %>
+                                                    <option value="<%= eachCate.id %>"><%= eachCate.name %></option>
+                                                <% } %>
+                                            <% }); %>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Vui lòng chọn chuyên mục
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="em-separator separator-dashed"></div>
-                            
-                            <div class="text-center">
-                                <button class="btn btn-gradient-01" type="submit">Save Changes</button>
+                            <div class="form-group row d-flex align-items-center mb-2">
+                                <label class="col-lg-2 form-control-label d-flex">Chuyên mục con</label>
+                                <div class="col-lg-5">
+                                    <div class="select">
+            
+                                        <%
+                                            var cateIndex = -1;
+                                            var mainCate = allCategories.find(eachCate => eachCate.id === post.MainCategory.id);
+                                            <!-- var subCate = mainCate.SubCategories.find(eachCate => eachCate.id === post.SubCategory.id); -->
+                                        %>
+            
+                                        <select name="account" id="sub-cate" class="custom-select form-control" required>
+                                            <option value="" disabled>Chọn chuyên mục</option>
+                                            <% mainCate.SubCategories.forEach(eachCate => { %>
+                                                <% if(post.SubCategory.id === eachCate.id){ %>
+                                                    <option value="<%= eachCate.id %>" selected><%= eachCate.name %></option>
+                                                <% } else{ %>
+                                                    <option value="<%= eachCate.id %>"><%= eachCate.name %></option>
+                                                <% } %>
+                                            <% }); %>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Vui lòng chọn chuyên mục
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                    </form>
+                            <div class="form-group row d-flex align-items-center mb-2">
+                                <label class="col-lg-2 form-control-label d-flex">Nội dung tóm tắt</label>
+                                <div class="col-lg-10">
+                                    <input type="text" id="short-content" value="<%= post.shortContent %>" class="form-control"
+                                        placeholder="Nhập nội dung tóm tắt..." required>
+                                    <div id="short-content-invalid" class="invalid-feedback">
+                                        Nội dung tóm tắt tối thiểu phải gồm 10 ký tự
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row d-flex align-items-center mb-2">
+                                <label class="col-lg-2 form-control-label d-flex">
+                                    Nhãn
+                                </label>
+                                <div class="col-lg-10">
+                                    <div class="tags-container">
+                                        <% post.Tags.forEach(t => { %>
+                                        <div class="tags">
+                                            <span><%= t.name %></span>
+                                            &ensp;
+                                            <i class="ion-close-round tag-close-btn"></i>
+                                        </div>
+                                        <% }); %>
+            
+                                        <input class="tag-input" type="text" placeholder="Enter để thêm tag...">
+                                    </div>
+            
+                                </div>
+                            </div>
+                            <div class="form-group row d-flex align-items-center mb-2">
+                                <label class="col-lg-2 form-control-label">Ảnh đại diện</label>
+                                <input type="file" id="thumbnail" />
+                                <div class="col-lg-10">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="thumbnail-btn btn btn-warning ripple">
+                                                Chọn hình
+                                            </button>
+                                        </span>
+                                        <input type="text" id="thumbnail-name" class="form-control post-thumbnail-name" value="<%= post.thumbnail %>" readonly>
+                                        <div id="thumbnail-name-invalid" class="mt-1 invalid-feedback">
+                                            Vui lòng chọn ảnh đại diện
+                                        </div>
+                                    </div>
+                                    <img class="mt-2 post-thumbnail-image" src="/assets/img/posts/<%= post.thumbnail %>">
+                                </div>
+            
+                            </div>
+                            <div class="form-group row mb-2 mt-1">
+                                <div id="delta-content" style="display:none"><%= post.content %></div>
+                                <label class="col-lg-2 form-control-label d-flex">
+                                    Nội dung bài viết
+                                </label>
+            
+                                <div class="col-xl-12">
+                                    <div id="content-invalid" class="invalid-feedback mb-2">
+                                        Nội dung bài viết tối thiểu phải gồm 20 ký tự
+                                    </div>
+                                    <div id="edit-editor-container" class="custom-quill-editor-container"></div>
+                                </div>
+            
+                            </div>
+                            <div class="text-left">
+                                <button class="btn btn-warning btn-lg" id="edit-post-btn" type="submit">Sửa bài</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <!-- end your stuffs here -->
-        </div>
-        <!-- End Row -->
+        </div>>
     </div>
 </div>

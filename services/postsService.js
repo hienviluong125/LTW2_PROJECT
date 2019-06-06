@@ -1,6 +1,7 @@
 const db = require('./../models/index');
 const tagService = require('./tagService');
 const { Op, QueryTypes } = require('sequelize')
+const sequelize = require('sequelize');
 
 async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
     try {
@@ -240,6 +241,7 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset }) {
             let posts = await db.Posts.findAll({
                 where: {
                     status: 'pending',
+                    SubCategoryId: allSubCateIds
                 },
                 limit: limit,
                 offset: offset,
@@ -496,8 +498,11 @@ async function search({ searchStr, offset, limit }) {
                 db.Tags,
             ]
         });
-        let postsCount = posts.length;
-        return { posts, count: postsCount };
+
+        let count = await db.Posts.count({
+            where: query,
+        });
+        return { posts, count };
     } catch (err) {
         throw err;
     }
@@ -540,6 +545,11 @@ function noticeablePosts() {
 
 function mostViewsPosts() {
     return db.Posts.findAll({
+        where: {
+            releaseDate: {
+                [Op.lte]: new Date()
+            }
+        },
         order: [
             ['views', 'DESC']
         ],
@@ -555,6 +565,11 @@ function mostViewsPosts() {
 
 function latestPosts() {
     return db.Posts.findAll({
+        where: {
+            releaseDate: {
+                [Op.lte]: new Date()
+            }
+        },
         order: [
             ['releaseDate', 'DESC']
         ],
@@ -594,7 +609,7 @@ async function newPostByHotCats() {
         //     // raw: true, 
 
         // })
-        let query = `SELECT "SubCategories"."name", "SubCategories"."id", coalesce(SUM("Posts"."views"), 0) AS "totalViews" 
+        let query = `SELECT  "SubCategories"."name", "SubCategories"."id", coalesce(SUM("Posts"."views"), 0) AS "totalViews" 
         FROM "SubCategories" AS "SubCategories" LEFT OUTER JOIN "Posts" AS "Posts" ON "SubCategories"."id" = "Posts"."SubCategoryId" 
         GROUP BY "SubCategories"."id"
         ORDER BY "totalViews" desc
@@ -602,9 +617,11 @@ async function newPostByHotCats() {
         let subCats = await db.sequelize.query(query, { type: QueryTypes.SELECT })
         let ids = subCats.map(s => s.id);
         return db.Posts.findAll({
-            // where:{
-            //     id: ids,
-            // },
+            where: {
+                releaseDate: {
+                    [Op.lte]: new Date()
+                }
+            },
             order: [
                 ['releaseDate', 'DESC']
             ],
@@ -612,7 +629,7 @@ async function newPostByHotCats() {
             include: [
                 db.MainCategories,
                 {
-                    model : db.SubCategories,
+                    model: db.SubCategories,
                     where: {
                         id: ids
                     }
@@ -625,6 +642,63 @@ async function newPostByHotCats() {
     } catch (err) {
         throw err;
     }
+}
+
+async function geRandomPostsWithSameCategory({ slug, limit }) {
+    let currentPost = await db.Posts.findOne({
+        raw: true,
+        attributes: ['id', 'slug', 'SubCategoryId'],
+        where: {
+            slug
+        }
+    })
+    return db.Posts.findAll({
+        order: [
+            [sequelize.fn('RANDOM')]
+        ],
+        limit,
+        where: {
+            [Op.and]: [
+                {
+                    SubCategoryId: currentPost.SubCategoryId
+                },
+                {
+                    id: { [Op.notIn]: [currentPost.id] }
+                }
+            ],
+        },
+        include: [
+            db.MainCategories,
+            db.SubCategories,
+            db.Users,
+        ]
+    })
+}
+
+async function getRandomPosts({ limit, slug }) {
+    return db.Posts.findAll({
+        order: [
+            [sequelize.fn('RANDOM')]
+        ],
+        limit,
+        where: {
+            slug: { [Op.notIn]: [slug] }
+        },
+        include: [
+            db.MainCategories,
+            db.SubCategories,
+            db.Users,
+        ]
+    })
+}
+
+async function deleteById(id){
+    await tagService.removeTagsOfPost({ postId:id });
+    return db.Posts.destroy({
+        where: {
+            id
+        }
+    })
 }
 
 module.exports = {
@@ -649,5 +723,8 @@ module.exports = {
     noticeablePosts,
     mostViewsPosts,
     latestPosts,
-    newPostByHotCats
+    newPostByHotCats,
+    geRandomPostsWithSameCategory,
+    getRandomPosts,
+    deleteById
 };

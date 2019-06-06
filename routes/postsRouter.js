@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const mockPost = require('./../mocks/post.index');
 const postsService = require('./../services/postsService');
-const { createPagesArr,highlightSearchText } = require('./../helpers/utils');
+const { createPagesArr, highlightSearchText, parseVIDate } = require('./../helpers/utils');
+const {convert} =require('./../helpers/delta-to-html');
 const subService = require('./../services/subscriberService');
 
 const renderAllPosts = (req, res, next) => {
@@ -10,13 +11,18 @@ const renderAllPosts = (req, res, next) => {
     let limit = 8;
     let offset = limit * (page - 1);
 
-    postsService
-        .getAllPosts({ offset, limit, tag, maincate, subcate })
+    Promise.all([
+        postsService.getAllPosts({ offset, limit, tag, maincate, subcate }),
+        postsService.latestPosts(),
+        postsService.mostViewsPosts()
+    ])
         .then(result => {
-            let { data } = result;
+            let { data } = result[0];
             let { posts, count } = data;
+            let latestPosts = result[1];
+            let mostViewsPosts = result[2];
             let pagination = createPagesArr(page, count, limit);
-            res.render('posts/index', { posts, page, pagination, topPosts, hotTags, tag, maincate, subcate });
+            res.render('posts/index', { posts, page, pagination, topPosts, hotTags, tag, maincate, subcate, latestPosts, mostViewsPosts, parseVIDate });
         })
         .catch(err => next(err));
 }
@@ -28,20 +34,42 @@ const renderDetailPost = (req, res, next) => {
         Promise.all([
             postsService.getDetailPost({ slug }),
             subService.isPremium(+req.user.id),
+            postsService.latestPosts(),
+            postsService.mostViewsPosts(),
+            postsService.geRandomPostsWithSameCategory({ slug,limit: 10 }),
+            postsService.getRandomPosts({ slug, limit: 10 })
         ])
-            .then(data => {
-                // res.json(post);
-                res.render('posts/detail', { post: data[0], topPosts, hotTags, isPremium: data[1] });
+            .then(result => {
+                let post = result[0];
+                let isPremium = result[1];
+                let latestPosts = result[2];
+                let mostViewsPosts = result[3];
+                let randomPostsWithSameCategory = result[4];
+                let randomPosts = result[5];
+
+                res.render('posts/detail', { post, topPosts, hotTags, isPremium, latestPosts, mostViewsPosts, parseVIDate, randomPostsWithSameCategory, randomPosts });
             })
             .catch(err => next(err));
     } else {
         Promise.all([
             postsService.getDetailPost({ slug }),
+            postsService.latestPosts(),
+            postsService.mostViewsPosts(),
+            postsService.geRandomPostsWithSameCategory({ slug, limit: 10 }),
+            postsService.getRandomPosts({ slug, limit: 10 })
             //subService.isPremium(+req.user.id),
         ])
-            .then(data => {
-                // res.json(post);
-                res.render('posts/detail', { post: data[0], topPosts, hotTags, isPremium: false });
+        // /assets/img/posts/dung-thu-tinh-nang-quay-phim-dual-view-tren-huawei-p30-pro-0.jpeg
+            .then(result => {
+                let post = result[0];
+                post.content = convert(JSON.parse(result[0].content)).replace(/assets/g,'/assets');
+                let isPremium = false;
+                let latestPosts = result[1];
+                let mostViewsPosts = result[2];
+                let randomPostsWithSameCategory = result[3];
+                let randomPosts = result[4];
+
+                res.render('posts/detail', { post, topPosts, hotTags, isPremium, latestPosts, mostViewsPosts, parseVIDate, randomPostsWithSameCategory, randomPosts });
             })
             .catch(err => next(err));
     }
@@ -82,13 +110,13 @@ const search = (req, res, next) => {
     let page = req.query.page;
     let searchStr = req.query.text;
     let limit = 8;
-    let offset = (page-1) * limit;
+    let offset = (page - 1) * limit;
     postsService
         .search({ searchStr, offset, limit })
         .then(result => {
             let { posts, count } = result;
             let pagination = createPagesArr(page, count, limit);
-            res.render('posts/search', { posts, count, text: searchStr,page,pagination,highlightSearchText });
+            res.render('posts/search', { posts, count, text: searchStr, page, pagination, highlightSearchText });
         })
         .catch(err => next(err));
 }

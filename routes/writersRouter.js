@@ -41,7 +41,7 @@ const renderAddPostPage = (req, res, next) => {
 
 const renderEditPostPage = (req, res, next) => {
     let slug = req.params.slug
-    let WriterId = 2;
+    let WriterId = res.locals.user.id;
     Promise.all([
         postsService.get({ slug, WriterId }),
         categoriesSerivce.getAllCategories()
@@ -123,7 +123,7 @@ const deletePost = (req, res, next) => {
 
 router.all(
     '*',
-    middleware.Authorization(['writer'])
+    middleware.Authorization(['writer','admin'])
 );
 
 router.get('/posts/add', renderAddPostPage);

@@ -1,17 +1,10 @@
 <!DOCTYPE html>
-<!--
-Item Name: Elisyam - Web App & Admin Dashboard Template
-Version: 1.5
-Author: SAEROX
-
-** A license must be purchased in order to legally use this template for your project **
--->
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Elisyam - Datatables</title>
+    <title>LTW2 Project</title>
     <meta name="description" content="Elisyam is a Web App and Admin Dashboard Template built with Bootstrap 4">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Google Fonts -->
@@ -28,14 +21,16 @@ Author: SAEROX
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="/assets/vendors/css/base/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/vendors/css/base/bootstrap.css">
     <link rel="stylesheet" href="/assets/vendors/css/base/elisyam-1.5.css">
-    <link rel="stylesheet" href="/assets/css/datatables/datatables.min.css">
-    <!-- Tweaks for older IEs-->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <link rel="stylesheet" href="/assets/css/animate/animate.min.css">
+
+
+    <link rel="stylesheet" href="/assets/css/owl-carousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="/assets/css/owl-carousel/owl.theme.min.css">
+
+    <link href="/assets/css/custom/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/custom/style.css">
 </head>
 
 <body id="page-top">
@@ -88,33 +83,51 @@ Author: SAEROX
         <div class="page-content d-flex align-items-stretch">
             <%- body %>
         </div>
-      
+
     </div>
-    <!-- Begin Vendor Js -->
+
     <script src="/assets/vendors/js/base/jquery.min.js"></script>
     <script src="/assets/vendors/js/base/core.min.js"></script>
-    <!-- End Vendor Js -->
-    <!-- Begin Page Vendor Js -->
-    <script src="/assets/vendors/js/datatables/datatables.min.js"></script>
-    <script src="/assets/vendors/js/datatables/dataTables.buttons.min.js"></script>
-    <script src="/assets/vendors/js/datatables/jszip.min.js"></script>
-    <script src="/assets/vendors/js/datatables/buttons.html5.min.js"></script>
-    <script src="/assets/vendors/js/datatables/pdfmake.min.js"></script>
-    <script src="/assets/vendors/js/datatables/vfs_fonts.js"></script>
-    <script src="/assets/vendors/js/datatables/buttons.print.min.js"></script>
+
+
+
+    <!-- <script src="/assets/vendors/js/datatables/datatables.min.js"></script> -->
+    <!-- <script src="/assets/vendors/js/datatables/dataTables.buttons.min.js"></script>
+         <script src="/assets/vendors/js/datatables/jszip.min.js"></script>
+         <script src="/assets/vendors/js/datatables/buttons.html5.min.js"></script>
+         <script src="/assets/vendors/js/datatables/pdfmake.min.js"></script>
+         <script src="/assets/vendors/js/datatables/vfs_fonts.js"></script>
+         <script src="/assets/vendors/js/datatables/buttons.print.min.js"></script>
+         <script src="/assets/js/components/tables/tables.js"></script> -->
+
     <script src="/assets/vendors/js/nicescroll/nicescroll.min.js"></script>
+    <script src="/assets/vendors/js/waypoints/waypoints.min.js"></script>
+    <script src="/assets/vendors/js/chart/chart.min.js"></script>
     <script src="/assets/vendors/js/progress/circle-progress.min.js"></script>
+    <script src="/assets/vendors/js/datepicker/moment.min.js"></script>
+    <script src="/assets/vendors/js/datepicker/daterangepicker.js"></script>
+    <script src="/assets/vendors/js/owl-carousel/owl.carousel.min.js"></script>
     <script src="/assets/vendors/js/app/app.min.js"></script>
-    <!-- End Page Vendor Js -->
-    <!-- Begin Page Snippets -->
-    <script src="/assets/js/components/tables/tables.js"></script>
+
+    <script src="/assets/js/components/datepicker/datepicker.js"></script>
     <script src="/assets/js/dashboard/db-modern.min.js"></script>
+    <!-- <script src="/assets/js/components/tables/tables.js"></script> -->
 
-    <script src="/assets/js/commons/adminMain.js"></script>
 
-    
 
-    <!-- End Page Snippets -->
+
+    <script src="/assets/js/commons/quill.js"></script>
+
+    <script src="/assets/js/commons/image-resize.min.js"></script>
+
+
+    <script src="/assets/js/commons/modalHelper.js"></script>
+    <script src="/assets/js/commons/addPost.js"></script>
+    <script src="/assets/js/commons/editPost.js"></script>
+    <script src="/assets/js/commons/PostList.js"></script>
+    <script src="/assets/js/commons/verifyPost.js"></script>
+    <script src="/assets/js/commons/postDetail.js"></script>
+    <script src="/assets/js/commons/main.js"></script>
 </body>
 
 </html>

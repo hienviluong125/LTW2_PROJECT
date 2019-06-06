@@ -7,7 +7,7 @@
 }
 
 .post-detail{
-    min-height:400px;
+    height:auto !important;
 }
 
 .post-detail-thumbnail-btn{
@@ -333,4 +333,22 @@ outline: 0; */
 .search-input:focus{
     border:1px solid #eee !important;
 
+}
+
+.post-detail > p > img{
+    width:100%;
+}
+
+.post-detail > iframe{
+    width:100%;
+}
+
+.footer-bg{
+    background: #2c304d;
+  
+}
+
+
+.default-text-color{
+    color:#aea9c3; 
 }

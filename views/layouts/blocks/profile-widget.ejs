@@ -20,15 +20,22 @@
 
                    <% if(_locals.user.role == 'writer'){ %>
                    <li class="nav-item">
-                       <a class="nav-link" href="/writers/posts"><i class="la la-clipboard la-2x align-middle pr-2"></i>Posts</a>
+                       <a class="nav-link" href="/writers/posts/all/1"><i class="la la-clipboard la-2x align-middle pr-2"></i>Posts</a>
                    </li>
                    <% } %>
+
                    <% if(_locals.user.role == 'sub'){ %>
                    <li class="nav-item">
                        <a class="nav-link" href="/subscribers/extend"><i
                                class="la la-credit-card la-2x align-middle pr-2"></i>Subscriptions</a>
                    </li>
                    <% } %>
+
+                   <% if(_locals.user.role == 'editor'){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/editors/posts/all/1"><i class="la la-database la-2x align-middle pr-2"></i>Posts management</a>
+                    </li>
+                    <% } %>
                    
                    <% if(_locals.user.role == 'admin'){ %>
                    <li class="nav-item">

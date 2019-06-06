@@ -313,7 +313,8 @@ function submitPost(formData) {
             success: function (data) {
                 setTimeout(function () {
                     hideModal({ id: 'add-post-loading-modal' });
-                    var linkTo = "writers/posts";
+                    var linkTo = window.location.href.indexOf('admin') !== -1  ? 'admin/posts': 'writers/posts';
+                    
                     initSuccessModal("add-post-success-modal", linkTo);
                     showModal({ id: 'add-post-success-modal', backdrop: 'static', keyboard: false });
                 }, 500)

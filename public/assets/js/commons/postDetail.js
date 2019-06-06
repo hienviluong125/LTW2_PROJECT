@@ -2,7 +2,7 @@ function initPostDetailPage() {
 
 
 
-    loadQuillHtml();
+    // loadQuillHtml();
     autoSizeEvent();
     seemoreContentOfComment();
     addComment();
@@ -137,7 +137,7 @@ function addComment() {
 function quillGetHTML(inputDelta) {
     var tempQuill = new Quill(document.createElement("div"));
     tempQuill.setContents(inputDelta);
-    return tempQuill.root.innerHTML;
+    return  tempQuill.container.firstChild.innerHTML;
 }
 
 function loadQuillHtml() {
@@ -145,6 +145,8 @@ function loadQuillHtml() {
     if (typeof delta !== 'undefined') {
         let inputDelta = JSON.parse(delta);
         let contentHtml = quillGetHTML(inputDelta);
+        contentHtml = contentHtml.replace('nbsp;',' ');
+        console.log("content",contentHtml);
 
         $('#post-detail').html(contentHtml).css('display', 'block');
     }
