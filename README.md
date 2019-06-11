@@ -1,15 +1,13 @@
-# LTW2_PROJECT
+## Reset table's primary key generation
 
-# Env struct
+### SELECT setval('"Posts_id_seq"', (SELECT MAX(id) FROM public."Posts")+1);
 
+### SELECT setval('"Tags_id_seq"', (SELECT MAX(id) FROM public."Tags")+1);
 
-PORT = yourport
-DB_USER = postgres
-DB_PASSWORD = yourpassword
+### SELECT setval('"PostTags_id_seq"', (SELECT MAX(id) FROM public."PostTags")+1);
 
-HOST = 127.0.0.1
-DIALECT = postgres
+### SELECT setval('"MainCategories_id_seq"', (SELECT MAX(id) FROM public."MainCategories")+1);
 
-DB_NAME_DEV = your_database_name_development
-DB_NAME_TEST =  your_database_name_test
-DB_NAME_PRODUCTION =  your_database_name_production
+### SELECT setval('"SubCategories_id_seq"', (SELECT MAX(id) FROM public."SubCategories")+1);
+
+### SELECT setval('"Users_id_seq"', (SELECT MAX(id) FROM public."Users")+1);
