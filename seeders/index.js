@@ -55,7 +55,7 @@ async function creatTags({ tags }) {
 
 const randomImgs = ['01.jpg', '02.jpg', '03.jpg', '04.jpg', '05.jpg'];
 
-async function seed(){
+async function seed() {
     await db.Writers.destroy({ where: {} });
     await db.Subscribers.destroy({ where: {} });
 
@@ -100,27 +100,44 @@ async function seed(){
 
     await seedEditorCategory('zzz@gmail.com', 'Âm nhạc');
     await seedEditorCategory('zzz@gmail.com', 'Điện ảnh');
-
-    await seedSpecialWriters();
 }
 
 (async function () {
 
-    //await seed();
-    
+    // await seed();
+    // await seedUserWithId(99,'succc');
+    // await seedUserWithId(10,'minhduccc');
+    // await seedUserWithId(78,'daniel_kox');
 
-    await db.Posts.update({
-        releaseDate: new Date(),
-        status: 'published'
-    },{
-        where : {
-            status: 'pending'
-        }
-    })
+
+    // await db.Posts.update({
+    //     releaseDate: new Date(),
+    //     status: 'published'
+    // },{
+    //     where : {
+    //         status: 'pending'
+    //     }
+    // })
+
+
+    // let ids = await db.Posts.findAll({ raw: true, attributes: ['id'] });
+
+    // await Promise.all(ids.map(async _id => {
+    //     let rd = getRandomInt(100,1000);
+    //     return await db.Posts.update({
+    //         views: rd
+    //     }, {
+    //             where: {
+    //                 id: _id.id
+    //             }
+    //         })
+    // }))
 
    
 
-    // await seedUsers
+
+
+
 
 
 
@@ -156,28 +173,28 @@ async function seedPosts(username, subcatename) {
 async function seedCategory() {
     var _mainCates = [
         {
-            id:46,
+            id: 46,
             name: "Công nghệ",
             _subCates: [{ id: 163, name: "Trải nghiệm", }, { id: 164, name: "Thị trường", }
             ]
         },
         {
-            id:47,
+            id: 47,
             name: "Kinh doanh",
             _subCates: [
-                {id:173, name: "Tài chính", }, { id:174,name: "Doanh nghiệp" }
+                { id: 173, name: "Tài chính", }, { id: 174, name: "Doanh nghiệp" }
             ]
         },
         {
-            id:48,
+            id: 48,
             name: "Giải trí",
             _subCates: [
                 {
-                    id:183,
+                    id: 183,
                     name: "Âm nhạc",
                 },
                 {
-                    id:184,
+                    id: 184,
                     name: "Điện ảnh",
                 }
             ]
@@ -191,7 +208,7 @@ async function seedCategory() {
 
     for (let maincate of _mainCates) {
         MainCategories.create({
-            id:maincate.id,
+            id: maincate.id,
             name: maincate.name,
             slug: str_to_slug(maincate.name)
         }).then(result => {
@@ -199,7 +216,7 @@ async function seedCategory() {
             let id = result.dataValues.id;
             for (let subCate of maincate._subCates) {
                 SubCategories.create({
-                    id:subCate.id,
+                    id: subCate.id,
                     name: subCate.name,
                     slug: str_to_slug(subCate.name),
                     MainCategoryId: id
@@ -209,13 +226,13 @@ async function seedCategory() {
     }
 }
 
-async function seedSpecialWriters(){
+async function seedSpecialWriters() {
     const emails1 = ['alex', 'john', 'marry'];
     await Promise.all(emails1.map(async e => {
-        let _id = 
-        e === 'alex' 
-        ? 99 
-        : e === 'john' ? 121 : 10; 
+        let _id =
+            e === 'alex'
+                ? 99
+                : e === 'john' ? 121 : 10;
         let hash = await bcrypt.hash(e + e, crypto.iteration)
         let userResult = await db.Users.create({
             username: e + '@gmail.com',
@@ -241,8 +258,8 @@ async function seedUserWithId(id, email) {
             role: 'writer',
             id
         });
-        let id = userResult.dataValues.id
-        return await db.Writers.create({ PenName: e + '@gmail.com', UserId: id });
+        let u_id = userResult.dataValues.id
+        return await db.Writers.create({ PenName: e + '@gmail.com', UserId: u_id });
 
     }))
 }
@@ -277,7 +294,7 @@ async function seedUsers() {
 
     let hashAdmin = await bcrypt.hash('admin123456', crypto.iteration)
     let adminResult = await db.Users.create({
-        id:169,
+        id: 169,
         username: 'admin@gmail.com',
         email: 'admin@gmail.com',
         password: hashAdmin,

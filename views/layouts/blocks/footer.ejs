@@ -18,9 +18,18 @@
                 <div class="row">
                     <% allCategories.forEach(cate => { %>
                     <div class="col-md-4">
-                        <h3 class="default-text-color mb-4"><%= cate.name%></h3>
+                        <h3 class="default-text-color mb-4">
+                            <a class="default-text-color" href="/posts/<%= cate.slug %>/1">
+                                <%= cate.name %>
+                            </a>
+
+                        </h3>
                         <% cate.SubCategories.forEach(subcate => { %>
-                        <h5 class="default-text-color"><%= subcate.name %></h5>
+                        <h5 class="default-text-color">
+                            <a class="default-text-color" href="/posts/<%= cate.slug %>/<%= subcate.slug %>/1">
+                                <%= subcate.name %>
+                            </a>
+                        </h5>
                         <% }) %>
                     </div>
                     <% }) %>
@@ -31,7 +40,7 @@
                                     <i class="ti ti-search mt-1"></i>
                                 </span>
                                 <input name="page" value="1" type="hidden" />
-                                <input  name="text" type="text" placeholder="Tìm kiếm..." class="form-control">
+                                <input name="text" type="text" placeholder="Tìm kiếm..." class="form-control">
                             </div>
                         </form>
 
@@ -40,12 +49,13 @@
 
             </div>
             <div class="col-md-3">
+                <h2 class="default-text-color mb-4"><a class="default-text-color" href="/index">Elisyam</a></h2>
                 <h4 class="default-text-color">Thiết kế bởi Elisyam aka Saerox</h4>
                 <h4 class="default-text-color">themeforest</h4>
-               
+
             </div>
         </div>
         <h5 class="default-text-color font-italic text-center">Copy right @2019 by ElisyamVietnamNews</h5>
     </div>
-    
+
 </div>

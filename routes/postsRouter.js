@@ -19,6 +19,7 @@ const renderAllPosts = (req, res, next) => {
         .then(result => {
             let { data } = result[0];
             let { posts, count } = data;
+            
             let latestPosts = result[1];
             let mostViewsPosts = result[2];
             let pagination = createPagesArr(page, count, limit);
@@ -41,6 +42,7 @@ const renderDetailPost = (req, res, next) => {
         ])
             .then(result => {
                 let post = result[0];
+                post.content = convert(JSON.parse(result[0].content)).replace(/assets/g,'/assets');
                 let isPremium = result[1];
                 let latestPosts = result[2];
                 let mostViewsPosts = result[3];

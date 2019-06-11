@@ -25,6 +25,7 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
                         { model: db.MainCategories, where: { slug: maincate } },
                         { model: db.SubCategories, where: { slug: subcate } },
                         db.Users,
+                        db.Comments,
                         db.Tags,
                         db.Notes
                     ]
@@ -41,7 +42,7 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
                     where: { status: 'published' },
                     limit,
                     offset,
-                    include: [{ model: db.MainCategories, where: { slug: maincate } }, db.SubCategories, db.Users, db.Tags, db.Notes]
+                    include: [{ model: db.MainCategories, where: { slug: maincate } }, db.SubCategories, db.Users, db.Comments, db.Tags, db.Notes]
                 }
                 countOps = { where: { status: 'published' }, include: [{ model: db.MainCategories, where: { slug: maincate } }] }
             }
@@ -53,7 +54,7 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
                 where: { status: 'published', id: allPostsId },
                 limit,
                 offset,
-                include: [db.MainCategories, db.SubCategories, db.Users, db.Tags, db.Notes]
+                include: [db.MainCategories, db.SubCategories, db.Users, db.Comments, db.Tags, db.Notes]
             }
             countOps = { where: { status: 'published' }, include: [{ model: db.Tags, where: { slug: tag } }] }
 
@@ -77,8 +78,8 @@ async function getAll() {
 
 async function add({ WriterId, title, shortContent, slug, MainCategoryId, SubCategoryId, content, tags, thumbnail }) {
     try {
-        let isExistSameSlug = await db.Posts.findOne({ where: { slug } }, { raw: true });
-        if (isExistSameSlug) {
+        let isExistSameSlug = await db.Posts.findOne({ where: { slug } });
+        if (isExistSameSlug && isExistSameSlug.slug && isExistSameSlug.id) {
             return { status: false, err: 'This title of post already exists' };
         }
         //add new post
@@ -180,14 +181,19 @@ async function edit({ id, WriterId, title, shortContent, slug, MainCategoryId, S
 
 async function _delete({ slug, WriterId }) {
     try {
-        let postInfo = await db.Posts.findOne({ where: { slug } }, { raw: true });
-        let postId = postInfo.id;
-        await tagService.removeTagsOfPost({ postId });
-        let data = await db.Posts.destroy({
-            where: {
-                slug, WriterId
-            }
-        })
+        console.log("===============================");
+        console.log({ slug, WriterId });
+        console.log("===============================");
+        let data = "xxx";
+
+        // let postInfo = await db.Posts.findOne({ where: { slug } }, { raw: true });
+        // let postId = postInfo.id;
+        // await tagService.removeTagsOfPost({ postId });
+        // let data = await db.Posts.destroy({
+        //     where: {
+        //         slug, WriterId
+        //     }
+        // })
         return { status: true, data: data }
     } catch (err) {
         console.log({ err });
@@ -211,6 +217,7 @@ async function getAllPostByUserId({ id, limit, offset, status }) {
             }
         }
         let posts = await db.Posts.findAll({
+            order: [['createdAt', 'DESC']],
             where: queryOps,
             limit: limit,
             offset: offset,
@@ -463,9 +470,6 @@ async function loadMoreComment({ PostId, offset, limit }) {
 }
 
 async function search({ searchStr, offset, limit }) {
-    console.log("==========================")
-    console.log("seachStr =>_" + searchStr);
-    console.log("==========================")
     try {
         searchStr = `%${searchStr}%`;
         let query = {
@@ -485,7 +489,8 @@ async function search({ searchStr, offset, limit }) {
                         [Op.iLike]: searchStr
                     }
                 }
-            ]
+            ],
+            status: 'published'
         };
         let posts = await db.Posts.findAll({
             where: query,
@@ -508,29 +513,40 @@ async function search({ searchStr, offset, limit }) {
     }
 }
 
+
+
+function getMondayOfCurrentWeek(d) {
+    var day = d.getDay();
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate() + ((day == 0 ? -6 : 1) - day)+1);
+}
+function getSundayOfCurrentWeek(d) {
+    var day = d.getDay();
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate() + ((day == 0 ? 0 : 7) - day) + 1);
+}
 function getNextWeekDate() {
     let now = new Date();
     return new Date(now.getTime() + 7 * 24 * 3600 * 1000);
 }
 
-function noticeablePosts() {
+async function noticeablePosts() {
     let nextWeek = getNextWeekDate();
-    console.log("==============DATA=============");
-    console.log(nextWeek);
-    console.log("=============DATA================");
-    return db.Posts.findAll({
+    let today = new Date();
+    let monday = getMondayOfCurrentWeek(today);
+    let sunday = getSundayOfCurrentWeek(today);
+    let posts = await db.Posts.findAll({
         where: {
             [Op.and]: [
                 {
                     releaseDate: {
-                        [Op.lte]: nextWeek,
-                        // [Op.gte]: new Date()
+                        [Op.lte]: sunday,
+                        // [Op.gte]: monday
                     },
                     status: 'published'
                 }
             ],
         },
         order: [
+            ['releaseDate', 'DESC'],
             ['views', 'DESC']
         ],
         include: [
@@ -541,6 +557,7 @@ function noticeablePosts() {
         ],
         limit: 4
     });
+    return posts;
 }
 
 function mostViewsPosts() {
@@ -692,8 +709,8 @@ async function getRandomPosts({ limit, slug }) {
     })
 }
 
-async function deleteById(id){
-    await tagService.removeTagsOfPost({ postId:id });
+async function deleteById(id) {
+    await tagService.removeTagsOfPost({ postId: id });
     return db.Posts.destroy({
         where: {
             id

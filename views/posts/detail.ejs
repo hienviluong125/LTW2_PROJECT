@@ -60,9 +60,9 @@ today = `${day}, ngày ${date}, tháng ${month}, năm ${year}`;
                         <div class="ml-auto font-italic">Đăng bởi <span class="text-pink"><%= post.User.email %></span>
                         </div>
                         <br>
-                       <div class="col-md-12 col-xl-12 col-sm-12">
-                           <hr>
-                       </div>
+                        <div class="col-md-12 col-xl-12 col-sm-12">
+                            <hr>
+                        </div>
                         <div class=" m-0 p-0 col-md-12 form-group">
                             <% if(typeof user !== 'undefined'){ %>
                             <h3 class="font-weight-bold text-secondary" for="">Viết bình luận</h3>
@@ -73,9 +73,9 @@ today = `${day}, ngày ${date}, tháng ${month}, năm ${year}`;
                             <% }else{%>
                             <a href="/users/login" class="mt-2 btn btn-block btn-success">Đăng nhập để bình luận !</a>
                             <% } %>
-                
+
                         </div>
-                
+
                         <h2 class="m-0 p-0 col-md-12 col-xl-12 mt-3 text-dark mb-2 font-weight-bold">
                             Danh sách bình luận
                         </h2>
@@ -102,10 +102,11 @@ today = `${day}, ngày ${date}, tháng ${month}, năm ${year}`;
                         </div>
                         <div class="m-0 btn-area p-0 col-md-12 col-xl-12">
                             <% if(post.Comments.length > 0){%>
-                            <button type="button" class="btn btn-block  btn-gradient-01 load-more-comment-btn custom-btn">Tải thêm bình
+                            <button type="button"
+                                class="btn btn-block  btn-gradient-01 load-more-comment-btn custom-btn">Tải thêm bình
                                 luận</button>
                             <% } %>
-                
+
                         </div>
                     </div>
                 </div>
@@ -126,15 +127,19 @@ today = `${day}, ngày ${date}, tháng ${month}, năm ${year}`;
                                                 class="bottom-right-thumbmail float-left">
                                         </div>
                                         <div class="col-xl-9 col-md-12 col-sm-12 mb-3">
-                                            <div class="text-default-color font-weight-bold">
-                                                <%= latestPosts[i].title.length >= 50
-                                                     ?  latestPosts[i].title.substring(0,50) + '...'
-                                                     :  latestPosts[i].title
-                                                     %>
-                                            </div>
+                                            <a href="/posts/detail/<%= latestPosts[i].slug %>">
+                                                <div class="text-default-color font-weight-bold">
+                                                    <%= latestPosts[i].title.length >= 50
+                                                                 ?  latestPosts[i].title.substring(0,50) + '...'
+                                                                 :  latestPosts[i].title
+                                                                 %>
+                                                </div>
+                                            </a>
+
                                             <div class="text-gray small-text">
 
-                                                <%=  latestPosts[i].SubCategory.name %>
+                                                <a class="text-gray"
+                                                    href="/posts/<%= latestPosts[i].MainCategory.slug %>/<%= latestPosts[i].SubCategory.slug %>/1"><%=  latestPosts[i].SubCategory.name %></a>
                                                 &nbsp;
                                                 <%= parseVIDate(latestPosts[i].releaseDate) %>
                                             </div>
@@ -155,17 +160,21 @@ today = `${day}, ngày ${date}, tháng ${month}, năm ${year}`;
                                                 class="bottom-right-thumbmail float-left">
                                         </div>
                                         <div class="col-xl-9 col-md-12 col-sm-12 mb-3">
-                                            <div class="text-default-color font-weight-bold">
-                                                <%= mostViewsPosts[i].title.length >= 50
-                                                 ?  mostViewsPosts[i].title.substring(0,50) + '...'
-                                                 :  mostViewsPosts[i].title
-                                                 %>
-                                            </div>
+                                            <a href="/posts/detail/<%=  mostViewsPosts[i].slug %>">
+                                                <div class="text-default-color font-weight-bold">
+                                                    <%=  mostViewsPosts[i].title.length >= 50
+                                                                     ?   mostViewsPosts[i].title.substring(0,50) + '...'
+                                                                     :   mostViewsPosts[i].title
+                                                                     %>
+                                                </div>
+                                            </a>
+
                                             <div class="text-gray small-text">
 
-                                                <%=  mostViewsPosts[i].SubCategory.name %>
+                                                <a class="text-gray"
+                                                    href="/posts/<%=  mostViewsPosts[i].MainCategory.slug %>/<%=  mostViewsPosts[i].SubCategory.slug %>/1"><%=   mostViewsPosts[i].SubCategory.name %></a>
                                                 &nbsp;
-                                                <%= parseVIDate(mostViewsPosts[i].releaseDate) %>
+                                                <%= parseVIDate( mostViewsPosts[i].releaseDate) %>
                                             </div>
                                         </div>
                                     </div>
@@ -248,7 +257,7 @@ today = `${day}, ngày ${date}, tháng ${month}, năm ${year}`;
 
                     <%= parseVIDate(randomPostsWithSameCategory[i].releaseDate) %> &emsp;
                     <a
-                        href="posts/<%= randomPostsWithSameCategory[i].MainCategory.slug + '/' + randomPostsWithSameCategory[i].SubCategory.slug %>/1">
+                        href="/posts/<%= randomPostsWithSameCategory[i].MainCategory.slug + '/' + randomPostsWithSameCategory[i].SubCategory.slug %>/1">
                         <span class="text-gray font-weight-bold">
                             <%= randomPostsWithSameCategory[i].SubCategory.name %>
                         </span>
@@ -262,7 +271,7 @@ today = `${day}, ngày ${date}, tháng ${month}, năm ${year}`;
             <h1 class="font-weight-light text-dark">Các tin khác</h1>
             <div class="owl-carousel post-detai-recommend">
                 <% for(var i=0;i < randomPosts.length ;i++){ %>
-                 <div class="item">
+                <div class="item">
                     <img src="/assets/img/posts/<%= randomPosts[i].thumbnail %>" alt="..."
                         class="float-right owl-thumbnail mb-2">
                     <a href="/posts/detail/<%= randomPosts[i].slug %>">
@@ -272,8 +281,7 @@ today = `${day}, ngày ${date}, tháng ${month}, năm ${year}`;
                     </a>
 
                     <%= parseVIDate(randomPosts[i].releaseDate) %> &emsp;
-                    <a
-                        href="posts/<%= randomPosts[i].MainCategory.slug + '/' + randomPosts[i].SubCategory.slug %>/1">
+                    <a href="/posts/<%= randomPosts[i].MainCategory.slug + '/' + randomPosts[i].SubCategory.slug %>/1">
                         <span class="text-gray font-weight-bold">
                             <%= randomPosts[i].SubCategory.name %>
                         </span>
@@ -288,6 +296,6 @@ today = `${day}, ngày ${date}, tháng ${month}, năm ${year}`;
 
 <div id="modal-large" class="modal fade">
     <div class="modal-dialog modal-lg">
-        <img src="/assets/img/posts/<%= post.thumbnail %>" />
+        <img width="100%" src="/assets/img/posts/<%= post.thumbnail %>" />
     </div>
 </div>

@@ -65,7 +65,7 @@
                 <div class="row">
                     <div class="col-md-8 col-xl-8">
                         <% if(isShowMain){ %>
-                        <h2 class="float-left font-weight-light ml-2">
+                        <h2 class="float-left font-weight-light ml-2 mt-2 mb-3">
                             <a href="/posts/<%= mainSlug %>/1">
                                 <%= mainName %>
                             </a>
@@ -88,9 +88,9 @@
                         </h2>
 
                         <% if(typeof user !== 'undefined' && (user.role === 'admin' || user.role === 'writer')){ %>
-                            <a class="btn btn-gradient-01 float-right mr-3" href="/writers/posts/add">Viết bài</a>
+                        <a class="btn btn-gradient-01 float-right mr-3 mb-3" href="/writers/posts/add">Viết bài</a>
                         <% } %>
-                        
+
                     </div>
                     <div class="col-md-4 col-xl-4">
                         <p class="font-italic float-left text-dark">
@@ -130,7 +130,14 @@
                                                     posted by <a href="#"><span
                                                             class="username"><%= p.User.username %></span></a>
                                                 </div>
-                                                <div class="time">42 min ago</div>
+
+                                                
+
+                                                
+                                           
+
+
+                                                <div class="time"><%= parseVIDate( p.releaseDate) %></div>
                                             </div>
                                             <div class="media-right align-self-center">
                                                 <img src="/assets/img/posts/<%= p.thumbnail %>"
@@ -144,7 +151,7 @@
                                                     <li><i class="la la-eye"></i><span
                                                             class="numb"><%= p.views %></span>
                                                     </li>
-                                                    <li><i class="la la-comment"></i><span class="numb">38</span></li>
+                                                    <li><i class="la la-comment"></i><span class="numb"><%= p.Comments ? p.Comments.length : '0' %></span></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -210,17 +217,21 @@
                                                     class="bottom-right-thumbmail float-left">
                                             </div>
                                             <div class="col-xl-9 col-md-12 col-sm-12 mb-3">
-                                                <div class="text-default-color font-weight-bold">
-                                                    <%= latestPosts[i].title.length >= 50
-                                                         ?  latestPosts[i].title.substring(0,50) + '...'
-                                                         :  latestPosts[i].title
-                                                         %>
-                                                </div>
+                                                <a href="/posts/detail/<%=  latestPosts[i].slug %>">
+                                                    <div class="text-default-color font-weight-bold">
+                                                        <%=  latestPosts[i].title.length >= 50
+                                                                             ?   latestPosts[i].title.substring(0,50) + '...'
+                                                                             :   latestPosts[i].title
+                                                                             %>
+                                                    </div>
+                                                </a>
+
                                                 <div class="text-gray small-text">
 
-                                                    <%=  latestPosts[i].SubCategory.name %>
+                                                    <a class="text-gray"
+                                                        href="/posts/<%=  latestPosts[i].MainCategory.slug %>/<%=  latestPosts[i].SubCategory.slug %>/1"><%=   latestPosts[i].SubCategory.name %></a>
                                                     &nbsp;
-                                                    <%= parseVIDate(latestPosts[i].releaseDate) %>
+                                                    <%= parseVIDate( latestPosts[i].releaseDate) %>
                                                 </div>
                                             </div>
                                         </div>
@@ -239,17 +250,21 @@
                                                     alt="..." class="bottom-right-thumbmail float-left">
                                             </div>
                                             <div class="col-xl-9 col-md-12 col-sm-12 mb-3">
-                                                <div class="text-default-color font-weight-bold">
-                                                    <%= mostViewsPosts[i].title.length >= 50
-                                                     ?  mostViewsPosts[i].title.substring(0,50) + '...'
-                                                     :  mostViewsPosts[i].title
-                                                     %>
-                                                </div>
+                                                <a href="/posts/detail/<%=  mostViewsPosts[i].slug %>">
+                                                    <div class="text-default-color font-weight-bold">
+                                                        <%=  mostViewsPosts[i].title.length >= 50
+                                                                             ?   mostViewsPosts[i].title.substring(0,50) + '...'
+                                                                             :   mostViewsPosts[i].title
+                                                                             %>
+                                                    </div>
+                                                </a>
+
                                                 <div class="text-gray small-text">
 
-                                                    <%=  mostViewsPosts[i].SubCategory.name %>
+                                                    <a class="text-gray"
+                                                        href="/posts/<%=  mostViewsPosts[i].MainCategory.slug %>/<%=  mostViewsPosts[i].SubCategory.slug %>/1"><%=   mostViewsPosts[i].SubCategory.name %></a>
                                                     &nbsp;
-                                                    <%= parseVIDate(mostViewsPosts[i].releaseDate) %>
+                                                    <%= parseVIDate( mostViewsPosts[i].releaseDate) %>
                                                 </div>
                                             </div>
                                         </div>
