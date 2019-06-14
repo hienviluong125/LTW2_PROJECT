@@ -113,10 +113,6 @@
                                 <div class="widget-04 widget-body p-0 widget-mb-0">
                                     <div class="post-container">
                                         <div class="media">
-                                            <!-- <div class="media-left mt-3 user">
-                                                <a href="pages-profile.html"><img src="/assets/img/avatar/avatar-07.jpg"
-                                                        class="rounded-circle" alt="..."></a>
-                                            </div> -->
                                             <div class="media-body align-self-center ml-3">
                                                 <h2 class="font-weight-bold float-left mr-2">
                                                     <a href="/posts/detail/<%= p.slug %>"><%= p.title %></a>
@@ -130,18 +126,17 @@
                                                     posted by <a href="#"><span
                                                             class="username"><%= p.User.username %></span></a>
                                                 </div>
-
-                                                
-
-                                                
-                                           
-
-
                                                 <div class="time"><%= parseVIDate( p.releaseDate) %></div>
                                             </div>
                                             <div class="media-right align-self-center">
-                                                <img src="/assets/img/posts/<%= p.thumbnail %>"
-                                                    class="post-list-thumbnail" alt="...">
+                                                <div class="post-list-thumbnail">
+                                                    <% if(p.isPremium){ %><i
+                                                        class="ion-pricetag price-tag-icon"></i></i>
+                                                    <% } %>
+                                                    <img src="/assets/img/posts/<%= p.thumbnail %>"
+                                                        class="post-list-thumbnail" alt="...">
+                                                </div>
+
                                             </div>
                                         </div>
                                         <!-- <img src="/assets/img/background/01.jpg" alt="..." class="img-fluid"> -->
@@ -151,7 +146,9 @@
                                                     <li><i class="la la-eye"></i><span
                                                             class="numb"><%= p.views %></span>
                                                     </li>
-                                                    <li><i class="la la-comment"></i><span class="numb"><%= p.Comments ? p.Comments.length : '0' %></span></li>
+                                                    <li><i class="la la-comment"></i><span
+                                                            class="numb"><%= p.Comments ? p.Comments.length : '0' %></span>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -213,8 +210,14 @@
                                     <div class="col-xl-12 col-md-3 col-sm-4">
                                         <div class="row">
                                             <div class="col-xl-3 col-md-12 col-md-12">
-                                                <img src="/assets/img/posts/<%= latestPosts[i].thumbnail %>" alt="..."
-                                                    class="bottom-right-thumbmail float-left">
+                                                <div class="bottom-right-thumbmail float-left">
+                                                    <% if(latestPosts[i].isPremium){ %><i
+                                                        class="ion-pricetag price-tag-icon small-pricetag"></i></i>
+                                                    <% } %>
+                                                    <img src="/assets/img/posts/<%= latestPosts[i].thumbnail %>"
+                                                        alt="..." class="bottom-right-thumbmail float-left">
+                                                </div>
+
                                             </div>
                                             <div class="col-xl-9 col-md-12 col-sm-12 mb-3">
                                                 <a href="/posts/detail/<%=  latestPosts[i].slug %>">
@@ -246,8 +249,13 @@
                                     <div class="col-xl-12 col-md-3 col-sm-4">
                                         <div class="row">
                                             <div class="col-xl-3 col-md-12 col-md-12">
-                                                <img src="/assets/img/posts/<%= mostViewsPosts[i].thumbnail %>"
-                                                    alt="..." class="bottom-right-thumbmail float-left">
+                                                <div class="bottom-right-thumbmail float-left">
+                                                    <% if(mostViewsPosts[i].isPremium){ %><i
+                                                        class="ion-pricetag price-tag-icon small-pricetag"></i></i>
+                                                    <% } %>
+                                                    <img src="/assets/img/posts/<%= mostViewsPosts[i].thumbnail %>"
+                                                        alt="..." class="bottom-right-thumbmail float-left">
+                                                </div>
                                             </div>
                                             <div class="col-xl-9 col-md-12 col-sm-12 mb-3">
                                                 <a href="/posts/detail/<%=  mostViewsPosts[i].slug %>">

@@ -49,6 +49,16 @@ const renderDetailPost = (req, res, next) => {
                 let randomPostsWithSameCategory = result[4];
                 let randomPosts = result[5];
 
+                if(post.isPremium){
+                    if(isPremium){
+                        res.json("ok mày là vip");
+                        //được dzô
+                    }else{
+                        res.json("not vip");
+                        //redirect
+                    }
+                }
+
                 res.render('posts/detail', { post, topPosts, hotTags, isPremium, latestPosts, mostViewsPosts, parseVIDate, randomPostsWithSameCategory, randomPosts });
             })
             .catch(err => next(err));
@@ -65,11 +75,19 @@ const renderDetailPost = (req, res, next) => {
             .then(result => {
                 let post = result[0];
                 post.content = convert(JSON.parse(result[0].content)).replace(/assets/g,'/assets');
+               
                 let isPremium = false;
                 let latestPosts = result[1];
                 let mostViewsPosts = result[2];
                 let randomPostsWithSameCategory = result[3];
                 let randomPosts = result[4];
+
+                if(post.isPremium){
+                    if(res.locals.user === '' || !res.locals.user || typeof res.locals.user === 'undefined'){
+                        res.json("dăng nhập");
+                        //redirect
+                    }
+                }
 
                 res.render('posts/detail', { post, topPosts, hotTags, isPremium, latestPosts, mostViewsPosts, parseVIDate, randomPostsWithSameCategory, randomPosts });
             })

@@ -123,8 +123,13 @@ today = `${day}, ngày ${date}, tháng ${month}, năm ${year}`;
                                 <div class="col-xl-12 col-md-3 col-sm-4">
                                     <div class="row">
                                         <div class="col-xl-3 col-md-12 col-md-12">
-                                            <img src="/assets/img/posts/<%= latestPosts[i].thumbnail %>" alt="..."
-                                                class="bottom-right-thumbmail float-left">
+                                            <div class="bottom-right-thumbmail float-left">
+                                                <% if(latestPosts[i].isPremium){ %><i
+                                                    class="ion-pricetag price-tag-icon small-pricetag"></i></i>
+                                                <% } %>
+                                                <img src="/assets/img/posts/<%= latestPosts[i].thumbnail %>" alt="..."
+                                                    class="bottom-right-thumbmail float-left">
+                                            </div>
                                         </div>
                                         <div class="col-xl-9 col-md-12 col-sm-12 mb-3">
                                             <a href="/posts/detail/<%= latestPosts[i].slug %>">
@@ -156,8 +161,13 @@ today = `${day}, ngày ${date}, tháng ${month}, năm ${year}`;
                                 <div class="col-xl-12 col-md-3 col-sm-4">
                                     <div class="row">
                                         <div class="col-xl-3 col-md-12 col-md-12">
-                                            <img src="/assets/img/posts/<%= mostViewsPosts[i].thumbnail %>" alt="..."
-                                                class="bottom-right-thumbmail float-left">
+                                            <div class="bottom-right-thumbmail float-left">
+                                                <% if(mostViewsPosts[i].isPremium){ %><i
+                                                    class="ion-pricetag price-tag-icon small-pricetag"></i></i>
+                                                <% } %>
+                                                <img src="/assets/img/posts/<%= mostViewsPosts[i].thumbnail %>"
+                                                    alt="..." class="bottom-right-thumbmail float-left">
+                                            </div>
                                         </div>
                                         <div class="col-xl-9 col-md-12 col-sm-12 mb-3">
                                             <a href="/posts/detail/<%=  mostViewsPosts[i].slug %>">

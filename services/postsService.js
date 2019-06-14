@@ -11,6 +11,7 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
             if (maincate === 'all') {
                 queryOps = {
                     where: { status: 'published' },
+                    order: [['isPremium', 'DESC']],
                     limit,
                     offset,
                     include: [db.MainCategories, db.SubCategories, db.Users, db.Tags, db.Notes]
@@ -19,6 +20,7 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
             } else if (subcate) {
                 queryOps = {
                     where: { status: 'published' },
+                    order: [['isPremium', 'DESC']],
                     limit,
                     offset,
                     include: [
@@ -32,6 +34,7 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
                 }
                 countOps = {
                     where: { status: 'published' },
+                    order: [['isPremium', 'DESC']],
                     include: [
                         { model: db.MainCategories, where: { slug: maincate } },
                         { model: db.SubCategories, where: { slug: subcate } }
@@ -40,6 +43,7 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
             } else {
                 queryOps = {
                     where: { status: 'published' },
+                    order: [['isPremium', 'DESC']],
                     limit,
                     offset,
                     include: [{ model: db.MainCategories, where: { slug: maincate } }, db.SubCategories, db.Users, db.Comments, db.Tags, db.Notes]
@@ -52,6 +56,7 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
             allPostsId = allPostsId.map(p => p.id)
             queryOps = {
                 where: { status: 'published', id: allPostsId },
+                order: [['isPremium', 'DESC']],
                 limit,
                 offset,
                 include: [db.MainCategories, db.SubCategories, db.Users, db.Comments, db.Tags, db.Notes]
@@ -494,6 +499,7 @@ async function search({ searchStr, offset, limit }) {
         };
         let posts = await db.Posts.findAll({
             where: query,
+            order: [['isPremium', 'DESC']],
             limit,
             offset,
             include: [
@@ -517,7 +523,7 @@ async function search({ searchStr, offset, limit }) {
 
 function getMondayOfCurrentWeek(d) {
     var day = d.getDay();
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate() + ((day == 0 ? -6 : 1) - day)+1);
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate() + ((day == 0 ? -6 : 1) - day) + 1);
 }
 function getSundayOfCurrentWeek(d) {
     var day = d.getDay();
@@ -568,6 +574,7 @@ function mostViewsPosts() {
             }
         },
         order: [
+          
             ['views', 'DESC']
         ],
         limit: 10,
@@ -588,7 +595,8 @@ function latestPosts() {
             }
         },
         order: [
-            ['releaseDate', 'DESC']
+         
+            ['releaseDate', 'DESC'],
         ],
         limit: 10,
         include: [
@@ -602,30 +610,6 @@ function latestPosts() {
 
 async function newPostByHotCats() {
     try {
-        // let subCats = await db.SubCategories.findAll({
-        //     attributes: ['name', 'id', [sequelize.fn('SUM', sequelize.col('Posts.views')), 'totalViews']],
-        //     group: ['SubCategories.id'],
-        //     include: [
-        //         {
-        //             attributes: [],
-        //             model: db.Posts, 
-        //         }
-        //     ],
-        //     //limit: 10,
-        //     //order: sequelize.literal('totalViews DESC'),
-        //     raw: true,
-
-
-        //     // attributes: [
-        //     //     'name', 'id'
-        //     // ],
-        //     // limit: 10,
-        //     // order:[
-        //     //     ['createdAt', 'ASC']
-        //     // ],
-        //     // raw: true, 
-
-        // })
         let query = `SELECT  "SubCategories"."name", "SubCategories"."id", coalesce(SUM("Posts"."views"), 0) AS "totalViews" 
         FROM "SubCategories" AS "SubCategories" LEFT OUTER JOIN "Posts" AS "Posts" ON "SubCategories"."id" = "Posts"."SubCategoryId" 
         GROUP BY "SubCategories"."id"
@@ -640,7 +624,8 @@ async function newPostByHotCats() {
                 }
             },
             order: [
-                ['releaseDate', 'DESC']
+              
+                ['releaseDate', 'DESC'],
             ],
             limit: 10,
             include: [
