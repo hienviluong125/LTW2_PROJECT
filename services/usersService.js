@@ -4,7 +4,7 @@ const crypto = require('../config/crypto');
 const validator = require('validator');
 const jwt = require('jwt-simple');
 const db = require('./../models/index');
-
+const subService = require('./subscriberService');
 
 async function getAllUsers(){
     return User.findAll({raw: true});
@@ -55,9 +55,7 @@ async function createWithRole(user){
                 UserId: createdUser.id
             })
         }else if(user.role == 'sub'){
-            return db.Subscribers.create({
-                UserId: createdUser.id
-            })
+        	return subService.create(createdUser.id, true)
         }else if(user.role == 'writer'){
             return db.Writers.create({
                 UserId: createdUser.id,
