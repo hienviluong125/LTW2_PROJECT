@@ -1,0 +1,10 @@
+<div class="container premium-redirect pt-5">
+    <h1 class="text-center">Nội dung bài viết này chỉ hỗ trợ tài khoản Premium</h1>
+    <% if(typeof user !== 'undefined'){ %>
+    <h1 class="text-center">Vui lòng đăng ký hoặc gia hạn tài khoản premium</h1>
+    <a href="/users/profile/<%= user.id %>" class="btn btn-gradient-01 btn-block mt-5 mb-2">Chuyển đến trang hồ sơ</a>
+    <% } else { %>
+    <h1 class="text-center">Vui lòng đăng nhập </h1>
+    <a href="/users/login" class="btn btn-gradient-01 btn-block mt-5 mb-2">Chuyển đến trang đăng nhập</a>
+    <% } %>
+</div>

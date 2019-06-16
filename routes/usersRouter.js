@@ -255,6 +255,9 @@ const changePasswordHandler = (req, res, next) => {
     }
 }
 
+const premiumRedirect = (req, res, next) => {
+    res.render('users/premium-redirect');
+}
 
 
 router.get('/register', renderRegisterPage);
@@ -263,8 +266,8 @@ router.get('/logout', logout);
 router.get('/forgot', renderForgotPage);
 router.get('/reset/:id/:token', renderRecoveryPasswordPage);
 router.get('/profile/changepassword', middleware.Authentication, renderChangePasswordPage);
-router.get('/profile/:id',middleware.Authentication, renderProfilePage);
-
+router.get('/profile/:id', middleware.Authentication, renderProfilePage);
+router.get('/premium_redirect', premiumRedirect);
 
 router.post('/register', registerAccount);
 router.post('/login', loginHandle);

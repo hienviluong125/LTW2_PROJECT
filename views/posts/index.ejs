@@ -52,7 +52,7 @@
         isShowTag = true;
         tagName =  posts[0].Tags.find(t => t.slug === tag).name;
         tagSlug = posts[0].Tags.find(t => t.slug === tag).slug;
-        pageHref = '/posts/' + tagSlug
+        pageHref = '/posts/tags/' + tagSlug
     }
      
 %>
@@ -123,7 +123,7 @@
                                                 <% }); %>
                                                 <h5 class="pr-5 mt-3"><%= p.shortContent %></h5>
                                                 <div class="mt-1">
-                                                    posted by <a href="#"><span
+                                                    posted by <a><span
                                                             class="username"><%= p.User.username %></span></a>
                                                 </div>
                                                 <div class="time"><%= parseVIDate( p.releaseDate) %></div>

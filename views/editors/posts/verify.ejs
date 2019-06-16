@@ -21,6 +21,21 @@
                     </div>
                 </div>
                 <div class="form-group row d-flex align-items-center mb-2">
+                    <label class="col-lg-2 form-control-label d-flex">Loại bài viết</label>
+                    <div class="col-lg-5">
+                        <div class="select">
+                            <select name="posttype" id="post-type" class="custom-select form-control" required>
+                                <option value="" disabled>Chọn loại bài viết</option>
+                                <option value="normal" selected>Normal</option>
+                                <option value="premium">Premium</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn loại
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row d-flex align-items-center mb-2">
                     <label class="col-lg-2 form-control-label d-flex">Chuyên mục cha</label>
                     <div class="col-lg-5">
                         <div class="select">
@@ -40,6 +55,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="form-group row d-flex align-items-center mb-2">
                     <label class="col-lg-2 form-control-label d-flex">Chuyên mục con</label>
                     <div class="col-lg-5">
@@ -97,15 +113,15 @@
                     </div>
                 </div>
                 <div class="form-group row d-flex align-items-center mb-5">
-                        <label class="col-lg-2">Ngày ra mắt</label>
-                        <div class="col-lg-10">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="date" placeholder="Chọn ngày ra mắt">
-                                </div>
+                    <label class="col-lg-2">Ngày ra mắt</label>
+                    <div class="col-lg-10">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="date" placeholder="Chọn ngày ra mắt">
                             </div>
                         </div>
                     </div>
+                </div>
                 <div class="form-group row d-flex align-items-center mb-2">
                     <label class="col-lg-2 form-control-label">Ảnh đại diện</label>
                     <input readonly type="file" id="thumbnail" />

@@ -10,7 +10,7 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
         if (maincate) {
             if (maincate === 'all') {
                 queryOps = {
-                    where: { status: 'published' },
+                    where: { status: 'published', releaseDate: { [Op.lte]: new Date() } },
                     order: [['isPremium', 'DESC']],
                     limit,
                     offset,
@@ -19,7 +19,7 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
                 countOps = { where: { status: 'published' } }
             } else if (subcate) {
                 queryOps = {
-                    where: { status: 'published' },
+                    where: { status: 'published', releaseDate: { [Op.lte]: new Date() } },
                     order: [['isPremium', 'DESC']],
                     limit,
                     offset,
@@ -33,7 +33,7 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
                     ]
                 }
                 countOps = {
-                    where: { status: 'published' },
+                    where: { status: 'published', releaseDate: { [Op.lte]: new Date() } },
                     order: [['isPremium', 'DESC']],
                     include: [
                         { model: db.MainCategories, where: { slug: maincate } },
@@ -42,26 +42,26 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
                 }
             } else {
                 queryOps = {
-                    where: { status: 'published' },
+                    where: { status: 'published', releaseDate: { [Op.lte]: new Date() } },
                     order: [['isPremium', 'DESC']],
                     limit,
                     offset,
                     include: [{ model: db.MainCategories, where: { slug: maincate } }, db.SubCategories, db.Users, db.Comments, db.Tags, db.Notes]
                 }
-                countOps = { where: { status: 'published' }, include: [{ model: db.MainCategories, where: { slug: maincate } }] }
+                countOps = { where: { status: 'published', releaseDate: { [Op.lte]: new Date() } }, include: [{ model: db.MainCategories, where: { slug: maincate } }] }
             }
         }
         else if (tag) {
-            let allPostsId = await db.Posts.findAll({ raw: true, where: { status: 'published' }, limit, offset, include: [{ model: db.Tags, where: { slug: tag } }] })
+            let allPostsId = await db.Posts.findAll({ raw: true, where: { status: 'published' }, include: [{ model: db.Tags, where: { slug: tag } }] })
             allPostsId = allPostsId.map(p => p.id)
             queryOps = {
-                where: { status: 'published', id: allPostsId },
+                where: { status: 'published', id: allPostsId, releaseDate: { [Op.lte]: new Date() } },
                 order: [['isPremium', 'DESC']],
                 limit,
                 offset,
                 include: [db.MainCategories, db.SubCategories, db.Users, db.Comments, db.Tags, db.Notes]
             }
-            countOps = { where: { status: 'published' }, include: [{ model: db.Tags, where: { slug: tag } }] }
+            countOps = { where: { status: 'published', id: allPostsId, releaseDate: { [Op.lte]: new Date() } }, include: [{ model: db.Tags, where: { slug: tag } }] }
 
         }
 
@@ -359,12 +359,13 @@ async function rejectPost({ WriterId, EditorId, PostId, NoteContent }) {
     }
 }
 
-async function verifyPost({ releaseDate, tags, WriterId, EditorId, PostId, SubCategoryId, MainCategoryId, prevRouter }) {
+async function verifyPost({ releaseDate, tags, WriterId, EditorId, PostId, SubCategoryId, MainCategoryId, prevRouter, PostType }) {
     // console.log({ WriterId, EditorId, releaseDate, tags, PostId, SubCategoryId, MainCategoryId, prevRouter });
     // return { status: true, data: 'null' };
     try {
+        let isPremium = PostType === 'premium' ? true : false;
         let result = await db.Posts.update(
-            { status: 'verified', releaseDate, SubCategoryId, MainCategoryId },
+            { status: 'verified', releaseDate, SubCategoryId, MainCategoryId, isPremium },
             { where: { id: PostId } }
         );
         if (tags.length > 0) {
@@ -495,7 +496,10 @@ async function search({ searchStr, offset, limit }) {
                     }
                 }
             ],
-            status: 'published'
+            status: 'published',
+            releaseDate: {
+                [Op.lte]: new Date(),
+            }
         };
         let posts = await db.Posts.findAll({
             where: query,
@@ -544,7 +548,7 @@ async function noticeablePosts() {
             [Op.and]: [
                 {
                     releaseDate: {
-                        [Op.lte]: sunday,
+                        [Op.lte]: today,
                         // [Op.gte]: monday
                     },
                     status: 'published'
@@ -574,7 +578,7 @@ function mostViewsPosts() {
             }
         },
         order: [
-          
+
             ['views', 'DESC']
         ],
         limit: 10,
@@ -595,7 +599,7 @@ function latestPosts() {
             }
         },
         order: [
-         
+
             ['releaseDate', 'DESC'],
         ],
         limit: 10,
@@ -624,7 +628,7 @@ async function newPostByHotCats() {
                 }
             },
             order: [
-              
+
                 ['releaseDate', 'DESC'],
             ],
             limit: 10,

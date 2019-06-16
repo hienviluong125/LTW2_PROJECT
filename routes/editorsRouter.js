@@ -64,7 +64,7 @@ const renderVerifyPost = (req, res, next) => {
 
 const verifyPost = (req, res, next) => {
     let EditorId = res.locals.user.id;
-    let { WriterId, releaseDate, tags, PostId, SubCategoryId, MainCategoryId, prevRouter } = req.body;
+    let { WriterId, releaseDate, tags, PostId, SubCategoryId, MainCategoryId, prevRouter,PostType } = req.body;
     let str_date = releaseDate.split('/');
     let day = parseInt(str_date[1]),
         month = parseInt(str_date[0]) - 1,
@@ -72,7 +72,7 @@ const verifyPost = (req, res, next) => {
     releaseDate = new Date(year, month, day);
     //
     postsService
-        .verifyPost({ WriterId, EditorId, releaseDate, tags, PostId, SubCategoryId, MainCategoryId, prevRouter })
+        .verifyPost({ WriterId, EditorId, releaseDate, tags, PostId, SubCategoryId, MainCategoryId, prevRouter,PostType })
         .then(result => {
             if (result.status) {
                 return res.status(200).json({ data: result.data })

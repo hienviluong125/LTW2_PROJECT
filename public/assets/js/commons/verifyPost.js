@@ -66,6 +66,7 @@ function verifySubmit() {
     let tags = getAllTagsValue();
     let MainCategoryId = parseInt($('#main-cate option:selected').val());
     let SubCategoryId = parseInt($('#sub-cate option:selected').val());
+    let PostType = $('#post-type option:selected').val();
     let PostId = $('.hidden_id').val();
     let WriterId = parseInt($('.post-user-id').val());
     let prevRouter = $('.prevRouter').val();
@@ -75,6 +76,7 @@ function verifySubmit() {
         tags,
         MainCategoryId,
         SubCategoryId,
+        PostType,
         PostId,
         prevRouter,
         WriterId

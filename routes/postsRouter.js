@@ -2,7 +2,7 @@ const router = require('express').Router();
 const mockPost = require('./../mocks/post.index');
 const postsService = require('./../services/postsService');
 const { createPagesArr, highlightSearchText, parseVIDate } = require('./../helpers/utils');
-const {convert} =require('./../helpers/delta-to-html');
+const { convert } = require('./../helpers/delta-to-html');
 const subService = require('./../services/subscriberService');
 
 const renderAllPosts = (req, res, next) => {
@@ -19,7 +19,7 @@ const renderAllPosts = (req, res, next) => {
         .then(result => {
             let { data } = result[0];
             let { posts, count } = data;
-            
+
             let latestPosts = result[1];
             let mostViewsPosts = result[2];
             let pagination = createPagesArr(page, count, limit);
@@ -37,25 +37,22 @@ const renderDetailPost = (req, res, next) => {
             subService.isPremium(+req.user.id),
             postsService.latestPosts(),
             postsService.mostViewsPosts(),
-            postsService.geRandomPostsWithSameCategory({ slug,limit: 10 }),
+            postsService.geRandomPostsWithSameCategory({ slug, limit: 10 }),
             postsService.getRandomPosts({ slug, limit: 10 })
         ])
             .then(result => {
                 let post = result[0];
-                post.content = convert(JSON.parse(result[0].content)).replace(/assets/g,'/assets');
+                post.content = convert(JSON.parse(result[0].content)).replace(/assets/g, '/assets');
                 let isPremium = result[1];
                 let latestPosts = result[2];
                 let mostViewsPosts = result[3];
                 let randomPostsWithSameCategory = result[4];
                 let randomPosts = result[5];
 
-                if(post.isPremium){
-                    if(isPremium){
-                        res.json("ok mày là vip");
-                        //được dzô
-                    }else{
-                        res.json("not vip");
-                        //redirect
+                if (post.isPremium) {
+                    if (!isPremium) {
+                        // res.redirect('/users/premium_redirect');
+                        res.render('users/premium-redirect');
                     }
                 }
 
@@ -71,21 +68,20 @@ const renderDetailPost = (req, res, next) => {
             postsService.getRandomPosts({ slug, limit: 10 })
             //subService.isPremium(+req.user.id),
         ])
-        // /assets/img/posts/dung-thu-tinh-nang-quay-phim-dual-view-tren-huawei-p30-pro-0.jpeg
             .then(result => {
                 let post = result[0];
-                post.content = convert(JSON.parse(result[0].content)).replace(/assets/g,'/assets');
-               
+                post.content = convert(JSON.parse(result[0].content)).replace(/assets/g, '/assets');
+
                 let isPremium = false;
                 let latestPosts = result[1];
                 let mostViewsPosts = result[2];
                 let randomPostsWithSameCategory = result[3];
                 let randomPosts = result[4];
 
-                if(post.isPremium){
-                    if(res.locals.user === '' || !res.locals.user || typeof res.locals.user === 'undefined'){
-                        res.json("dăng nhập");
-                        //redirect
+                if (post.isPremium) {
+                    if (res.locals.user === '' || !res.locals.user || typeof res.locals.user === 'undefined') {
+                        // res.redirect('/users/premium_redirect');
+                        res.render('users/premium-redirect');
                     }
                 }
 
