@@ -7,12 +7,18 @@ const mail = require('../config/mailer');
 const { parse } = require('../helpers/utils')
 const middleware = require('./../middlewares/index');
 
+const PRIVATE_KEY = '6LeeL6kUAAAAALLx-ztHh88BkHDrTgQB8jnWviJq';
+const GoogleRecaptcha = require('google-recaptcha')
+ 
+const googleRecaptcha = new GoogleRecaptcha({secret: PRIVATE_KEY})
+
 const logout = (req, res, next) => {
     req.logout();
     res.redirect('/users/login');
 }
 
 const renderLoginPage = (req, res, next) => {
+
     if (typeof res.locals.isLoggedIn !== 'undefined' && res.locals.isLoggedIn) {
         res.redirect('/index');
         return;
@@ -37,6 +43,13 @@ const registerAccount = async (req, res, next) => {
     let user = { email, password, repassword } = req.body;
     let type = req.body.type;
     let errors = await usersService.validateRegisterData(email, password, repassword);
+    const recaptchaResponse = req.body['g-recaptcha-response']
+    googleRecaptcha.verify({response: recaptchaResponse}, (errs) => {
+        if(errs){
+            console.log(errs);
+            errors.push({message:"Please finish the captcha"});
+        }
+    })
 
     if (errors.length > 0) {
         res.render('users/register', {
