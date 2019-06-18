@@ -7,6 +7,7 @@ const { getPostStatusColor, createPagesArr } = require('./../helpers/utils');
 const renderPosts = (req, res, next) => {
     let subCateSlug = req.params.cate;
     let page = req.params.page;
+    let status = req.params.status;
     let limit = 8;
     let offset = limit * (page - 1);
     let EditorId = res.locals.user.id;
@@ -14,7 +15,7 @@ const renderPosts = (req, res, next) => {
     Promise.all(
         [
             categoriesService.getAllSubCategoriesOfEditor({ EditorId }),
-            postsService.getAllPostManagedByEditor({ SubCate: subCateSlug, EditorId, limit, offset })
+            postsService.getAllPostManagedByEditor({ SubCate: subCateSlug, EditorId, limit, offset, status })
         ]
     ).then(rs => {
         let SubCategories = rs[0];
@@ -22,7 +23,8 @@ const renderPosts = (req, res, next) => {
         let pagination = createPagesArr(page, count, limit);
         let currentSubCate = SubCategories.find(sub => sub.slug === subCateSlug);
         currentSubCate = typeof currentSubCate === 'undefined' ? 'all' : currentSubCate.name;
-        res.render('editors/posts/index', { currentSubCate, SubCategories, posts, subCateSlug, getPostStatusColor,pagination,page });
+        // return res.json({ currentSubCate, SubCategories, posts, subCateSlug, getPostStatusColor,pagination,page });
+        res.render('editors/posts/index', { currentSubCate, SubCategories, posts, subCateSlug, getPostStatusColor, pagination, page,status });
     }).catch(err => {
         console.log(err);
         // return next();
@@ -64,7 +66,7 @@ const renderVerifyPost = (req, res, next) => {
 
 const verifyPost = (req, res, next) => {
     let EditorId = res.locals.user.id;
-    let { WriterId, releaseDate, tags, PostId, SubCategoryId, MainCategoryId, prevRouter,PostType } = req.body;
+    let { WriterId, releaseDate, tags, PostId, SubCategoryId, MainCategoryId, prevRouter, PostType } = req.body;
     let str_date = releaseDate.split('/');
     let day = parseInt(str_date[1]),
         month = parseInt(str_date[0]) - 1,
@@ -72,7 +74,7 @@ const verifyPost = (req, res, next) => {
     releaseDate = new Date(year, month, day);
     //
     postsService
-        .verifyPost({ WriterId, EditorId, releaseDate, tags, PostId, SubCategoryId, MainCategoryId, prevRouter,PostType })
+        .verifyPost({ WriterId, EditorId, releaseDate, tags, PostId, SubCategoryId, MainCategoryId, prevRouter, PostType })
         .then(result => {
             if (result.status) {
                 return res.status(200).json({ data: result.data })
@@ -89,7 +91,7 @@ const verifyPost = (req, res, next) => {
 
 router.all(
     '*',
-    middleware.Authorization(['editor'])
+    middleware.Authorization(['editor','admin'])
 );
 
 
@@ -102,7 +104,7 @@ router.get('/posts/verify/:slug', renderVerifyPost)
 router.post('/posts/verify', verifyPost)
 //
 
-router.get('/posts/:cate/:page', renderPosts);
+router.get('/posts/:cate/:status/:page', renderPosts);
 
 
 

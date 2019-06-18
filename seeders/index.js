@@ -133,6 +133,32 @@ async function seed() {
     //         })
     // }))
 
+
+    //let ids = await db.
+
+    // let ids = await db.Posts.findAll({
+    //     raw: true,
+    //     attributes: ['id','WriterId'],
+    //     where : {
+    //         SubCategoryId:[183,184]
+    //     }
+    // });
+
+    // await Promise.all(ids.map(s => {
+    //     try{
+    //         return db.Notes.create({
+    //             WriterId: s.WriterId,
+    //             PostId: s.id,
+    //             status: 'verified',
+    //             EditorId: 7
+    //         })
+    //     }catch(err){
+    //         console.log({err});
+    //     }
+        
+    // }))
+
+    // console.log({ids,length: ids.length})
    
 
 

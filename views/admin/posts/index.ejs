@@ -73,12 +73,15 @@
                                         </td>
                                         <% } %>
                                         <td class="td-actions text-right">
-                                            <% if(post.status === 'verified'){%>
+                                            <!-- <% if(post.status === 'verified'){%>
                                             <a href="/admin/posts/publish/<%= post.id %>">
                                                 <i class="la la-check-square verify admin-verify-post"></i>
                                             </a>
-                                            <% } %>
+                                            <% } %> -->
                                             <% if(post.status === 'pending' || post.status === 'rejected'){%>
+                                                <a href="/admin/posts/verify/<%= post.slug %>">
+                                                    <i class="la la-check-square verify "></i>
+                                                </a>
                                             <a href="/admin/posts/edit/<%= post.slug %>">
                                                 <i class="la la-edit edit"></i>
                                             </a>

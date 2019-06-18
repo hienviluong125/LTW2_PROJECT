@@ -186,22 +186,21 @@ async function edit({ id, WriterId, title, shortContent, slug, MainCategoryId, S
 
 async function _delete({ slug, WriterId }) {
     try {
-        console.log("===============================");
-        console.log({ slug, WriterId });
-        console.log("===============================");
-        let data = "xxx";
 
-        // let postInfo = await db.Posts.findOne({ where: { slug } }, { raw: true });
-        // let postId = postInfo.id;
-        // await tagService.removeTagsOfPost({ postId });
-        // let data = await db.Posts.destroy({
-        //     where: {
-        //         slug, WriterId
-        //     }
-        // })
+        let postInfo = await db.Posts.findOne({ where: { slug } }, { raw: true });
+        let postId = postInfo.id;
+        await tagService.removeTagsOfPost({ postId });
+        await db.Notes.destroy({ where: { PostId: postId, WriterId: WriterId } });
+        let data = await db.Posts.destroy({
+            where: {
+                slug, WriterId
+            }
+        })
         return { status: true, data: data }
     } catch (err) {
+        console.log("====================");
         console.log({ err });
+        console.log("====================");
         return { status: false, err: err.toString() }
     }
 
@@ -245,14 +244,14 @@ async function getAllPostByUserId({ id, limit, offset, status }) {
 }
 
 // pending - verified - published - rejected
-async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset }) {
+async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, status }) {
     try {
         if (SubCate === 'all') {
             let allSubCateIds = await db.EditorCategories.findAll({ raw: true, attributes: ['SubCategoryId'], where: { UserId: EditorId } });
             allSubCateIds = allSubCateIds.map(aS => aS.SubCategoryId);
             let posts = await db.Posts.findAll({
                 where: {
-                    status: 'pending',
+                    status: status === 'all' ? ['verified', 'published', 'rejected', 'verified'] : status === 'verified' ? ['verified', 'published'] : status,
                     SubCategoryId: allSubCateIds
                 },
                 limit: limit,
@@ -262,11 +261,12 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset }) {
                     db.SubCategories,
                     db.Users,
                     db.Tags,
+                    db.Notes
                 ]
             })
             let count = await db.Posts.count({
                 where: {
-                    status: 'pending',
+                    status: status === 'all' ? ['verified', 'published', 'rejected', 'verified'] : status === 'verified' ? ['verified', 'published'] : status,
                     SubCategoryId: allSubCateIds
                 }
             });
@@ -276,7 +276,6 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset }) {
             }
         } else {
             let allSubCateIds = await db.SubCategories.findAll({
-                // raw: true,
                 attributes: ['id'],
                 where: { slug: SubCate },
                 include: [{
@@ -290,7 +289,7 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset }) {
             let subCateId = allSubCateIds[0].id;
             let posts = await db.Posts.findAll({
                 where: {
-                    status: 'pending',
+                    status: status === 'all' ? ['verified', 'published', 'rejected', 'verified'] : status === 'verified' ? ['verified', 'published'] : status,
                     SubCategoryId: subCateId
                 },
                 limit: limit,
@@ -300,11 +299,12 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset }) {
                     db.SubCategories,
                     db.Users,
                     db.Tags,
+                    db.Notes
                 ]
             })
             let count = await db.Posts.count({
                 where: {
-                    status: 'pending',
+                    status: status === 'all' ? ['verified', 'published', 'rejected', 'verified'] : status === 'verified' ? ['verified', 'published'] : status,
                     SubCategoryId: subCateId
                 }
             });
@@ -364,7 +364,7 @@ async function verifyPost({ releaseDate, tags, WriterId, EditorId, PostId, SubCa
     // return { status: true, data: 'null' };
     try {
         let isPremium = PostType === 'premium' ? true : false;
-        let result = await db.Posts.update(
+        let data = await db.Posts.update(
             { status: 'verified', releaseDate, SubCategoryId, MainCategoryId, isPremium },
             { where: { id: PostId } }
         );
@@ -376,8 +376,26 @@ async function verifyPost({ releaseDate, tags, WriterId, EditorId, PostId, SubCa
             })
 
             await tagService.addTagsToPost({ tagIds, postId: PostId });
+
+            let isNoteExist = await db.Notes.findOne({ where: { EditorId, WriterId, PostId } });
+            let result = null;
+            if (isNoteExist) {
+                result = await db.Notes.update(
+                    { status: 'verified', content: '' },
+                    { where: { EditorId, WriterId, PostId } })
+            } else {
+                result = await db.Notes.create({
+                    status: 'rejected',
+                    content: '',
+                    EditorId,
+                    WriterId,
+                    PostId
+                });
+            }
+
+
         }
-        return { status: true, data: result };
+        return { status: true, data: data };
     } catch (err) {
         console.log({ err });
         return { status: false, data: err };
@@ -482,9 +500,9 @@ async function search({ searchStr, offset, limit, field }) {
         if (field === 'all') {
             query = {
                 [Op.or]: [
-                    {content: { [Op.iLike]: searchStr}},
-                    {shortContent: { [Op.iLike]: searchStr}},
-                    {title: { [Op.iLike]: searchStr}}
+                    { content: { [Op.iLike]: searchStr } },
+                    { shortContent: { [Op.iLike]: searchStr } },
+                    { title: { [Op.iLike]: searchStr } }
                 ],
                 status: 'published',
                 releaseDate: {
@@ -492,10 +510,10 @@ async function search({ searchStr, offset, limit, field }) {
                 }
             };
         }
-        else if(field === 'title'){
+        else if (field === 'title') {
             query = {
                 [Op.or]: [
-                    {title: { [Op.iLike]: searchStr}}
+                    { title: { [Op.iLike]: searchStr } }
                 ],
                 status: 'published',
                 releaseDate: {
@@ -503,10 +521,10 @@ async function search({ searchStr, offset, limit, field }) {
                 }
             };
         }
-        else if(field === 'shortContent'){
+        else if (field === 'shortContent') {
             query = {
                 [Op.or]: [
-                    {shortContent: { [Op.iLike]: searchStr}}
+                    { shortContent: { [Op.iLike]: searchStr } }
                 ],
                 status: 'published',
                 releaseDate: {
@@ -514,10 +532,10 @@ async function search({ searchStr, offset, limit, field }) {
                 }
             };
         }
-        else if(field === 'content'){
+        else if (field === 'content') {
             query = {
                 [Op.or]: [
-                    {content: { [Op.iLike]: searchStr}}
+                    { content: { [Op.iLike]: searchStr } }
                 ],
                 status: 'published',
                 releaseDate: {
@@ -728,6 +746,7 @@ async function getRandomPosts({ limit, slug }) {
 
 async function deleteById(id) {
     await tagService.removeTagsOfPost({ postId: id });
+    await db.Notes.destroy({ where: { PostId: id } });
     return db.Posts.destroy({
         where: {
             id

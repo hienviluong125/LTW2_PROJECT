@@ -385,7 +385,8 @@ outline: 0; */
 }
 
 .search-form{
-    margin-top:12px;
+    margin-top:12.5px;
+    font-size:0.9rem;
     /* float:right; */
     /* margin-left:10px; */
     /* width:80%; */

@@ -35,15 +35,32 @@ const renderEditPostPage = (req, res, next) => {
         let post = data[0];
         let allCategories = data[1];
         if (post && allCategories) {
-            if(post.status === 'verified' || post.status === 'published'){
+            if (post.status === 'verified' || post.status === 'published') {
                 res.redirect('/admin/posts')
             }
-            res.render('admin/posts/edit', { post, allCategories,layout: 'admin/common/add_edit_post'  });
+            res.render('admin/posts/edit', { post, allCategories, layout: 'admin/common/add_edit_post' });
         } else {
             res.render('commons/error404');
         }
     }).catch(err => {
         res.render('commons/error404');
+    })
+}
+
+const renderVerifyPostPage = (req, res, next) => {
+    let prevRouter = req.headers.referer;
+    let slug = req.params.slug;
+    Promise.all(
+        [
+            categoriesService.getAllCategories(),
+            postsService.get({ slug })
+        ]
+    ).then(rs => {
+        let allCategories = rs[0];
+        let post = rs[1];
+        res.render('admin/posts/verify', { allCategories, post, prevRouter, layout: 'admin/common/add_edit_post' });
+    }).catch(err => {
+        return next();
     })
 }
 
@@ -72,14 +89,22 @@ const publishPost = (req, res, next) => {
         .catch(err => next(err))
 }
 
+
+
 router.get('/', renderpostIndexPage);
 router.get('/add', renderAddPostPage);
 router.get('/edit/:slug', renderEditPostPage);
 router.get('/delete/:id', renderDeletePostPage);
 router.get('/publish/:id', publishPost)
+router.get('/verify/:slug', renderVerifyPostPage)
 
 router.post('/add', addPostHandler);
 router.post('/edit/:id', editPostHandler);
 router.post('/delete/:id', deletePostHandler);
+
+
+
+// Ajax
+// router.post('/posts/verify', verifyPost)
 
 module.exports = router;
