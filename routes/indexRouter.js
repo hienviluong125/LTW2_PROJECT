@@ -28,6 +28,10 @@ const renderIndexPage = (req, res, next) => {
     })
 }
 
+const renderContactPage = (req,res,next) => {
+    res.render('commons/contact');
+}
+
 const renderAboutPage = (req, res, next) => {
     res.render('commons/about');
 }
@@ -44,6 +48,7 @@ const renderErrorPage = (req,res,next) => {
 router.get('/', redirectToIndexPage);
 router.get('/index', renderIndexPage);
 router.get('/about', renderAboutPage);
+router.get('/contact',renderContactPage);
 router.get('/error',renderErrorPage);
 
 

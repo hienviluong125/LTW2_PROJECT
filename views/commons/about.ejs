@@ -1,166 +1,42 @@
-<div class="content">
-    <div class="container">
-        <div class="breadcramps">
-            <h1>About us</h1>
-            <h4>our story</h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
-        </div>
-    </div>
+<% 
+    var allSubCates = [];
+    allCategories.forEach(cate => {
+        var parentName = cate.name;
+        var parentSlug = cate.slug;
+        cate.SubCategories.forEach(subCate => {
+            subCate.parentName = parentName;
+            subCate.parentSlug = parentSlug;
+            allSubCates = allSubCates.concat(subCate);
+        });
+    });
 
-    <div class="our-team">
-        <div class="container">
-            <h4>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</h4>
-            <ol>
-                <li>Nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo. </li>
-                <li>Excepteur sint occaecat cupidatat non, sunt in culpa qui officia deserunt mollit anim id est
-                    laborum. </li>
-                <li>Coccaecat cupidatat non, sunt in culpa qui officia deserunt mollit anim id est laborum. </li>
-            </ol>
 
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="our-member">
-                        <div class="our-member-cover">
-                            <img src="/images/our-team/member-1.jpg" alt="our member" />
-                        </div>
-                        <h4>Joe doe<span>Manager</span></h4>
-                        <p>Coccaecat cupidatat non, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        <ul>
-                            <li><a class="our-member-facebook" href="#"></a></li>
-                            <li><a class="our-member-twitter" href="#"></a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="our-member">
-                        <div class="our-member-cover">
-                            <img src="/images/our-team/member-2.jpg" alt="our member" />
-                        </div>
-                        <h4>Philip doe<span>Manager</span></h4>
-                        <p>Coccaecat cupidatat non, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        <ul>
-                            <li><a class="our-member-facebook" href="#"></a></li>
-                            <li><a class="our-member-twitter" href="#"></a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="our-member">
-                        <div class="our-member-cover">
-                            <img src="/images/our-team/member-3.jpg" alt="our member" />
-                        </div>
-                        <h4>Dorina doe<span>Manager</span></h4>
-                        <p>Coccaecat cupidatat non, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        <ul>
-                            <li><a class="our-member-facebook" href="#"></a></li>
-                            <li><a class="our-member-twitter" href="#"></a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="our-member">
-                        <div class="our-member-cover">
-                            <img src="/images/our-team/member-4.jpg" alt="our member" />
-                        </div>
-                        <h4>Billy doe<span>Manager</span></h4>
-                        <p>Coccaecat cupidatat non, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        <ul>
-                            <li><a class="our-member-facebook" href="#"></a></li>
-                            <li><a class="our-member-twitter" href="#"></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h2>Our Skills</h2>
-                <div class="skill">
-                    <div style="width: 59%" class="skill-fill site-bg-color"><span class="site-bg-color">59%</span>Html
-                    </div>
-                </div>
-                <div class="skill">
-                    <div style="width: 70%" class="skill-fill site-bg-color"><span class="site-bg-color">70%</span>psd
-                    </div>
-                </div>
-                <div class="skill">
-                    <div style="width: 35%" class="skill-fill site-bg-color"><span class="site-bg-color">35%</span>css
-                    </div>
-                </div>
-                <div class="skill">
-                    <div style="width: 65%" class="skill-fill site-bg-color"><span class="site-bg-color">65%</span>php
-                    </div>
-                </div>
-                <div class="skill">
-                    <div style="width: 90%" class="skill-fill site-bg-color"><span class="site-bg-color">90%</span>js
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h2>Tabs</h2>
-                <div id="accordion" class="accordion">
-                    <div class="accordion-group">
-                        <div class="accordion-heading active">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"
-                                href="#content_1">
-                                <span>Eiusmod incididunt</span>
-                            </a>
-                        </div>
-                        <div id="content_1" class="accordion-body in collapse">
-                            <div class="accordion-inner">
-                                Nunc laoreet mattis eros ac aliquam. Duis faucibus tincidunt arcu, non vestibulum eros
-                                malesuada eu. Praesent dictum feugiat justo eget eleifend.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"
-                                href="#content_2">
-                                <span>Ut enim ad minim veniam.</span>
-                            </a>
-                        </div>
-                        <div id="content_2" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                Nunc laoreet mattis eros ac aliquam. Duis faucibus tincidunt arcu, non vestibulum eros
-                                malesuada eu. Praesent dictum feugiat justo eget eleifend.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"
-                                href="#content_3">
-                                <span>Dolor consectetur adipisicing</span>
-                            </a>
-                        </div>
-                        <div id="content_3" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                Nunc laoreet mattis eros ac aliquam. Duis faucibus tincidunt arcu, non vestibulum eros
-                                malesuada eu. Praesent dictum feugiat justo eget eleifend.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"
-                                href="#content_4">
-                                <span>Dolor consectetur adipisicing</span>
-                            </a>
-                        </div>
-                        <div id="content_4" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                Nunc laoreet mattis eros ac aliquam. Duis faucibus tincidunt arcu, non vestibulum eros
-                                malesuada eu. Praesent dictum feugiat justo eget eleifend. malesuada eu. Praesent dictum
-                                feugiat justo eget eleifend.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+%>
+
+
+<div class="container p-5">
+    <h1>Báo điện tử Elisyam</h1>
+    <br>
+    <h2>Elisyam là trang báo điện tử được thành lập nhằm cung cấp những tin tức thời sự giải trí cho mọi người. </h2>
+    <br>
+    <h2>Với đội ngũ đông đảo và nhiệt tình, Elisyam hứa hẹn sẽ cung cấp những tin tức đúng và tốt nhất trong thời gian
+        sớm nhất. </h2>
+    <br>
+    <h2>Dưới đây là những chủ đề Elisyam đang hoạt động: </h2>
+    <div class="row mt-5">
+
+        <% allSubCates.forEach(subcate => { %>
+        <div class="col-xl-4 col-md-6 col-sm-12 text-center mb-5">
+            
+            
+            <a href="/posts/<%= subcate.parentSlug %>/1"><%= subcate.parentName %></a>
+            /
+            <a href="/posts/<%= subcate.parentSlug %>/<%= subcate.slug %>/1"><%= subcate.name %></a>
+            <br>
+            <img src="/assets/img/posts/<%= subcate.slug %>.jpeg" class="about-thumbnail mt-2" alt="">
         </div>
+        <% }); %>
+
     </div>
 </div>
