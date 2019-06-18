@@ -61,11 +61,11 @@
         <ul class="pagination pagination-lg justify-content-center">
 
             <li class="page-item <%= parseInt(page) <= 1 ? 'custom-page-disabled' : ''  %>">
-                <a class="page-link" href="/posts/search?text=<%= text %>&page=1">First</a>
+                <a class="page-link" href="/posts/search?text=<%= text %>&field=<%= field %>&page=1">First</a>
             </li>
 
             <li class="page-item <%= parseInt(page) <= 1 ? 'custom-page-disabled' : ''  %> ">
-                <a class="page-link "  href="/posts/search?text=<%= text %>&page=<%= (parseInt(page)-1) %>" >Prev</a>
+                <a class="page-link "  href="/posts/search?text=<%= text %>&field=<%= field %>&page=<%= (parseInt(page)-1) %>" >Prev</a>
             </li>
 
             <% if(pagination.align === 'right' || pagination.align === "middle"){ %>
@@ -77,7 +77,7 @@
             <% pagination.pages.forEach(_p => { %>
             <li class="page-item <%= page.toString() === _p.toString() ? 'page-active' : '' %>">
                 <a class="page-link <%= page.toString() === _p.toString() ? 'text-white' : '' %>"
-                   href="/posts/search?text=<%= text %>&page=<%= _p %>"><%= _p %></a>
+                   href="/posts/search?text=<%= text %>&field=<%= field %>&page=<%= _p %>"><%= _p %></a>
             </li>
             <% }); %>
             <% if(pagination.align === 'left' || pagination.align === "middle"){ %>
@@ -87,10 +87,10 @@
             <% } %>
 
             <li class="page-item <%= parseInt(page) >= pagination.lastPage  ? 'custom-page-disabled' : ''  %>">
-                <a class="page-link"  href="/posts/search?text=<%= text %>&page=<%= (parseInt(page)+1) %>">Next</a>
+                <a class="page-link"  href="/posts/search?text=<%= text %>&field=<%= field %>&page=<%= (parseInt(page)+1) %>">Next</a>
             </li>
             <li class="page-item <%= parseInt(page) >= pagination.lastPage  ? 'custom-page-disabled' : ''  %>">
-                <a class="page-link"  href="/posts/search?text=<%= text %>&page=<%= pagination.lastPage %>">Last</a>
+                <a class="page-link"  href="/posts/search?text=<%= text %>&field=<%= field %>&page=<%= pagination.lastPage %>">Last</a>
             </li>
         </ul>
     </nav>

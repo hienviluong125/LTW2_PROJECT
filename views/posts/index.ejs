@@ -209,7 +209,7 @@
                                     <% for(var i=0;i < latestPosts.length ;i++){ %>
                                     <div class="col-xl-12 col-md-3 col-sm-4">
                                         <div class="row">
-                                            <div class="col-xl-3 col-md-12 col-md-12">
+                                            <div class="col-xl-3 col-md-12 col-md-12 mb-3">
                                                 <div class="bottom-right-thumbmail float-left">
                                                     <% if(latestPosts[i].isPremium){ %><i
                                                         class="ion-pricetag price-tag-icon small-pricetag"></i></i>
@@ -219,7 +219,7 @@
                                                 </div>
 
                                             </div>
-                                            <div class="col-xl-9 col-md-12 col-sm-12 mb-3">
+                                            <div class="col-xl-9 col-md-12 col-sm-12  mb-3">
                                                 <a href="/posts/detail/<%=  latestPosts[i].slug %>">
                                                     <div class="text-default-color font-weight-bold">
                                                         <%=  latestPosts[i].title.length >= 50
@@ -248,7 +248,7 @@
                                     <% for(var i=0;i < mostViewsPosts.length ;i++){ %>
                                     <div class="col-xl-12 col-md-3 col-sm-4">
                                         <div class="row">
-                                            <div class="col-xl-3 col-md-12 col-md-12">
+                                            <div class="col-xl-3 col-md-12 col-md-12 mb-3">
                                                 <div class="bottom-right-thumbmail float-left">
                                                     <% if(mostViewsPosts[i].isPremium){ %><i
                                                         class="ion-pricetag price-tag-icon small-pricetag"></i></i>

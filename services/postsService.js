@@ -475,32 +475,57 @@ async function loadMoreComment({ PostId, offset, limit }) {
     })
 }
 
-async function search({ searchStr, offset, limit }) {
+async function search({ searchStr, offset, limit, field }) {
     try {
         searchStr = `%${searchStr}%`;
-        let query = {
-            [Op.or]: [
-                {
-                    content: {
-                        [Op.iLike]: searchStr
-                    }
-                },
-                {
-                    shortContent: {
-                        [Op.iLike]: searchStr
-                    }
-                },
-                {
-                    title: {
-                        [Op.iLike]: searchStr
-                    }
+        let query = {};
+        if (field === 'all') {
+            query = {
+                [Op.or]: [
+                    {content: { [Op.iLike]: searchStr}},
+                    {shortContent: { [Op.iLike]: searchStr}},
+                    {title: { [Op.iLike]: searchStr}}
+                ],
+                status: 'published',
+                releaseDate: {
+                    [Op.lte]: new Date(),
                 }
-            ],
-            status: 'published',
-            releaseDate: {
-                [Op.lte]: new Date(),
-            }
-        };
+            };
+        }
+        else if(field === 'title'){
+            query = {
+                [Op.or]: [
+                    {title: { [Op.iLike]: searchStr}}
+                ],
+                status: 'published',
+                releaseDate: {
+                    [Op.lte]: new Date(),
+                }
+            };
+        }
+        else if(field === 'shortContent'){
+            query = {
+                [Op.or]: [
+                    {shortContent: { [Op.iLike]: searchStr}}
+                ],
+                status: 'published',
+                releaseDate: {
+                    [Op.lte]: new Date(),
+                }
+            };
+        }
+        else if(field === 'content'){
+            query = {
+                [Op.or]: [
+                    {content: { [Op.iLike]: searchStr}}
+                ],
+                status: 'published',
+                releaseDate: {
+                    [Op.lte]: new Date(),
+                }
+            };
+        }
+
         let posts = await db.Posts.findAll({
             where: query,
             order: [['isPremium', 'DESC']],
@@ -556,8 +581,8 @@ async function noticeablePosts() {
             ],
         },
         order: [
+            ['views', 'DESC'],
             ['releaseDate', 'DESC'],
-            ['views', 'DESC']
         ],
         include: [
             db.MainCategories,
@@ -614,36 +639,39 @@ function latestPosts() {
 
 async function newPostByHotCats() {
     try {
-        let query = `SELECT  "SubCategories"."name", "SubCategories"."id", coalesce(SUM("Posts"."views"), 0) AS "totalViews" 
+        let query = `SELECT DISTINCT "SubCategories"."id", coalesce(SUM("Posts"."views"), 0) AS "totalViews" 
         FROM "SubCategories" AS "SubCategories" LEFT OUTER JOIN "Posts" AS "Posts" ON "SubCategories"."id" = "Posts"."SubCategoryId" 
         GROUP BY "SubCategories"."id"
         ORDER BY "totalViews" desc
         LIMIT 10`;
         let subCats = await db.sequelize.query(query, { type: QueryTypes.SELECT })
-        let ids = subCats.map(s => s.id);
-        return db.Posts.findAll({
-            where: {
-                releaseDate: {
-                    [Op.lte]: new Date()
-                }
-            },
-            order: [
-
-                ['releaseDate', 'DESC'],
-            ],
-            limit: 10,
-            include: [
-                db.MainCategories,
-                {
-                    model: db.SubCategories,
-                    where: {
-                        id: ids
+        return Promise.all(subCats.map(s => {
+            return db.Posts.findOne({
+                where: {
+                    releaseDate: {
+                        [Op.lte]: new Date()
                     }
                 },
-                db.Users,
-                db.Tags,
-            ],
-        });
+                order: [
+                    ['isPremium', 'ASC'],
+                ],
+                include: [
+                    db.MainCategories,
+                    {
+                        model: db.SubCategories,
+                        where: {
+                            id: s.id
+                        }
+                    },
+                    db.Users,
+                    db.Tags,
+                ],
+            });
+        }))
+        // console.log({subCats});
+
+        // let ids = subCats.map(s => s.id);
+        // return 
 
     } catch (err) {
         throw err;

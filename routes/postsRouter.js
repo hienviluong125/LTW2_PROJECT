@@ -125,14 +125,15 @@ const exportPostAsPdf = async (req, res, next) => {
 const search = (req, res, next) => {
     let page = req.query.page;
     let searchStr = req.query.text;
+    let field = req.query.field;
     let limit = 8;
     let offset = (page - 1) * limit;
     postsService
-        .search({ searchStr, offset, limit })
+        .search({ searchStr, offset, limit,field })
         .then(result => {
             let { posts, count } = result;
             let pagination = createPagesArr(page, count, limit);
-            res.render('posts/search', { posts, count, text: searchStr, page, pagination, highlightSearchText });
+            res.render('posts/search', { posts, count, field,text: searchStr, page, pagination, highlightSearchText });
         })
         .catch(err => next(err));
 }

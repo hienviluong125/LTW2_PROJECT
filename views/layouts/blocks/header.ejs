@@ -10,7 +10,7 @@
             <div class="navbar-holder d-flex align-items-center align-middle justify-content-between horizontal-menu">
                 <!-- Begin Logo -->
                 <div class="navbar-header">
-                    <a href="/" class="navbar-brand">
+                    <a href="db-modern.html" class="navbar-brand">
                         <div class="brand-image brand-big">
                             <img src="/assets/img/logo.png" alt="logo" style="width: 70px;" class="logo-big">
                         </div>
@@ -30,52 +30,77 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li><a href="/index">Trang chủ</a></li>
-                            <% allCategories.forEach(cate => { %>
+                            <li><a href="/about">Giới thiệu</a></li>
+
+
                             <li class="dropdown">
                                 <a class="dropdown-toggle" href="#" id="components" role="button" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false"><%= cate.name %></a>
+                                    aria-haspopup="true" aria-expanded="false">Chuyên mục</a>
                                 <ul class="dropdown-menu" aria-labelledby="components">
-                                    <% cate.SubCategories.forEach(subcate => { %>
-                                    <li>
-                                        <a href="/posts/<%= cate.slug + '/' + subcate.slug + '/1' %>">
-                                            <%= subcate.name %>
+                                    <% allCategories.forEach(cate => { %>
+                                    <li class="dropdown">
+                                        <a class="dropdown-toggle" id="elements" href="/posts/<%= cate.slug + '/1' %>"
+                                            role="button" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="true">
+                                            <%= cate.name %>
                                         </a>
+                                        <ul class="dropdown-menu" aria-labelledby="elements">
+                                            <% cate.SubCategories.forEach(subcate => { %>
+                                            <li>
+                                                <a href="/posts/<%= cate.slug + '/' + subcate.slug + '/1' %>">
+                                                    <%= subcate.name %>
+                                                </a>
+                                            </li>
+                                            <% }) %>
+                                        </ul>
                                     </li>
-                                    <% }); %>
+                                    <% }) %>
                                 </ul>
                             </li>
-                            <% }); %>
+                            <li><a href="maps-leaflet.html">Contact</a></li>
                         </ul>
 
                         <% if(!_locals.isLoggedIn){ %>
                         <ul class="navbar-nav ml-auto">
                             <li>
                                 <form method="GET" action="/posts/search" class="input-group search-form">
-                                    <input name="text" type="text" placeholder="Tìm kiếm..."
-                                        class="form-control search-input">
-                                    <input name="page" value="1" type="hidden" />
-                                    <span class="input-group-addon addon-primary bg-none">
-                                        <i class="ti ti-search mt-1" data-toggle="false"></i>
-                                    </span>
+                                    <!-- <input type="text" placeholder="With icon" class="form-control search-input">
+                                        <span class="input-group-addon addon-primary bg-none">
+                                            <i class="ti ti-search mt-1" data-toggle="false"></i>
+                                        </span> -->
+                                    <input type="hidden" name="page" value="1">
+                                    <select name="field">
+                                        <option value="all" selected>Tất cả</option>
+                                        <option value="title">Tiêu đề</option>
+                                        <option value="shortContent">Tóm tắt</option>
+                                        <option value="content">Nội dung</option>
+                                    </select>
+                                    <input type="text" name="text" placeholder="Tìm kiếm..." id="">
                                 </form>
                             </li>
-                            <li><a href="/users/register">Đăng ký</a></li>
-                            <li><a href="/users/login">Đăng nhập</a></li>
+                            <li><a href="/users/register"> Sign up </a></li>
+                            <li><a href="/users/login">Login</a></li>
                         </ul>
                         <% }else{ %>
                         <ul class="navbar-nav ml-auto">
                             <li>
                                 <form method="GET" action="/posts/search" class="input-group search-form">
-                                    <input name="text" type="text" placeholder="Tìm kiếm..."
-                                        class="form-control search-input">
-                                    <input name="page" value="1" type="hidden" />
-                                    <span class="input-group-addon addon-primary bg-none">
-                                        <i class="ti ti-search mt-1" data-toggle="false"></i>
-                                    </span>
+                                    <!-- <input type="text" placeholder="With icon" class="form-control search-input">
+                                                <span class="input-group-addon addon-primary bg-none">
+                                                    <i class="ti ti-search mt-1" data-toggle="false"></i>
+                                                </span> -->
+                                    <input type="hidden" name="page" value="1">
+                                    <select name="field">
+                                        <option value="all" selected>Tất cả</option>
+                                        <option value="title">Tiêu đề</option>
+                                        <option value="shortContent">Tóm tắt</option>
+                                        <option value="content">Nội dung</option>
+                                    </select>
+                                    <input type="text" name="text" placeholder="Tìm kiếm..." id="">
                                 </form>
                             </li>
-                            <li><a href="/users/profile/<%= _locals.user.id %>">Hồ sơ</a></li>
-                            <li><a href="/users/logout">Đăng xuất</a></li>
+                            <li><a href="/users/profile/<%= _locals.user.id %>"> Profile </a></li>
+                            <li><a href="/users/logout"> Log out </a></li>
                         </ul>
                         <% } %>
                     </div>
