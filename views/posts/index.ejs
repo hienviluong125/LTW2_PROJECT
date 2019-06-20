@@ -117,6 +117,16 @@
                                                 <h2 class="font-weight-bold float-left mr-2">
                                                     <a href="/posts/detail/<%= p.slug %>"><%= p.title %></a>
                                                 </h2>
+                                                <div class="mb-2">
+                                                    <a href="/posts/<%= p.MainCategory.slug %>/1">
+                                                        <%= p.MainCategory.name %>
+                                                    </a>
+                                                    /
+                                                    
+                                                    <a href="/posts/<%= p.MainCategory.slug %>/<%= p.SubCategory.slug %>/1">
+                                                        <%= p.SubCategory.name %>
+                                                    </a>
+                                                </div>
                                                 <% p.Tags.forEach(t => { %>
                                                 <a href="/posts/tags/<%= t.slug %>/1"
                                                     class="btn btn-sm btn-square mr-1 mb-2 btn-tag-style"><%= t.name %></a>

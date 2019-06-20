@@ -27,7 +27,7 @@ const renderPosts = (req, res, next) => {
         res.render('editors/posts/index', { currentSubCate, SubCategories, posts, subCateSlug, getPostStatusColor, pagination, page,status });
     }).catch(err => {
         console.log(err);
-        // return next();
+        return next(err);
     })
 
     // }

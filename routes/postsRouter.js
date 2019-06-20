@@ -22,6 +22,9 @@ const renderAllPosts = (req, res, next) => {
 
             let latestPosts = result[1];
             let mostViewsPosts = result[2];
+
+            console.log(" ============================== COUNT",count);
+
             let pagination = createPagesArr(page, count, limit);
             res.render('posts/index', { posts, page, pagination, topPosts, hotTags, tag, maincate, subcate, latestPosts, mostViewsPosts, parseVIDate });
         })
@@ -49,14 +52,14 @@ const renderDetailPost = (req, res, next) => {
                 let randomPostsWithSameCategory = result[4];
                 let randomPosts = result[5];
 
-                if (post.isPremium) {
+                if (post.isPremium && req.user.role !== 'admin') {
                     if (!isPremium) {
                         // res.redirect('/users/premium_redirect');
-                        res.render('users/premium-redirect');
+                        return res.render('users/premium-redirect');
                     }
                 }
 
-                res.render('posts/detail', { post, topPosts, hotTags, isPremium, latestPosts, mostViewsPosts, parseVIDate, randomPostsWithSameCategory, randomPosts });
+                return res.render('posts/detail', { post, topPosts, hotTags, isPremium, latestPosts, mostViewsPosts, parseVIDate, randomPostsWithSameCategory, randomPosts });
             })
             .catch(err => next(err));
     } else {
