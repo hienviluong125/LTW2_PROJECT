@@ -144,22 +144,35 @@ async function seed() {
     //     }
     // });
 
+    
+
+    // console.log({ids,length: ids.length})
+
+
+    let ids = await db.Posts.findAll({
+        raw: true,
+        attributes: ['id', 'WriterId'],
+        where: {
+            WriterId: 1,
+        }
+    });
+
     // await Promise.all(ids.map(s => {
     //     try{
     //         return db.Notes.create({
     //             WriterId: s.WriterId,
     //             PostId: s.id,
     //             status: 'verified',
-    //             EditorId: 7
+    //             EditorId: 9
     //         })
     //     }catch(err){
     //         console.log({err});
     //     }
-        
+
     // }))
 
-    // console.log({ids,length: ids.length})
-   
+    console.log({ids});
+
 
 
 

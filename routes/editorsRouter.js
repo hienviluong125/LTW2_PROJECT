@@ -104,9 +104,11 @@ router.get('/posts/verify/:slug', renderVerifyPost)
 router.post('/posts/verify', verifyPost)
 //
 
+
+router.get('/posts/all/all/1' , (req,res,next) => {
+    res.redirect('/editors/posts/all/pending/1');
+})
 router.get('/posts/:cate/:status/:page', renderPosts);
-
-
 
 
 module.exports = router;

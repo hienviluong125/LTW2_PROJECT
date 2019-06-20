@@ -260,9 +260,18 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
         if (SubCate === 'all') {
             let allSubCateIds = await db.EditorCategories.findAll({ raw: true, attributes: ['SubCategoryId'], where: { UserId: EditorId } });
             allSubCateIds = allSubCateIds.map(aS => aS.SubCategoryId);
+
+            let statusCond = status === 'verified' ? ['verified', 'published'] : status;
+            let tagJoinCond = {model : db.Notes};
+            if(status !== 'pending'){
+                tagJoinCond.where = { EditorId};
+            }
+
+            
+
             let posts = await db.Posts.findAll({
                 where: {
-                    status: status === 'all' ? ['verified', 'published', 'rejected', 'verified'] : status === 'verified' ? ['verified', 'published'] : status,
+                    status: statusCond,
                     SubCategoryId: allSubCateIds
                 },
                 order: [['id', 'DESC']],
@@ -273,17 +282,17 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
                     db.SubCategories,
                     db.Users,
                     db.Tags,
-                    { model: db.Notes, where: { EditorId } }
+                    tagJoinCond
 
                 ]
             })
             let count = await db.Posts.count({
                 where: {
-                    status: status === 'all' ? ['verified', 'published', 'rejected', 'verified'] : status === 'verified' ? ['verified', 'published'] : status,
+                    status: statusCond,
                     SubCategoryId: allSubCateIds
                 },
                 include: [
-                    { model: db.Notes, where: { EditorId } }
+                    tagJoinCond
                 ]
             });
 
@@ -291,6 +300,13 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
                 posts, count
             }
         } else {
+            let statusCond = status === 'verified' ? ['verified', 'published'] : status;
+            let tagJoinCond = {model : db.Notes};
+            if(status !== 'pending'){
+                tagJoinCond.where = { EditorId};
+            }
+
+            
             let allSubCateIds = await db.SubCategories.findAll({
                 attributes: ['id'],
                 where: { slug: SubCate },
@@ -305,7 +321,7 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
             let subCateId = allSubCateIds[0].id;
             let posts = await db.Posts.findAll({
                 where: {
-                    status: status === 'all' ? ['verified', 'published', 'rejected', 'verified'] : status === 'verified' ? ['verified', 'published'] : status,
+                    status: statusCond ,
                     SubCategoryId: subCateId
                 },
                 limit: limit,
@@ -315,17 +331,17 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
                     db.SubCategories,
                     db.Users,
                     db.Tags,
-                    { model: db.Notes, where: { EditorId } }
+                    tagJoinCond
                 ]
             })
             
             let count = await db.Posts.count({
                 where: {
-                    status: status === 'all' ? ['verified', 'published', 'rejected', 'verified'] : status === 'verified' ? ['verified', 'published'] : status,
+                    status: statusCond ,
                     SubCategoryId: subCateId
                 },
                 include: [
-                    { model: db.Notes, where: { EditorId } }
+                    tagJoinCond
                 ]
             });
 
@@ -637,6 +653,7 @@ async function noticeablePosts() {
                     status: 'published'
                 }
             ],
+            status: 'published'
         },
         order: [
             ['views', 'DESC'],
@@ -658,7 +675,8 @@ function mostViewsPosts() {
         where: {
             releaseDate: {
                 [Op.lte]: new Date()
-            }
+            },
+            status: 'published'
         },
         order: [
 
@@ -679,7 +697,8 @@ function latestPosts() {
         where: {
             releaseDate: {
                 [Op.lte]: new Date()
-            }
+            },
+            status: 'published'
         },
         order: [
 
@@ -708,7 +727,8 @@ async function newPostByHotCats() {
                 where: {
                     releaseDate: {
                         [Op.lte]: new Date()
-                    }
+                    },
+                    status: 'published'
                 },
                 order: [
                     ['isPremium', 'ASC'],
