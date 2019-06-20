@@ -72,11 +72,6 @@ const adminRouter = require('./routes/adminRouter');
 
 
 
-
-
-
-
-
 //================== Routes =================
 
 app.use('/', indexRouter);

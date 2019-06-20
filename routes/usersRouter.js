@@ -4,7 +4,7 @@ const subService = require('./../services/subscriberService');
 const writerService = require('./../services/writerService');
 const passport = require('passport');
 const mail = require('../config/mailer');
-const { htmlDateParser } = require('../helpers/utils')
+const utils = require('../helpers/utils')
 const middleware = require('./../middlewares/index');
 
 const logout = (req, res, next) => {
@@ -197,7 +197,7 @@ const renderProfilePage = (req, res, next) => {
                 next(new Error('Can not find user'));
             } else {
                 if (values[0].DoB !== null) {
-                    values[0].DoB = htmlDateParser.parse(values[0].DoB);
+                    values[0].DoB = utils.parse(values[0].DoB);
                 }
                 res.render('users/profile.ejs', {
                     user: values[0],
