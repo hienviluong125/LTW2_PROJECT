@@ -12,4 +12,4 @@
 
 ### SELECT setval('"Users_id_seq"', (SELECT MAX(id) FROM public."Users")+1);
 
-#### imgs resource : https://mega.nz/#!2TRzWaIT!GV7gTekhN9ZS3ytohTGNLrSMVJ-OIh5HW2DNy57o-tI
+#### imgs resource : https://mega.nz/#!CLxT3YZK!PKgm6FO_j73HuqP428nrhWWfPL1hIzpRHUUQ8IMbymc
