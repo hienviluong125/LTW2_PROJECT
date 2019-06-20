@@ -146,7 +146,7 @@ function loadQuillHtml() {
         let inputDelta = JSON.parse(delta);
         let contentHtml = quillGetHTML(inputDelta);
         contentHtml = contentHtml.replace('nbsp;',' ');
-        console.log("content",contentHtml);
+      
 
         $('#post-detail').html(contentHtml).css('display', 'block');
     }

@@ -196,7 +196,7 @@ async function _delete({ slug, WriterId }) {
         let postInfo = await db.Posts.findOne({ where: { slug } }, { raw: true });
         let postId = postInfo.id;
         await tagService.removeTagsOfPost({ postId });
-        await db.Comments.destroy({where: {PostId: postId}});
+        await db.Comments.destroy({ where: { PostId: postId } });
         await db.Notes.destroy({ where: { PostId: postId, WriterId: WriterId } });
         let data = await db.Posts.destroy({
             where: {
@@ -263,12 +263,12 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
             allSubCateIds = allSubCateIds.map(aS => aS.SubCategoryId);
 
             let statusCond = status === 'verified' ? ['verified', 'published'] : status;
-            let tagJoinCond = {model : db.Notes};
-            if(status !== 'pending'){
-                tagJoinCond.where = { EditorId};
+            let tagJoinCond = { model: db.Notes };
+            if (status !== 'pending') {
+                tagJoinCond.where = { EditorId };
             }
 
-            
+
 
             let posts = await db.Posts.findAll({
                 where: {
@@ -302,12 +302,12 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
             }
         } else {
             let statusCond = status === 'verified' ? ['verified', 'published'] : status;
-            let tagJoinCond = {model : db.Notes};
-            if(status !== 'pending'){
-                tagJoinCond.where = { EditorId};
+            let tagJoinCond = { model: db.Notes };
+            if (status !== 'pending') {
+                tagJoinCond.where = { EditorId };
             }
 
-            
+
             let allSubCateIds = await db.SubCategories.findAll({
                 attributes: ['id'],
                 where: { slug: SubCate },
@@ -322,7 +322,7 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
             let subCateId = allSubCateIds[0].id;
             let posts = await db.Posts.findAll({
                 where: {
-                    status: statusCond ,
+                    status: statusCond,
                     SubCategoryId: subCateId
                 },
                 limit: limit,
@@ -335,10 +335,10 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
                     tagJoinCond
                 ]
             })
-            
+
             let count = await db.Posts.count({
                 where: {
-                    status: statusCond ,
+                    status: statusCond,
                     SubCategoryId: subCateId
                 },
                 include: [
@@ -357,7 +357,7 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
 }
 
 function updatePosts() {
-    console.log("======================== start call updatePosts =========================");
+
     let today = new Date();
     return db.Posts.update(
         {
@@ -371,7 +371,7 @@ function updatePosts() {
                 }
             }
         }
-    ).then(_ => console.log("======================== end call updatePosts ========================="));
+    );
 }
 
 async function publishPost({ id }) {
@@ -746,11 +746,6 @@ async function newPostByHotCats() {
                 ],
             });
         }))
-        // console.log({subCats});
-
-        // let ids = subCats.map(s => s.id);
-        // return 
-
     } catch (err) {
         throw err;
     }
@@ -806,7 +801,7 @@ async function getRandomPosts({ limit, slug }) {
 
 async function deleteById(id) {
     await tagService.removeTagsOfPost({ postId: id });
-    await db.Comments.destroy({where: {PostId: id}});
+    await db.Comments.destroy({ where: { PostId: id } });
     await db.Notes.destroy({ where: { PostId: id } });
     return db.Posts.destroy({
         where: {
