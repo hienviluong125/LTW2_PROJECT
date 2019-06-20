@@ -416,8 +416,6 @@ async function rejectPost({ WriterId, EditorId, PostId, NoteContent }) {
 }
 
 async function verifyPost({ releaseDate, tags, WriterId, EditorId, PostId, SubCategoryId, MainCategoryId, prevRouter, PostType }) {
-    // console.log({ WriterId, EditorId, releaseDate, tags, PostId, SubCategoryId, MainCategoryId, prevRouter });
-    // return { status: true, data: 'null' };
     try {
         let isPremium = PostType === 'premium' ? true : false;
         let data = await db.Posts.update(
@@ -432,25 +430,26 @@ async function verifyPost({ releaseDate, tags, WriterId, EditorId, PostId, SubCa
             })
 
             await tagService.addTagsToPost({ tagIds, postId: PostId });
-
-            let isNoteExist = await db.Notes.findOne({ where: { EditorId, WriterId, PostId } });
-            let result = null;
-            if (isNoteExist) {
-                result = await db.Notes.update(
-                    { status: 'verified', content: '' },
-                    { where: { EditorId, WriterId, PostId } })
-            } else {
-                result = await db.Notes.create({
-                    status: 'rejected',
-                    content: '',
-                    EditorId,
-                    WriterId,
-                    PostId
-                });
-            }
-
-
         }
+
+        let isNoteExist = await db.Notes.findOne({ where: { EditorId, WriterId, PostId } });
+        let result = null;
+        if (isNoteExist) {
+            result = await db.Notes.update(
+                { status: 'verified', content: '' },
+                { where: { EditorId, WriterId, PostId } })
+        } else {
+            // console.log("chua taon tai =========================================================");
+            result = await db.Notes.create({
+                status: 'verified',
+                content: '',
+                EditorId,
+                WriterId,
+                PostId
+            });
+        }
+
+
         return { status: true, data: data };
     } catch (err) {
         console.log({ err });
