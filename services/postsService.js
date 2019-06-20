@@ -5,6 +5,9 @@ const sequelize = require('sequelize');
 
 async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
     try {
+        //
+        await updatePosts();
+        //
         let queryOps = {};
         let countOps = {};
         if (maincate) {
@@ -78,6 +81,9 @@ async function getAllPosts({ tag, maincate, subcate, offset, limit }) {
 }
 
 async function getAll() {
+    //
+    await updatePosts();
+    //
     return await db.Posts.findAll();
 }
 
@@ -210,7 +216,9 @@ async function _delete({ slug, WriterId }) {
 // pending - verified - published - rejected
 async function getAllPostByUserId({ id, limit, offset, status }) {
     try {
-
+        //
+        await updatePosts();
+        //
         let queryOps = {};
         if (status === 'all') {
             queryOps = { WriterId: id }
@@ -246,6 +254,9 @@ async function getAllPostByUserId({ id, limit, offset, status }) {
 // pending - verified - published - rejected
 async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, status }) {
     try {
+        //
+        await updatePosts();
+        //
         if (SubCate === 'all') {
             let allSubCateIds = await db.EditorCategories.findAll({ raw: true, attributes: ['SubCategoryId'], where: { UserId: EditorId } });
             allSubCateIds = allSubCateIds.map(aS => aS.SubCategoryId);
@@ -254,6 +265,7 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
                     status: status === 'all' ? ['verified', 'published', 'rejected', 'verified'] : status === 'verified' ? ['verified', 'published'] : status,
                     SubCategoryId: allSubCateIds
                 },
+                order: [['id', 'DESC']],
                 limit: limit,
                 offset: offset,
                 include: [
@@ -261,14 +273,18 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
                     db.SubCategories,
                     db.Users,
                     db.Tags,
-                    db.Notes
+                    { model: db.Notes, where: { EditorId } }
+
                 ]
             })
             let count = await db.Posts.count({
                 where: {
                     status: status === 'all' ? ['verified', 'published', 'rejected', 'verified'] : status === 'verified' ? ['verified', 'published'] : status,
                     SubCategoryId: allSubCateIds
-                }
+                },
+                include: [
+                    { model: db.Notes, where: { EditorId } }
+                ]
             });
 
             return {
@@ -299,15 +315,21 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
                     db.SubCategories,
                     db.Users,
                     db.Tags,
-                    db.Notes
+                    { model: db.Notes, where: { EditorId } }
                 ]
             })
+            
             let count = await db.Posts.count({
                 where: {
                     status: status === 'all' ? ['verified', 'published', 'rejected', 'verified'] : status === 'verified' ? ['verified', 'published'] : status,
                     SubCategoryId: subCateId
-                }
+                },
+                include: [
+                    { model: db.Notes, where: { EditorId } }
+                ]
             });
+
+            console.log("COUNT ========= ", count);
             return {
                 posts, count
             }
@@ -315,6 +337,24 @@ async function getAllPostManagedByEditor({ SubCate, EditorId, limit, offset, sta
     } catch (err) {
         console.log({ err });
     }
+}
+
+function updatePosts() {
+    console.log("======================== start call updatePosts =========================");
+    let today = new Date();
+    return db.Posts.update(
+        {
+            status: 'published',
+        },
+        {
+            where: {
+                status: 'verified',
+                releaseDate: {
+                    [Op.lte]: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+                }
+            }
+        }
+    ).then(_ => console.log("======================== end call updatePosts ========================="));
 }
 
 async function publishPost({ id }) {
@@ -779,5 +819,6 @@ module.exports = {
     newPostByHotCats,
     geRandomPostsWithSameCategory,
     getRandomPosts,
-    deleteById
+    deleteById,
+    updatePosts
 };

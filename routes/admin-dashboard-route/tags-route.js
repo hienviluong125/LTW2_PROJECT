@@ -6,6 +6,11 @@ const successRedirect = (req, res, message) => {
     res.redirect('/admin/tags');
 }
 
+const failRedirect = (req, res, message) => {
+    req.flash('tags-flash', {message, className:"danger"});
+    res.redirect('/admin/tags');
+}
+
 const renderTagsDashboard = (req, res, next) =>{
     tagService.getAll()
     .then(tags => {
@@ -58,7 +63,7 @@ const updateTagHandler = (req, res, next) => {
         successRedirect(req, res, "Tag updated successfully!");
     })
     .catch(err => {
-        next(err);
+        failRedirect(req,res, "Cannot update tag")
     })
 }
 
@@ -69,7 +74,7 @@ const deleteTagHandler = (req, res, next) => {
         successRedirect(req, res, "Tag deleted sucessfully");
     })
     .catch(err => {
-        next(err);
+        failRedirect(req,res, "Cannot delete tag, it still has posts linked with this tag,")
     })
 }
 
@@ -79,7 +84,7 @@ const addTagHandler = (req, res, next) => {
         successRedirect(req, res, "Tag added successfully!");
     })
     .catch(err => {
-        next(err);
+        failRedirect(req,res, "Cannot add tag")
     })
 }
 

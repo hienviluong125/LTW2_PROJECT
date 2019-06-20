@@ -98,6 +98,7 @@
                             <%= latestPosts[i].title.length >= 40 ? latestPosts[i].title.substring(0,40) + '...' : latestPosts[i].title %>
                         </div>
                     </a>
+                    <br>
 
                     <%= parseVIDate(latestPosts[i].releaseDate) %> &emsp;
                     <a href="posts/<%= latestPosts[i].MainCategory.slug + '/' + latestPosts[i].SubCategory.slug %>/1">

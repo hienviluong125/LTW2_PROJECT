@@ -70,6 +70,10 @@ function removeTagById(tagId){
 
 async function deleteTag(id){
     try{
+        let countPost = await db.PostTags.count({where: {TagId: id}});
+        if(countPost > 0){
+            throw new Error('Cannot delete tag');
+        }
         let deletedRows = await removeTagById(+id);
         console.log(`deleted ${deletedRows} post-tag.`);
         return db.Tags.destroy({

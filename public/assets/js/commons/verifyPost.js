@@ -40,7 +40,7 @@ function openVerifyForm() {
         let title = "Thông báo";
         let content = `Bạn có chắc chắn muốn phê duyệt bài viết này hay không ?
         Bài viết đã phê duyệt sẽ không thể thay đổi`;
-        let linkTo = window.location.href.indexOf('admin') !== -1  ? 'admin/posts': 'editors/posts/all/1';
+        let linkTo = window.location.href.indexOf('admin') !== -1  ? 'admin/posts': 'editors/posts/all/all/1';
 
         initConfirmModal("verify-post-confirm-modal", title, content);
         initLoadingModal("verify-post-loading-modal");

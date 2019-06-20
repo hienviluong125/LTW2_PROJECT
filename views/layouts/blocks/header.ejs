@@ -78,12 +78,15 @@
                                     <input type="text" name="text" placeholder="Tìm kiếm..." id="">
                                 </form>
                             </li>
+
+
+
                             <li><a href="/users/register"> Sign up </a></li>
                             <li><a href="/users/login">Login</a></li>
                         </ul>
                         <% }else{ %>
                         <ul class="navbar-nav ml-auto">
-                            <li>
+                            <li class="mr-1">
                                 <form method="GET" action="/posts/search" class="input-group search-form">
                                     <!-- <input type="text" placeholder="With icon" class="form-control search-input">
                                                 <span class="input-group-addon addon-primary bg-none">
@@ -99,8 +102,33 @@
                                     <input type="text" name="text" placeholder="Tìm kiếm..." id="">
                                 </form>
                             </li>
-                            <li><a href="/users/profile/<%= _locals.user.id %>"> Profile </a></li>
-                            <li><a href="/users/logout"> Log out </a></li>
+
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" href="#" id="user-actions" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false"><%= user.username %></a>
+                                <ul class="dropdown-menu" aria-labelledby="user-actions">
+                                    <% if(user.role === 'writer'){ %>
+                                    <li><a href="/writers/posts/add">Viết bài</a></li>
+                                    <li><a href="/writers/posts">Bài viết của tôi</a></li>
+                                    <% } %>
+
+                                    <% if(user.role === 'editor'){ %>
+                                    <li><a href="/editors/posts/all/all/1">Quản lý bài viết</a></li>
+                                    <% } %>
+
+                                    <% if(user.role === 'admin'){ %>
+                                    <li><a href="/admin">Dashboard</a></li>
+                                    <% } %>
+
+
+                                    <li><a href="/users/profile/<%= _locals.user.id %>">Thông tin cá nhân</a></li>
+                                    <li><a href="/users/logout">Đăng xuất</a></li>
+
+
+                                </ul>
+                            </li>
+
                         </ul>
                         <% } %>
                     </div>
