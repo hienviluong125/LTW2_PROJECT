@@ -196,6 +196,7 @@ async function _delete({ slug, WriterId }) {
         let postInfo = await db.Posts.findOne({ where: { slug } }, { raw: true });
         let postId = postInfo.id;
         await tagService.removeTagsOfPost({ postId });
+        await db.Comments.destroy({where: {PostId: postId}});
         await db.Notes.destroy({ where: { PostId: postId, WriterId: WriterId } });
         let data = await db.Posts.destroy({
             where: {
@@ -805,6 +806,7 @@ async function getRandomPosts({ limit, slug }) {
 
 async function deleteById(id) {
     await tagService.removeTagsOfPost({ postId: id });
+    await db.Comments.destroy({where: {PostId: id}});
     await db.Notes.destroy({ where: { PostId: id } });
     return db.Posts.destroy({
         where: {
